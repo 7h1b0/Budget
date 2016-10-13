@@ -1,0 +1,58 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="textColor">@color/text</item>
+        <item name="secondaryTextColor">@color/secondary_text</item>
+        <item name="iconColor">@color/icon</item>
+        <item name="dividerColor">@color/divider</item>
+        <item name="backgroundHeader">@color/backgroundHeader</item>
+        <item name="backgroundItem">@color/backgroundItem</item>
+    </style>
+
+    <style name="TextHeader">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/secondaryTextColor</item>
+        <item name="android:textSize">@dimen/font_label</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextSubhead">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/textColor</item>
+        <item name="android:textSize">@dimen/font_subhead</item>
+    </style>
+
+    <style name="TextBody">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/secondaryTextColor</item>
+        <item name="android:textSize">@dimen/font_body</item>
+    </style>
+
+    <style name="IconShort">
+        <item name="android:layout_width">@dimen/icon_width_short</item>
+        <item name="android:layout_height">@dimen/icon_width_short</item>
+        <item name="android:tint">?attr/iconColor</item>
+    </style>
+
+    <style name="Icon">
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_width</item>
+        <item name="android:tint">?attr/iconColor</item>
+    </style>
+
+    <style name="Input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/item_height_input</item>
+        <item name="android:paddingTop">@dimen/spacing_small</item>
+    </style>
+
+</resources>

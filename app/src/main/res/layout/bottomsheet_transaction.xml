@@ -1,0 +1,54 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/spacing_small"
+    android:paddingBottom="@dimen/spacing_small"
+    >
+
+    <FrameLayout
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_single"
+        >
+
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_edit"
+            style="@style/IconShort"
+            android:layout_marginStart="@dimen/spacing_medium"
+            />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/spacing_huge"
+            android:text="@string/edit"
+            style="@style/TextBody"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_single"
+        >
+
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_delete"
+            style="@style/IconShort"
+            android:layout_marginStart="@dimen/spacing_medium"
+            />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/spacing_huge"
+            android:text="@string/delete"
+            style="@style/TextBody"
+            />
+
+    </FrameLayout>
+
+</LinearLayout>
