@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import com.th1b0.budget.model.Transaction;
@@ -21,7 +22,7 @@ abstract class Database extends SQLiteOpenHelper {
 
   static BriteDatabase db;
 
-  Database(Context context) {
+  Database(@NonNull Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
     SqlBrite sqlBrite = SqlBrite.create();
     db = sqlBrite.wrapDatabaseHelper(this, Schedulers.io());
@@ -54,7 +55,7 @@ abstract class Database extends SQLiteOpenHelper {
     onCreate(db);
   }
 
-  Cursor getCursor(SqlBrite.Query query) {
+  Cursor getCursor(@NonNull SqlBrite.Query query) {
     return query.run();
   }
 }

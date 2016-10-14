@@ -15,7 +15,7 @@ import rx.Observable;
  */
 
 public final class TransactionTable extends Database {
-  public TransactionTable(Context context) {
+  public TransactionTable(@NonNull Context context) {
     super(context);
   }
 

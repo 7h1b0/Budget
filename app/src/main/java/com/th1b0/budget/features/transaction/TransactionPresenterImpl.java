@@ -1,5 +1,6 @@
 package com.th1b0.budget.features.transaction;
 
+import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Header;
 import com.th1b0.budget.model.RecyclerItem;
 import com.th1b0.budget.model.Transaction;
@@ -18,7 +19,7 @@ import rx.schedulers.Schedulers;
 final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
     implements TransactionPresenter {
 
-  TransactionPresenterImpl(TransactionView view, DataManager dataManager) {
+  TransactionPresenterImpl(@NonNull TransactionView view, @NonNull DataManager dataManager) {
     super(view, dataManager);
   }
 

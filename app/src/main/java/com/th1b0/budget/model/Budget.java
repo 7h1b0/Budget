@@ -69,14 +69,6 @@ public class Budget implements Parcelable {
     this.goal = goal;
   }
 
-  public String getDate() {
-    return date;
-  }
-
-  public void setDate(String date) {
-    this.date = date;
-  }
-
   @Override public int describeContents() {
     return 0;
   }

@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import com.th1b0.budget.R;
 import com.th1b0.budget.model.Transaction;
@@ -16,7 +17,8 @@ import com.th1b0.budget.model.Transaction;
 
 public final class ConfirmDialog extends DialogFragment {
 
-  public static ConfirmDialog newInstance(Transaction transaction, Fragment target, int requestCode) {
+  public static ConfirmDialog newInstance(@NonNull Transaction transaction,
+      @NonNull Fragment target, int requestCode) {
     ConfirmDialog dialog = new ConfirmDialog();
     Bundle args = new Bundle();
     args.putParcelable(Transaction.TRANSACTION, transaction);
@@ -35,9 +37,9 @@ public final class ConfirmDialog extends DialogFragment {
           intent.putExtra(Transaction.TRANSACTION, transaction);
           getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
         })
-        .setNegativeButton(R.string.cancel, (dialog, which) ->
-            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null)
-        )
+        .setNegativeButton(R.string.cancel,
+            (dialog, which) -> getTargetFragment().onActivityResult(getTargetRequestCode(),
+                Activity.RESULT_CANCELED, null))
         .create();
   }
 }

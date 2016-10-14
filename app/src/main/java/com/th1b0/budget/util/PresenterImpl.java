@@ -1,5 +1,6 @@
 package com.th1b0.budget.util;
 
+import android.support.annotation.NonNull;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -12,7 +13,7 @@ public abstract class PresenterImpl<T> {
   protected final DataManager mDataManager;
   protected final CompositeSubscription mSubscription;
 
-  public PresenterImpl(final T view, final DataManager dataManager) {
+  public PresenterImpl(@NonNull final T view, @NonNull final DataManager dataManager) {
     mView = view;
     mDataManager = dataManager;
     mSubscription = new CompositeSubscription();

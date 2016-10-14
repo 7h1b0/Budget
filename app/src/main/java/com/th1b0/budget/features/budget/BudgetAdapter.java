@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.th1b0.budget.R;
 import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.util.DateUtil;
 import com.th1b0.budget.util.Preferences;
 import java.util.ArrayList;
 
@@ -60,11 +61,11 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     if (getItemViewType(position) == HEADER) {
       ViewBudgetHeader viewBudgetHeader = (ViewBudgetHeader) holder;
       viewBudgetHeader.expense.setText(
-          String.format(mContext.getString(R.string.float_value), -budget.getValue()));
+          String.format(mContext.getString(R.string.float_value), negation(budget.getValue())));
       viewBudgetHeader.budget.setText(
           String.format(mContext.getString(R.string.float_value), budget.getGoal()));
       viewBudgetHeader.value.setText(String.format(mContext.getString(R.string.float_value), res));
-      viewBudgetHeader.date.setText(budget.getDate());
+      viewBudgetHeader.date.setText(DateUtil.formatDate(budget.getYear(), budget.getMonth()));
       if (res >= 0) {
         viewBudgetHeader.value.setTextColor(ContextCompat.getColor(mContext, R.color.green));
       } else {
@@ -73,9 +74,9 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     } else {
       ViewBudget viewBudget = (ViewBudget) holder;
       viewBudget.detail.setText(
-          String.format(mContext.getString(R.string.budget_of_goal), -budget.getValue(),
+          String.format(mContext.getString(R.string.budget_of_goal), negation(budget.getValue()),
               budget.getGoal()));
-      viewBudget.date.setText(budget.getDate());
+      viewBudget.date.setText(DateUtil.formatDate(budget.getYear(), budget.getMonth()));
 
       viewBudget.value.setText(String.format(mContext.getString(R.string.float_value), res));
       if (res >= 0) {
@@ -131,6 +132,10 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   void addAll(ArrayList<Budget> items) {
     mItems = items;
     notifyDataSetChanged();
+  }
+
+  private double negation(double number) {
+    return number == 0 ? number : -number;
   }
 }
 
