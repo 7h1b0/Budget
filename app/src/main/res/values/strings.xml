@@ -20,6 +20,7 @@
     <string name="settings_add_header_budget">Afficher l\'entête bilan global</string>
     <string name="description">Description</string>
     <string name="value">Montant</string>
+    <string name="categories">Catégories</string>
 
     <string name="add_transaction">Ajouter une transaction</string>
     <string name="edit_transaction">Editer une transaction</string>
@@ -28,4 +29,11 @@
     <string name="expense">Dépenses</string>
     <string name="no_empty_field">Ce champ ne doit pas être vide</string>
     <string name="enlarge_first_row">Elargir le premier budget</string>
+
+    <!-- Categories -->
+    <string name="food">Course</string>
+    <string name="diner">Restaurant</string>
+    <string name="hobby">Loisir</string>
+    <string name="shopping">Shopping</string>
+    <string name="transport">Transport</string>
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.th1b0.budget.R;
 import com.th1b0.budget.model.RecyclerItem;
 import com.th1b0.budget.model.Transaction;
-import com.th1b0.budget.util.CategorieUtil;
 import com.th1b0.budget.util.DateUtil;
 import java.util.ArrayList;
 
@@ -26,9 +24,9 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   private ArrayList<RecyclerItem> mItems;
   private Context mContext;
-  private OnClick mListener;
+  private OnTransactionClick mListener;
 
-  TransactionAdapter(@NonNull Context context, @NonNull OnClick listener) {
+  TransactionAdapter(@NonNull Context context, @NonNull OnTransactionClick listener) {
     mContext = context;
     mItems = new ArrayList<>();
     mListener = listener;
@@ -74,11 +72,10 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 transaction.getDay()));
 
         viewTransaction.value.setText(String.format(mContext.getString(R.string.float_value), transaction.getValue()));
-        viewTransaction.category.setImageResource(CategorieUtil.getIcon(transaction.getCategory()));
+        viewTransaction.category.setImageResource(transaction.getIcon());
 
         Drawable drawable = viewTransaction.category.getBackground();
-        int color = ContextCompat.getColor(mContext, CategorieUtil.getColor(transaction.getCategory()));
-        drawable.setColorFilter(color, PorterDuff.Mode.SRC);
+        drawable.setColorFilter(transaction.getColor(), PorterDuff.Mode.SRC);
 
         break;
     }
@@ -101,13 +98,13 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     ViewTransaction(View v) {
       super(v);
-      category = (ImageView) v.findViewById(R.id.icon_categorie);
+      category = (ImageView) v.findViewById(R.id.icon_category);
       description = (TextView) v.findViewById(R.id.description);
       date = (TextView) v.findViewById(R.id.date);
       value = (TextView) v.findViewById(R.id.value);
 
       v.setOnClickListener(
-          view -> mListener.onClick((Transaction) mItems.get(getLayoutPosition())));
+          view -> mListener.onTransactionClick((Transaction) mItems.get(getLayoutPosition())));
     }
   }
 
@@ -125,8 +122,8 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     notifyDataSetChanged();
   }
 
-  interface OnClick {
-    void onClick(Transaction transaction);
+  interface OnTransactionClick {
+    void onTransactionClick(@NonNull Transaction transaction);
   }
 }
 

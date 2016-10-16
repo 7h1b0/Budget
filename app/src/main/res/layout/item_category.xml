@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height_single_icon"
+    android:background="?attr/backgroundItem"
+    android:orientation="horizontal"
+    >
+
+  <ImageButton
+      android:id="@+id/icon"
+      android:layout_gravity="center_vertical"
+      android:layout_marginEnd="@dimen/spacing_medium"
+      android:layout_marginStart="@dimen/spacing_medium"
+      android:background="@drawable/circle"
+      android:padding="@dimen/spacing_small"
+      android:src="@mipmap/ic_hobby"
+      android:tint="@android:color/white"
+      style="@style/Icon"
+      />
+
+  <TextView
+      android:id="@+id/title"
+      android:layout_gravity="center_vertical"
+      android:ellipsize="end"
+      android:maxLines="1"
+      tools:text="Ut dolor porro id rerum aliquid aspernatur asperiores dicta"
+      style="@style/TextSubhead"
+      android:layout_marginEnd="@dimen/spacing_medium"
+      />
+
+</LinearLayout>

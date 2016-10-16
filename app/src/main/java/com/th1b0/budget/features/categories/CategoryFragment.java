@@ -1,10 +1,12 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.categories;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -12,33 +14,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentRecyclerViewBinding;
-import com.th1b0.budget.features.detailMonth.DetailMonthActivity;
-import com.th1b0.budget.features.wizard.TransactionFormActivity;
-import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DividerItemDecoration;
 import java.util.ArrayList;
 
 /**
- * Created by 7h1b0.
+ * Created by 7h1b0
  */
 
-public final class BudgetFragment extends Fragment
-    implements BudgetView, BudgetAdapter.OnBudgetClick {
+public final class CategoryFragment extends Fragment implements CategoryView,
+    CategoryAdapter.CnCategoryClick {
 
-  private BudgetPresenter mPresenter;
-  private BudgetAdapter mAdapter;
+
+  public static final int CONFIRM_DELETE = 2;
+
+  private CategoryPresenter mPresenter;
+  private CategoryAdapter mAdapter;
   private FragmentRecyclerViewBinding mView;
 
-  public static BudgetFragment newInstance() {
-    return new BudgetFragment();
+  public static CategoryFragment newInstance() {
+    return new CategoryFragment();
   }
+
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new BudgetPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new BudgetAdapter(getActivity(), this);
+    mPresenter = new CategoryPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mAdapter = new CategoryAdapter(getActivity(), this);
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +56,15 @@ public final class BudgetFragment extends Fragment
 
     initializeRecycler();
     initializeFAB();
-    mPresenter.loadBudgets();
+
+    mPresenter.loadCategory();
+  }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode) {
+      case CONFIRM_DELETE:
+        break;
+    }
   }
 
   @Override public void onDestroyView() {
@@ -60,16 +72,27 @@ public final class BudgetFragment extends Fragment
     mPresenter.detach();
   }
 
-  @Override public void onBudgetLoaded(ArrayList<Budget> budgets) {
-    mAdapter.addAll(budgets);
+  @Override public void onCategoryLoaded(ArrayList<Category> categories) {
+    mAdapter.addAll(categories);
   }
 
   @Override public void onError(String error) {
     Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
   }
 
-  @Override public void onBudgetClick(@NonNull Budget budget) {
-    startActivity(DetailMonthActivity.newInstance(getActivity(), budget));
+  @Override public void onCategoryClick(@NonNull Category category) {
+    View view = View.inflate(getActivity(), R.layout.bottomsheet_transaction, null);
+    BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
+    dialog.setContentView(view);
+    dialog.show();
+
+    view.findViewById(R.id.edit).setOnClickListener(v -> {
+      // TODO Call CategoryFormActivity
+    });
+
+    view.findViewById(R.id.delete).setOnClickListener(v -> {
+      // TODO Call ConfirmDialog
+    });
   }
 
   private void initializeRecycler() {
@@ -79,8 +102,8 @@ public final class BudgetFragment extends Fragment
     mView.recycler.setAdapter(mAdapter);
   }
 
+  /** TODO Call CategoryFormActivity */
   private void initializeFAB() {
-    mView.fab.setOnClickListener(
-        v -> startActivity(TransactionFormActivity.newInstance(getActivity())));
+    mView.fab.setOnClickListener(v -> {});
   }
 }

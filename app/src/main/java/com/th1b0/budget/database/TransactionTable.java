@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public final class TransactionTable extends Database {
     super(context);
   }
 
-  @Nullable public Observable<ArrayList<Transaction>> getAll(int limit) {
+  public Observable<ArrayList<Transaction>> getAll(int limit) {
     return db.createQuery(TABLE_TRANSACTION, "SELECT "
         + Transaction.ID
         + ", "
@@ -31,11 +31,21 @@ public final class TransactionTable extends Database {
         + ", "
         + Transaction.VALUE
         + ", "
-        + Transaction.CATEGORY
+        + Transaction.ID_CATEGORY
         + ", "
         + Transaction.DESCRIPTION
+        + ", "
+        + Category.COLOR
+        + ", "
+        + Category.ICON
         + " FROM "
         + TABLE_TRANSACTION
+        + " AS t JOIN "
+        + TABLE_CATEGORY
+        + " AS c ON "
+        + Transaction.ID_CATEGORY
+        + " = "
+        + Category.ID
         + " ORDER BY "
         + Transaction.YEAR
         + " DESC, "
@@ -70,11 +80,21 @@ public final class TransactionTable extends Database {
         + ", "
         + Transaction.VALUE
         + ", "
-        + Transaction.CATEGORY
+        + Transaction.ID_CATEGORY
         + ", "
         + Transaction.DESCRIPTION
+        + ", "
+        + Category.COLOR
+        + ", "
+        + Category.ICON
         + " FROM "
         + TABLE_TRANSACTION
+        + " AS t JOIN "
+        + TABLE_CATEGORY
+        + " AS c ON "
+        + Transaction.ID_CATEGORY
+        + " = "
+        + Category.ID
         + " WHERE "
         + Transaction.MONTH
         + " = ? AND "
@@ -112,6 +132,11 @@ public final class TransactionTable extends Database {
         String.valueOf(transaction.getId()));
   }
 
+  public int delete(Category category) {
+    return db.delete(TABLE_TRANSACTION, Transaction.ID_CATEGORY + " = ?",
+        String.valueOf(category.getId()));
+  }
+
   public int update(Transaction transaction) {
     return db.update(TABLE_TRANSACTION, getContentValues(transaction), Transaction.ID + " = ?",
         String.valueOf(transaction.getId()));
@@ -123,7 +148,7 @@ public final class TransactionTable extends Database {
     values.put(Transaction.MONTH, transaction.getMonth());
     values.put(Transaction.YEAR, transaction.getYear());
     values.put(Transaction.VALUE, transaction.getValue());
-    values.put(Transaction.CATEGORY, transaction.getCategory());
+    values.put(Transaction.ID_CATEGORY, transaction.getIdCategory());
     values.put(Transaction.DESCRIPTION, transaction.getDescription());
 
     return values;
@@ -132,9 +157,9 @@ public final class TransactionTable extends Database {
   private Transaction getTransaction(@NonNull Cursor cursor) {
     return new Transaction(DbUtil.getLong(cursor, Transaction.ID),
         DbUtil.getInt(cursor, Transaction.DAY), DbUtil.getInt(cursor, Transaction.MONTH),
-        DbUtil.getInt(cursor, Transaction.YEAR),
-        DbUtil.getDouble(cursor, Transaction.VALUE),
-        DbUtil.getInt(cursor, Transaction.CATEGORY),
-        DbUtil.getString(cursor, Transaction.DESCRIPTION));
+        DbUtil.getInt(cursor, Transaction.YEAR), DbUtil.getDouble(cursor, Transaction.VALUE),
+        DbUtil.getInt(cursor, Transaction.ID_CATEGORY),
+        DbUtil.getString(cursor, Transaction.DESCRIPTION), DbUtil.getInt(cursor, Category.COLOR),
+        DbUtil.getInt(cursor, Category.ICON));
   }
 }

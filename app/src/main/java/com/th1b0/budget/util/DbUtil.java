@@ -23,4 +23,8 @@ public final class DbUtil {
   public static double getDouble(Cursor cursor, String columnName) {
     return cursor.getDouble(cursor.getColumnIndexOrThrow(columnName));
   }
+
+  public static boolean getBoolean(Cursor cursor, String columnName) {
+    return cursor.getInt(cursor.getColumnIndexOrThrow(columnName)) == 1;
+  }
 }

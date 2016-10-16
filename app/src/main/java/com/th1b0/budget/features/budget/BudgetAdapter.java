@@ -23,15 +23,15 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   private static final int HEADER = 1;
   private static final int ITEM = 2;
 
-  interface OnClick {
-    void onClick(Budget budget);
+  interface OnBudgetClick {
+    void onBudgetClick(@NonNull Budget budget);
   }
 
   private ArrayList<Budget> mItems;
   private Context mContext;
-  private OnClick mListener;
+  private OnBudgetClick mListener;
 
-  BudgetAdapter(@NonNull Context context, @NonNull OnClick listener) {
+  BudgetAdapter(@NonNull Context context, @NonNull OnBudgetClick listener) {
     mContext = context;
     mListener = listener;
     mItems = new ArrayList<>();
@@ -107,7 +107,7 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       value = (TextView) v.findViewById(R.id.value);
       detail = (TextView) v.findViewById(R.id.detail);
 
-      v.setOnClickListener(view -> mListener.onClick(mItems.get(getLayoutPosition())));
+      v.setOnClickListener(view -> mListener.onBudgetClick(mItems.get(getLayoutPosition())));
     }
   }
 
@@ -125,7 +125,7 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       budget = (TextView) v.findViewById(R.id.budget);
       date = (TextView) v.findViewById(R.id.date);
 
-      v.setOnClickListener(view -> mListener.onClick(mItems.get(getLayoutPosition())));
+      v.setOnClickListener(view -> mListener.onBudgetClick(mItems.get(getLayoutPosition())));
     }
   }
 

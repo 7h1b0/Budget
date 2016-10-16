@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Transaction;
 import rx.schedulers.Schedulers;
 
@@ -16,9 +17,10 @@ import rx.schedulers.Schedulers;
 
 abstract class Database extends SQLiteOpenHelper {
 
-  public static final int DATABASE_VERSION = 3;
+  public static final int DATABASE_VERSION = 5;
   public static final String DATABASE_NAME = "budget";
   public static final String TABLE_TRANSACTION = "transaction_table";
+  public static final String TABLE_CATEGORY = "category_table";
 
   static BriteDatabase db;
 
@@ -42,12 +44,27 @@ abstract class Database extends SQLiteOpenHelper {
         + " INTEGER, "
         + Transaction.VALUE
         + " INTEGER, "
-        + Transaction.CATEGORY
+        + Transaction.ID_CATEGORY
         + " INTEGER, "
         + Transaction.DESCRIPTION
         + " TEXT ) ";
 
+    String CREATE_CATEGORY_TABLE = "CREATE TABLE "
+        + TABLE_CATEGORY
+        + " ( "
+        + Category.ID
+        + " INTEGER PRIMARY KEY, "
+        + Category.TITLE
+        + " TEXT, "
+        + Category.COLOR
+        + " INTEGER, "
+        + Category.ICON
+        + " INTEGER, "
+        + Category.INCLUDE_IN_BUDGET
+        + " INTEGER )";
+
     db.execSQL(CREATE_TRANSACTION_TABLE);
+    db.execSQL(CREATE_CATEGORY_TABLE);
   }
 
   @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

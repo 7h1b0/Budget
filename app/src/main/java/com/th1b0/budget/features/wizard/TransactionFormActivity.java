@@ -23,7 +23,7 @@ import com.th1b0.budget.util.DateUtil;
  * Created by 7h1b0.
  */
 
-public class TransactionFormActivity extends AppCompatActivity
+public final class TransactionFormActivity extends AppCompatActivity
     implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySet {
 
   private ActivityTransactionWizardBinding mView;
@@ -121,7 +121,7 @@ public class TransactionFormActivity extends AppCompatActivity
 
   private void updateCategory() {
     String[] categories = getResources().getStringArray(R.array.categories_title);
-    mView.categorie.setText(categories[mTransaction.getCategory()]);
+    mView.categorie.setText(categories[mTransaction.getIdCategory()]);
   }
 
   private void setupListener() {
@@ -133,7 +133,7 @@ public class TransactionFormActivity extends AppCompatActivity
     });
 
     mView.categorieLayout.setOnClickListener(
-        v -> CategoryDialog.newInstance(mTransaction.getCategory())
+        v -> CategoryDialog.newInstance(mTransaction.getIdCategory())
             .show(getFragmentManager(), null));
   }
 
@@ -182,7 +182,7 @@ public class TransactionFormActivity extends AppCompatActivity
   }
 
   @Override public void onCategorySet(int category) {
-    mTransaction.setCategory(category);
+    mTransaction.setIdCategory(category);
     updateCategory();
   }
 }

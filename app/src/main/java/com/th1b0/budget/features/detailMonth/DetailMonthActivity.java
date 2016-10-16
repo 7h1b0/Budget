@@ -16,7 +16,7 @@ import com.th1b0.budget.util.DateUtil;
  * Created by 7h1b0.
  */
 
-public class DetailMonthActivity extends AppCompatActivity {
+public final class DetailMonthActivity extends AppCompatActivity {
 
   public static Intent newInstance(@NonNull Context context, @NonNull Budget budget) {
     Intent intent = new Intent(context, DetailMonthActivity.class);

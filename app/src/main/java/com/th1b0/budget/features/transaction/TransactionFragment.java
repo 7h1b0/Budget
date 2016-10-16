@@ -3,18 +3,18 @@ package com.th1b0.budget.features.transaction;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.th1b0.budget.R;
-import com.th1b0.budget.features.pager.PagerActivity;
+import com.th1b0.budget.databinding.FragmentRecyclerViewBinding;
 import com.th1b0.budget.features.wizard.TransactionFormActivity;
 import com.th1b0.budget.model.RecyclerItem;
 import com.th1b0.budget.model.Transaction;
@@ -27,12 +27,13 @@ import java.util.ArrayList;
  */
 
 public final class TransactionFragment extends Fragment
-    implements TransactionView, TransactionAdapter.OnClick {
+    implements TransactionView, TransactionAdapter.OnTransactionClick {
 
   public static final int CONFIRM_DELETE = 2;
 
   private TransactionPresenter mPresenter;
   private TransactionAdapter mAdapter;
+  private FragmentRecyclerViewBinding mView;
 
   public static TransactionFragment newInstance() {
     return new TransactionFragment();
@@ -56,25 +57,16 @@ public final class TransactionFragment extends Fragment
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_recycler_view, container, false);
+    mView = DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_view, container, false);
+    return mView.getRoot();
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    // Setup Recycler
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
-    recyclerView.setLayoutManager(layoutManager);
-    recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-    recyclerView.setAdapter(mAdapter);
-
-    if (isDetailMonth()) {
-      mPresenter.loadTransaction(getArguments().getInt(Transaction.MONTH),
-          getArguments().getInt(Transaction.YEAR));
-    } else {
-      mPresenter.loadTransaction();
-    }
+    initializeRecycler();
+    initializeFAB();
+    loadTransactions();
   }
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -94,19 +86,14 @@ public final class TransactionFragment extends Fragment
   }
 
   @Override public void onTransactionLoaded(ArrayList<RecyclerItem> transactions) {
-    Log.e("TransactionFragment", "onTransactionLoaded");
     mAdapter.addAll(transactions);
   }
 
   @Override public void onError(String error) {
-    try {
-      ((PagerActivity) getActivity()).showMessage(error);
-    } catch (ClassCastException e) {
-      Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
-    }
+    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
   }
 
-  @Override public void onClick(Transaction transaction) {
+  @Override public void onTransactionClick(@NonNull Transaction transaction) {
     View view = View.inflate(getActivity(), R.layout.bottomsheet_transaction, null);
     BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
     dialog.setContentView(view);
@@ -116,6 +103,7 @@ public final class TransactionFragment extends Fragment
       startActivity(TransactionFormActivity.newInstance(getActivity(), transaction));
       dialog.dismiss();
     });
+
     view.findViewById(R.id.delete).setOnClickListener(v -> {
       ConfirmDialog.newInstance(transaction, this, CONFIRM_DELETE).show(getFragmentManager(), null);
       dialog.dismiss();
@@ -126,5 +114,26 @@ public final class TransactionFragment extends Fragment
     return getArguments() != null
         && getArguments().containsKey(Transaction.YEAR)
         && getArguments().containsKey(Transaction.MONTH);
+  }
+
+  private void initializeRecycler() {
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+    mView.recycler.setLayoutManager(layoutManager);
+    mView.recycler.addItemDecoration(new DividerItemDecoration(getActivity()));
+    mView.recycler.setAdapter(mAdapter);
+  }
+
+  private void initializeFAB() {
+    mView.fab.setOnClickListener(
+        v -> startActivity(TransactionFormActivity.newInstance(getActivity())));
+  }
+
+  private void loadTransactions() {
+    if (isDetailMonth()) {
+      mPresenter.loadTransaction(getArguments().getInt(Transaction.MONTH),
+          getArguments().getInt(Transaction.YEAR));
+    } else {
+      mPresenter.loadTransaction();
+    }
   }
 }

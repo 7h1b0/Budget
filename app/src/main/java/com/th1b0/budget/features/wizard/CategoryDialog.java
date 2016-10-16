@@ -24,7 +24,7 @@ public class CategoryDialog extends DialogFragment {
   public static CategoryDialog newInstance(int category) {
     CategoryDialog dialog = new CategoryDialog();
     Bundle args = new Bundle();
-    args.putInt(Transaction.CATEGORY, category);
+    args.putInt(Transaction.ID_CATEGORY, category);
     dialog.setArguments(args);
     return dialog;
   }
@@ -40,7 +40,7 @@ public class CategoryDialog extends DialogFragment {
 
   @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
     final String[] categories = getResources().getStringArray(R.array.categories_title);
-    final int category = getArguments().getInt(Transaction.CATEGORY);
+    final int category = getArguments().getInt(Transaction.ID_CATEGORY);
 
     return new AlertDialog.Builder(getActivity()).setTitle(R.string.set_categorie)
         .setSingleChoiceItems(categories, category, null)

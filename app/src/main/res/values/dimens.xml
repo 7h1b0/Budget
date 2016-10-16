@@ -5,6 +5,7 @@
     <dimen name="spacing_huge">72dp</dimen>
 
     <dimen name="item_height_single">48dp</dimen>
+    <dimen name="item_height_single_icon">56dp</dimen>
     <dimen name="item_height_double">72dp</dimen>
     <dimen name="item_height_input">88dp</dimen>
 

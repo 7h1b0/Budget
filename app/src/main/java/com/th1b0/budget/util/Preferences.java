@@ -14,6 +14,7 @@ public class Preferences {
   public static final String START = "pref_start";
   public static final String PREF_BUDGET_VALUE = "pref_budget_value";
   public static final String PREF_ENLARGE_FIRST_CELL = "pref_enlarge_first_cell";
+  public static final String PREF_FIRST_LAUNCH = "pref_first_launch";
 
   public static int getBudgetValue(@NonNull final Context context) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -27,5 +28,17 @@ public class Preferences {
   public static boolean enlargeFirstCell(@NonNull final Context context) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     return sharedPreferences.getBoolean(PREF_ENLARGE_FIRST_CELL, true);
+  }
+
+  public static boolean firstLaunch(@NonNull final Context context) {
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    return sharedPreferences.getBoolean(PREF_FIRST_LAUNCH, true);
+  }
+
+  public static void setFirstLaunch(@NonNull final Context context, boolean firstLaunch) {
+    PreferenceManager.getDefaultSharedPreferences(context)
+        .edit()
+        .putBoolean(PREF_FIRST_LAUNCH, firstLaunch)
+        .apply();
   }
 }

@@ -1,9 +1,11 @@
 package com.th1b0.budget.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public final class BudgetTable extends Database {
     super(context);
   }
 
-  @Nullable public Observable<ArrayList<Budget>> getAll(int limit) {
+  public Observable<ArrayList<Budget>> getAll(int limit) {
     return db.createQuery(TABLE_TRANSACTION, "SELECT "
         + Transaction.MONTH
         + ", "
@@ -31,6 +33,15 @@ public final class BudgetTable extends Database {
         + Budget.VALUE
         + " FROM "
         + TABLE_TRANSACTION
+        + " AS t JOIN "
+        + TABLE_CATEGORY
+        + " AS c ON "
+        + Transaction.ID_CATEGORY
+        + " = "
+        + Category.ID
+        + " WHERE "
+        + Category.INCLUDE_IN_BUDGET
+        + " = 1 "
         + " GROUP BY "
         + Transaction.MONTH
         + ", "
