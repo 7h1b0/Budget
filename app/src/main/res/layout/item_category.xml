@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/item_height_single_icon"
+    android:layout_height="@dimen/item_height_double"
     android:background="?attr/backgroundItem"
     android:orientation="horizontal"
     >
@@ -22,10 +22,8 @@
   <TextView
       android:id="@+id/title"
       android:layout_gravity="center_vertical"
-      android:ellipsize="end"
-      android:maxLines="1"
       tools:text="Ut dolor porro id rerum aliquid aspernatur asperiores dicta"
-      style="@style/TextSubhead"
+      style="@style/TextSubheadOneLine"
       android:layout_marginEnd="@dimen/spacing_medium"
       />
 

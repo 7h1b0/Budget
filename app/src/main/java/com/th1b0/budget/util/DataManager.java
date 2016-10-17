@@ -4,11 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.th1b0.budget.database.BudgetTable;
 import com.th1b0.budget.database.CategoryTable;
+import com.th1b0.budget.database.ContainerTable;
 import com.th1b0.budget.database.TransactionTable;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.Transaction;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +26,14 @@ public class DataManager {
   private TransactionTable mTransactionTable;
   private BudgetTable mBudgetTable;
   private CategoryTable mCategoryTable;
+  private ContainerTable mContainerTable;
   private BehaviorSubject<String> mRxPreferences;
 
   private DataManager(@NonNull Context context) {
     mTransactionTable = new TransactionTable(context);
     mBudgetTable = new BudgetTable(context);
     mCategoryTable = new CategoryTable(context);
+    mContainerTable = new ContainerTable(context);
     mRxPreferences = BehaviorSubject.create(Preferences.START);
   }
 
@@ -77,10 +80,31 @@ public class DataManager {
     mCategoryTable.add(categories);
   }
 
+  public int updateCategory(@NonNull Category category) {
+    return mCategoryTable.update(category);
+  }
+
   public Observable<Integer> deleteCategory(@NonNull Category category) {
     return Observable.just(mCategoryTable.delete(category))
         .filter(rows -> rows > 0)
         .map(ignored -> mTransactionTable.delete(category));
+  }
+
+  public Observable<ArrayList<Container>> getContainers(){
+    return mContainerTable.getAll();
+  }
+
+  public long addContainers(@NonNull Container container) {
+    return mContainerTable.add(container);
+  }
+
+  public int updateContainer(@NonNull Container container) {
+    return mContainerTable.update(container);
+  }
+
+  /** TODO Update Category where idContainer = container.getId() */
+  public int deleteContainer(@NonNull Container container) {
+    return mContainerTable.delete(container);
   }
 
   public void preferenceChange(String keyPref) {

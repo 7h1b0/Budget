@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.home;
 
 import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Budget;
@@ -16,9 +16,9 @@ import rx.schedulers.Schedulers;
  * Created by 7h1b0.
  */
 
-final class BudgetPresenterImpl extends PresenterImpl<BudgetView> implements BudgetPresenter {
+final class HomePresenterImpl extends PresenterImpl<HomeView> implements homePresenter {
 
-  BudgetPresenterImpl(@NonNull BudgetView view, @NonNull DataManager dataManager) {
+  HomePresenterImpl(@NonNull HomeView view, @NonNull DataManager dataManager) {
     super(view, dataManager);
   }
 

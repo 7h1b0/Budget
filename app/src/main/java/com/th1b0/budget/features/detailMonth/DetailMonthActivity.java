@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.detailMonth;
+package com.th1b0.budget.features.detailmonth;
 
 import android.content.Context;
 import android.content.Intent;

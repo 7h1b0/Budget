@@ -17,8 +17,9 @@
         </activity>
 
         <activity android:name=".features.settings.SettingsActivity"/>
-        <activity android:name=".features.wizard.TransactionFormActivity"/>
-        <activity android:name=".features.detailMonth.DetailMonthActivity"/>
+        <activity android:name=".features.transactionform.TransactionFormActivity"/>
+        <activity android:name=".features.categoryform.CategoryFormActivity"/>
+        <activity android:name=".features.detailmonth.DetailMonthActivity"/>
 
     </application>
 

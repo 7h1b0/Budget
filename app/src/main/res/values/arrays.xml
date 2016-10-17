@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="icon_drawable">
+        <item>@mipmap/ic_diner</item>
+        <item>@mipmap/ic_food</item>
+        <item>@mipmap/ic_category</item>
+        <item>@mipmap/ic_hobby</item>
+        <item>@mipmap/ic_color</item>
+        <item>@mipmap/ic_school</item>
+        <item>@mipmap/ic_shopping</item>
+        <item>@mipmap/ic_transactions</item>
+        <item>@mipmap/ic_transport</item>
+    </array>
+</resources>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <include
+                layout="@layout/toolbar"
+                android:id="@+id/included"
+                />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+
+                    <!-- Description -->
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/title_input_layout"
+                        android:layout_gravity="bottom"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        android:layout_marginStart="@dimen/spacing_medium"
+                        style="@style/Input"
+                        >
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/title"
+                            android:inputType="text"
+                            android:textColor="?attr/textColor"
+                            android:textSize="@dimen/font_headline"
+                            />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/dividerColor"
+                        />
+
+                    <!-- Color -->
+                    <FrameLayout
+                        android:id="@+id/color_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        >
+
+                        <ImageView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/spacing_medium"
+                            android:src="@mipmap/ic_color"
+                            style="@style/IconShort"
+                            />
+
+                        <TextView
+                            android:id="@+id/color"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_marginStart="@dimen/spacing_huge"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/spacing_large"
+                            android:paddingTop="@dimen/spacing_large"
+                            android:text="@string/color"
+                            style="@style/TextSubhead"
+                            />
+
+                    </FrameLayout>
+
+
+                    <!-- Icon -->
+                    <FrameLayout
+                        android:id="@+id/icon_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        >
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/spacing_medium"
+                            android:src="@mipmap/ic_category"
+                            style="@style/IconShort"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_marginStart="@dimen/spacing_huge"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:paddingBottom="@dimen/spacing_large"
+                            android:paddingTop="@dimen/spacing_large"
+                            android:text="@string/icon"
+                            style="@style/TextSubhead"
+                            />
+
+                    </FrameLayout>
+
+                    <!-- Include in Budget -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/spacing_large"
+                        android:paddingTop="@dimen/spacing_large"
+                        android:paddingEnd="@dimen/spacing_medium"
+                        >
+
+                        <ImageView
+                            android:id="@+id/include_in_budget_icon"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/spacing_medium"
+                            android:src="@mipmap/ic_category"
+                            style="@style/IconShort"
+                            />
+
+                        <TextView
+                            android:layout_toEndOf="@+id/include_in_budget_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_marginStart="32dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/include_in_budget"
+                            style="@style/TextSubhead"
+                            />
+
+                        <Switch
+                            android:id="@+id/include_in_budget"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

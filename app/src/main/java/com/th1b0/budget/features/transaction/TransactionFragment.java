@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentRecyclerViewBinding;
-import com.th1b0.budget.features.wizard.TransactionFormActivity;
+import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.RecyclerItem;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DataManager;
@@ -94,7 +94,7 @@ public final class TransactionFragment extends Fragment
   }
 
   @Override public void onTransactionClick(@NonNull Transaction transaction) {
-    View view = View.inflate(getActivity(), R.layout.bottomsheet_transaction, null);
+    View view = View.inflate(getActivity(), R.layout.bottomsheet_edit, null);
     BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
     dialog.setContentView(view);
     dialog.show();

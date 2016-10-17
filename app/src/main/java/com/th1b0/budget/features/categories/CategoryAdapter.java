@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +20,15 @@ import java.util.ArrayList;
 
 final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCategory> {
 
-  interface CnCategoryClick {
+  interface OnCategoryClick {
     void onCategoryClick(@NonNull Category category);
   }
 
   private ArrayList<Category> mCategories;
   private Context mContext;
-  private CnCategoryClick mListener;
+  private OnCategoryClick mListener;
 
-  CategoryAdapter(@NonNull Context context, @NonNull CnCategoryClick listener) {
+  CategoryAdapter(@NonNull Context context, @NonNull OnCategoryClick listener) {
     mContext = context;
     mListener = listener;
     mCategories = new ArrayList<>();
@@ -38,7 +37,7 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
 
   @Override public ViewCategory onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_budget, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category, parent, false);
     return new ViewCategory(view);
   }
 
@@ -49,8 +48,7 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
     holder.icon.setImageResource(category.getIcon());
 
     Drawable drawable = holder.icon.getBackground();
-    int color = ContextCompat.getColor(mContext, category.getColor());
-    drawable.setColorFilter(color, PorterDuff.Mode.SRC);
+    drawable.setColorFilter(category.getColor(), PorterDuff.Mode.SRC);
   }
 
   @Override public long getItemId(int position) {

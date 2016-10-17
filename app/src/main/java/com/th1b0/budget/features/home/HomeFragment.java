@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.home;
 
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentRecyclerViewBinding;
-import com.th1b0.budget.features.detailMonth.DetailMonthActivity;
-import com.th1b0.budget.features.wizard.TransactionFormActivity;
+import com.th1b0.budget.features.detailmonth.DetailMonthActivity;
+import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DividerItemDecoration;
@@ -23,22 +23,22 @@ import java.util.ArrayList;
  * Created by 7h1b0.
  */
 
-public final class BudgetFragment extends Fragment
-    implements BudgetView, BudgetAdapter.OnBudgetClick {
+public final class HomeFragment extends Fragment
+    implements HomeView, HomeAdapter.OnBudgetClick {
 
-  private BudgetPresenter mPresenter;
-  private BudgetAdapter mAdapter;
+  private homePresenter mPresenter;
+  private HomeAdapter mAdapter;
   private FragmentRecyclerViewBinding mView;
 
-  public static BudgetFragment newInstance() {
-    return new BudgetFragment();
+  public static HomeFragment newInstance() {
+    return new HomeFragment();
   }
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new BudgetPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new BudgetAdapter(getActivity(), this);
+    mPresenter = new HomePresenterImpl(this, DataManager.getInstance(getActivity()));
+    mAdapter = new HomeAdapter(getActivity(), this);
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,

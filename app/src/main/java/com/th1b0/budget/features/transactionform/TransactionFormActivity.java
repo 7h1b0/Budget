@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.wizard;
+package com.th1b0.budget.features.transactionform;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -8,27 +8,32 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import com.th1b0.budget.R;
-import com.th1b0.budget.databinding.ActivityTransactionWizardBinding;
+import com.th1b0.budget.databinding.ActivityTransactionFormBinding;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DateUtil;
+import java.util.ArrayList;
 
 /**
  * Created by 7h1b0.
  */
 
 public final class TransactionFormActivity extends AppCompatActivity
-    implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySet {
+    implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySet,
+    TransactionFormView {
 
-  private ActivityTransactionWizardBinding mView;
+  private ActivityTransactionFormBinding mView;
   private Transaction mTransaction;
-  private WizardTransactionPresenter mPresenter;
+  private TransactionFormPresenter mPresenter;
+  private ArrayList<Category> mCategories;
 
   public static Intent newInstance(@NonNull Context context) {
     return new Intent(context, TransactionFormActivity.class);
@@ -42,8 +47,9 @@ public final class TransactionFormActivity extends AppCompatActivity
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mView = DataBindingUtil.setContentView(this, R.layout.activity_transaction_wizard);
-    mPresenter = new WizardTransactionPresenterImpl(this, DataManager.getInstance(this));
+    mView = DataBindingUtil.setContentView(this, R.layout.activity_transaction_form);
+    mPresenter = new TransactionFormPresenterImpl(this, DataManager.getInstance(this));
+    mCategories = new ArrayList<>();
 
     if (savedInstanceState != null) {
       mTransaction = savedInstanceState.getParcelable(Transaction.TRANSACTION);
@@ -56,6 +62,10 @@ public final class TransactionFormActivity extends AppCompatActivity
     setupToolbar();
     fillForm();
     setupListener();
+
+    if (savedInstanceState == null) {
+      mPresenter.loadCategory();
+    }
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,9 +97,20 @@ public final class TransactionFormActivity extends AppCompatActivity
     }
   }
 
+  @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    mCategories = savedInstanceState.getParcelableArrayList(Category.CATEGORIES);
+  }
+
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelable(Transaction.TRANSACTION, mTransaction);
+    outState.putParcelableArrayList(Category.CATEGORIES, mCategories);
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    mPresenter.detach();
   }
 
   private void setupToolbar() {
@@ -120,8 +141,10 @@ public final class TransactionFormActivity extends AppCompatActivity
   }
 
   private void updateCategory() {
-    String[] categories = getResources().getStringArray(R.array.categories_title);
-    mView.categorie.setText(categories[mTransaction.getIdCategory()]);
+    int position = findCategoryPosition(mTransaction.getIdCategory());
+    if (position > -1) {
+      mView.category.setText(mCategories.get(position).getTitle());
+    }
   }
 
   private void setupListener() {
@@ -132,9 +155,10 @@ public final class TransactionFormActivity extends AppCompatActivity
       dialog.show();
     });
 
-    mView.categorieLayout.setOnClickListener(
-        v -> CategoryDialog.newInstance(mTransaction.getIdCategory())
-            .show(getFragmentManager(), null));
+    mView.categoryLayout.setOnClickListener(v -> {
+      int position = findCategoryPosition(mTransaction.getIdCategory());
+      CategoryDialog.newInstance(mCategories, position).show(getFragmentManager(), null);
+    });
   }
 
   private boolean isFormValid() {
@@ -144,7 +168,7 @@ public final class TransactionFormActivity extends AppCompatActivity
       mView.descriptionInputLayout.setError(getString(R.string.no_empty_field));
       isValid = false;
     } else {
-      mView.valueInputLayout.setErrorEnabled(false);
+      mView.descriptionInputLayout.setErrorEnabled(false);
     }
 
     if (mView.value.getText().length() == 0) {
@@ -181,8 +205,29 @@ public final class TransactionFormActivity extends AppCompatActivity
     updateDate();
   }
 
-  @Override public void onCategorySet(int category) {
-    mTransaction.setIdCategory(category);
+  @Override public void onCategorySet(@NonNull Category category) {
+    mTransaction.setIdCategory(category.getId());
     updateCategory();
+  }
+
+  @Override public void onCategoriesLoaded(ArrayList<Category> categories) {
+    mCategories = categories;
+    if (mTransaction.getIdCategory() == -1 && !categories.isEmpty()) {
+      mTransaction.setIdCategory(categories.get(0).getId());
+    }
+    updateCategory();
+  }
+
+  @Override public void onError(String error) {
+    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
+  }
+
+  private int findCategoryPosition(long selected) {
+    for (int index = 0; index < mCategories.size(); index++) {
+      if (mCategories.get(index).getId() == selected) {
+        return index;
+      }
+    }
+    return -1;
   }
 }

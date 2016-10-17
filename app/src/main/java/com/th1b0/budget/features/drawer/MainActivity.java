@@ -1,7 +1,6 @@
 package com.th1b0.budget.features.drawer;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,9 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityMainBinding;
-import com.th1b0.budget.features.budget.BudgetFragment;
+import com.th1b0.budget.features.home.HomeFragment;
 import com.th1b0.budget.features.categories.CategoryFragment;
-import com.th1b0.budget.features.settings.SettingsActivity;
 import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
@@ -87,8 +85,8 @@ public final class MainActivity extends AppCompatActivity
     mView.drawer.closeDrawers();
 
     switch (item.getItemId()) {
-      case R.id.budget:
-        display(BudgetFragment.newInstance(), item.getTitle());
+      case R.id.home:
+        display(HomeFragment.newInstance(), item.getTitle());
         return true;
 
       case R.id.transactions:
@@ -99,9 +97,12 @@ public final class MainActivity extends AppCompatActivity
         display(CategoryFragment.newInstance(), item.getTitle());
         return true;
 
-      case R.id.settings:
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+      case R.id.budget:
+        display(CategoryFragment.newInstance(), item.getTitle());
+        return true;
+
+      case R.id.history:
+        display(CategoryFragment.newInstance(), item.getTitle());
         return true;
 
       default:
@@ -120,15 +121,15 @@ public final class MainActivity extends AppCompatActivity
     ArrayList<Category> categories = new ArrayList<>(5);
     categories.add(
         new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food),
-            R.mipmap.ic_food, true));
+            R.mipmap.ic_food));
     categories.add(new Category(getString(R.string.diner),
-        ContextCompat.getColor(this, R.color.category_diner), R.mipmap.ic_diner, true));
+        ContextCompat.getColor(this, R.color.category_diner), R.mipmap.ic_diner));
     categories.add(new Category(getString(R.string.hobby),
-        ContextCompat.getColor(this, R.color.category_hobby), R.mipmap.ic_hobby, true));
+        ContextCompat.getColor(this, R.color.category_hobby), R.mipmap.ic_hobby));
     categories.add(new Category(getString(R.string.shopping),
-        ContextCompat.getColor(this, R.color.category_shopping), R.mipmap.ic_shopping, true));
+        ContextCompat.getColor(this, R.color.category_shopping), R.mipmap.ic_shopping));
     categories.add(new Category(getString(R.string.transport),
-        ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport, true));
+        ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
 
     DataManager.getInstance(this).addCategories(categories);
   }

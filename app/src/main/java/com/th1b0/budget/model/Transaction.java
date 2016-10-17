@@ -26,13 +26,13 @@ public class Transaction implements Parcelable, RecyclerItem {
   private int month;
   private int year;
   private double value;
-  private int idCategory;
+  private long idCategory;
   private int color;
   private int icon;
   private String description;
 
   public Transaction() {
-    this(-1, DateUtil.getCurrentDay(), DateUtil.getCurrentMonth(), DateUtil.getCurrentYear(), 0, 0, null);
+    this(-1, DateUtil.getCurrentDay(), DateUtil.getCurrentMonth(), DateUtil.getCurrentYear(), 0, -1, null);
   }
 
   public Transaction(Parcel in) {
@@ -41,21 +41,21 @@ public class Transaction implements Parcelable, RecyclerItem {
     this.month = in.readInt();
     this.year = in.readInt();
     this.value = in.readDouble();
-    this.idCategory = in.readInt();
+    this.idCategory = in.readLong();
     this.description = in.readString();
     this.color = in.readInt();
     this.icon = in.readInt();
   }
 
   public Transaction(int day, int month, int year, double value, int idCategory, String description) {
-    this(-1, day, month, year, value, idCategory, description, -1, -1);
+    this(-1, day, month, year, value, idCategory, description);
   }
 
-  public Transaction(long id, int day, int month, int year, double value, int idCategory, String description) {
+  public Transaction(long id, int day, int month, int year, double value, long idCategory, String description) {
     this(id, day, month, year, value, idCategory, description, -1, -1);
   }
 
-  public Transaction(long id, int day, int month, int year, double value, int idCategory, String description, @ColorInt int color, @DimenRes int icon) {
+  public Transaction(long id, int day, int month, int year, double value, long idCategory, String description, @ColorInt int color, @DimenRes int icon) {
     this.id = id;
     this.day = day;
     this.month = month;
@@ -107,11 +107,11 @@ public class Transaction implements Parcelable, RecyclerItem {
     this.value = value;
   }
 
-  public int getIdCategory() {
+  public long getIdCategory() {
     return idCategory;
   }
 
-  public void setIdCategory(int idCategory) {
+  public void setIdCategory(long idCategory) {
     this.idCategory = idCategory;
   }
 
@@ -141,7 +141,7 @@ public class Transaction implements Parcelable, RecyclerItem {
     dest.writeInt(month);
     dest.writeInt(year);
     dest.writeDouble(value);
-    dest.writeInt(idCategory);
+    dest.writeLong(idCategory);
     dest.writeString(description);
     dest.writeInt(color);
     dest.writeInt(icon);
@@ -174,8 +174,10 @@ public class Transaction implements Parcelable, RecyclerItem {
     result = 31 * result + year;
     temp = Double.doubleToLongBits(value);
     result = 31 * result + (int) (temp ^ (temp >>> 32));
-    result = 31 * result + idCategory;
-    result = 31 * result + description.hashCode();
+    result = 31 * result + (int) (idCategory ^ (idCategory >>> 32));
+    result = 31 * result + color;
+    result = 31 * result + icon;
+    result = 31 * result + (description != null ? description.hashCode() : 0);
     return result;
   }
 }

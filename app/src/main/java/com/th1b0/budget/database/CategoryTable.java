@@ -30,9 +30,9 @@ public final class CategoryTable extends Database {
         + ","
         + Category.ICON
         + ", "
-        + Category.INCLUDE_IN_BUDGET
+        + Category.ID_CONTAINERS
         + " FROM "
-        + TABLE_TRANSACTION
+        + TABLE_CATEGORY
         + " ORDER BY "
         + Category.TITLE).map(super::getCursor).map(cursor -> {
       try {
@@ -77,15 +77,14 @@ public final class CategoryTable extends Database {
     values.put(Category.TITLE, category.getTitle());
     values.put(Category.COLOR, category.getColor());
     values.put(Category.ICON, category.getIcon());
-    values.put(Category.INCLUDE_IN_BUDGET, category.isIncludeInBudget());
+    values.put(Category.ID_CONTAINERS, category.getIdContainers());
 
     return values;
   }
 
   private Category getCategory(@NonNull Cursor cursor) {
     return new Category(DbUtil.getLong(cursor, Category.ID),
-        DbUtil.getString(cursor, Category.TITLE), DbUtil.getInt(cursor, Category.COLOR),
-        DbUtil.getInt(cursor, Category.ICON),
-        DbUtil.getBoolean(cursor, Category.INCLUDE_IN_BUDGET));
+        DbUtil.getLong(cursor, Category.ID_CONTAINERS), DbUtil.getString(cursor, Category.TITLE),
+        DbUtil.getInt(cursor, Category.COLOR), DbUtil.getInt(cursor, Category.ICON));
   }
 }

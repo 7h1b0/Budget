@@ -3,8 +3,8 @@ package com.th1b0.budget.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import com.th1b0.budget.R;
 
 /**
  * Created by 7h1b0
@@ -13,36 +13,45 @@ import android.support.annotation.DrawableRes;
 public class Category implements Parcelable {
 
   public static final String CATEGORY = "category";
+  public static final String CATEGORIES = "categories";
   public static final String ID = "c_id";
   public static final String TITLE = "c_title";
   public static final String COLOR = "c_color";
   public static final String ICON = "c_icon";
-  public static final String INCLUDE_IN_BUDGET = "c_include_on_budget";
+  public static final String ID_CONTAINERS = "c_id_containers";
 
   private long id;
+  private long idContainers;
   private String title;
   @ColorInt private int color;
   @DrawableRes private int icon;
-  private boolean includeInBudget;
 
   public Category(Parcel in) {
     id = in.readLong();
     title = in.readString();
     color = in.readInt();
     icon = in.readInt();
-    includeInBudget = in.readByte() == 1;
+    idContainers = in.readLong();
   }
 
-  public Category(long id, String title, @ColorInt int color, @DrawableRes int icon, boolean includeInBudget) {
+  public Category(@ColorInt int color) {
+    this(-1, -1, null, color, R.mipmap.ic_category);
+  }
+
+  public Category(long id, long idContainers, String title, @ColorInt int color, @DrawableRes int icon) {
     this.id = id;
+    this.idContainers = idContainers;
     this.title = title;
     this.color = color;
     this.icon = icon;
-    this.includeInBudget = includeInBudget;
   }
 
-  public Category(String title, @ColorInt int color, @DrawableRes int icon, boolean includeInBudget) {
-    this(-1, title, color, icon, includeInBudget);
+  public Category(long idContainers, String title, @ColorInt int color, @DrawableRes int icon) {
+    this(-1, idContainers, title, color, icon);
+  }
+
+  public Category(String title, @ColorInt int color, @DrawableRes int icon) {
+    this(-1, -1, title, color, icon);
   }
 
   public long getId() {
@@ -77,12 +86,12 @@ public class Category implements Parcelable {
     this.icon = icon;
   }
 
-  public boolean isIncludeInBudget() {
-    return includeInBudget;
+  public long getIdContainers() {
+    return idContainers;
   }
 
-  public void setIncludeInBudget(boolean includeInBudget) {
-    this.includeInBudget = includeInBudget;
+  public void setIdContainers(long idContainers) {
+    this.idContainers = idContainers;
   }
 
   @Override public int describeContents() {
@@ -94,7 +103,7 @@ public class Category implements Parcelable {
     dest.writeString(title);
     dest.writeInt(color);
     dest.writeInt(icon);
-    dest.writeByte(includeInBudget ? (byte) 1 : (byte) 0);
+    dest.writeLong(idContainers);
   }
 
   public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
@@ -114,18 +123,18 @@ public class Category implements Parcelable {
     Category category = (Category) o;
 
     if (id != category.id) return false;
+    if (idContainers != category.idContainers) return false;
     if (color != category.color) return false;
     if (icon != category.icon) return false;
-    if (includeInBudget != category.includeInBudget) return false;
     return title != null ? title.equals(category.title) : category.title == null;
   }
 
   @Override public int hashCode() {
     int result = (int) (id ^ (id >>> 32));
+    result = 31 * result + (int) (idContainers ^ (idContainers >>> 32));
     result = 31 * result + (title != null ? title.hashCode() : 0);
     result = 31 * result + color;
     result = 31 * result + icon;
-    result = 31 * result + (includeInBudget ? 1 : 0);
     return result;
   }
 }

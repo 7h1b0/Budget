@@ -4,25 +4,29 @@
       android:id="@+id/group"
       android:checkableBehavior="single">
     <item
-        android:id="@+id/budget"
+        android:id="@+id/home"
         android:checked="true"
-        android:icon="@mipmap/ic_diner"
-        android:title="@string/budget"/>
+        android:icon="@mipmap/ic_home"
+        android:title="@string/home"/>
 
     <item
         android:id="@+id/transactions"
-        android:icon="@mipmap/ic_diner"
+        android:icon="@mipmap/ic_transactions"
         android:title="@string/transactions"/>
 
     <item
         android:id="@+id/categories"
         android:icon="@mipmap/ic_category"
         android:title="@string/categories"/>
-  </group>
 
-  <item
-      android:id="@+id/settings"
-      android:checkable="false"
-      android:icon="@mipmap/ic_diner"
-      android:title="@string/settings"/>
+    <item
+        android:id="@+id/budget"
+        android:icon="@mipmap/ic_category"
+        android:title="@string/budgets"/>
+
+    <item
+        android:id="@+id/history"
+        android:icon="@mipmap/ic_category"
+        android:title="@string/history"/>
+  </group>
 </menu>

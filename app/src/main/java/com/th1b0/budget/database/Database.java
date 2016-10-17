@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.Transaction;
 import rx.schedulers.Schedulers;
 
@@ -17,10 +18,11 @@ import rx.schedulers.Schedulers;
 
 abstract class Database extends SQLiteOpenHelper {
 
-  public static final int DATABASE_VERSION = 5;
+  public static final int DATABASE_VERSION = 7;
   public static final String DATABASE_NAME = "budget";
   public static final String TABLE_TRANSACTION = "transaction_table";
   public static final String TABLE_CATEGORY = "category_table";
+  public static final String TABLE_CONTAINER = "container_table";
 
   static BriteDatabase db;
 
@@ -60,15 +62,28 @@ abstract class Database extends SQLiteOpenHelper {
         + " INTEGER, "
         + Category.ICON
         + " INTEGER, "
-        + Category.INCLUDE_IN_BUDGET
+        + Category.ID_CONTAINERS
         + " INTEGER )";
+
+    String CREATE_CONTAINER_TABLE = "CREATE TABLE "
+        + TABLE_CONTAINER
+        + " ( "
+        + Container.ID
+        + " INTEGER PRIMARY KEY, "
+        + Container.TITLE
+        + " TEXT, "
+        + Container.VALUE
+        + " INTEGER ) ";
 
     db.execSQL(CREATE_TRANSACTION_TABLE);
     db.execSQL(CREATE_CATEGORY_TABLE);
+    db.execSQL(CREATE_CONTAINER_TABLE);
   }
 
   @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION);
+    db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+    db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTAINER);
     onCreate(db);
   }
 

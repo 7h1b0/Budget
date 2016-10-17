@@ -24,7 +24,7 @@
             />
 
         <TextView
-            android:id="@+id/detail"
+            android:id="@+id/total"
             android:gravity="center_vertical"
             android:textSize="@dimen/font_label"
             tools:text="250 on 300€"

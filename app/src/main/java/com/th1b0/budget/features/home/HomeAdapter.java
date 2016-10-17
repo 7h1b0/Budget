@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.home;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created by 7h1b0.
  */
 
-final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+final class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private static final int HEADER = 1;
   private static final int ITEM = 2;
@@ -31,7 +31,7 @@ final class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   private Context mContext;
   private OnBudgetClick mListener;
 
-  BudgetAdapter(@NonNull Context context, @NonNull OnBudgetClick listener) {
+  HomeAdapter(@NonNull Context context, @NonNull OnBudgetClick listener) {
     mContext = context;
     mListener = listener;
     mItems = new ArrayList<>();

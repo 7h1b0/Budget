@@ -1,5 +1,6 @@
 package com.th1b0.budget.features.categories;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentRecyclerViewBinding;
+import com.th1b0.budget.features.categoryform.CategoryFormActivity;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DividerItemDecoration;
@@ -23,9 +25,8 @@ import java.util.ArrayList;
  * Created by 7h1b0
  */
 
-public final class CategoryFragment extends Fragment implements CategoryView,
-    CategoryAdapter.CnCategoryClick {
-
+public final class CategoryFragment extends Fragment
+    implements CategoryView, CategoryAdapter.OnCategoryClick {
 
   public static final int CONFIRM_DELETE = 2;
 
@@ -36,7 +37,6 @@ public final class CategoryFragment extends Fragment implements CategoryView,
   public static CategoryFragment newInstance() {
     return new CategoryFragment();
   }
-
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -63,6 +63,10 @@ public final class CategoryFragment extends Fragment implements CategoryView,
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     switch (requestCode) {
       case CONFIRM_DELETE:
+        if (resultCode == Activity.RESULT_OK && data.hasExtra(Category.CATEGORY)) {
+          Category category = data.getParcelableExtra(Category.CATEGORY);
+          mPresenter.deleteCategory(category);
+        }
         break;
     }
   }
@@ -81,17 +85,20 @@ public final class CategoryFragment extends Fragment implements CategoryView,
   }
 
   @Override public void onCategoryClick(@NonNull Category category) {
-    View view = View.inflate(getActivity(), R.layout.bottomsheet_transaction, null);
+    View view = View.inflate(getActivity(), R.layout.bottomsheet_edit, null);
     BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
     dialog.setContentView(view);
     dialog.show();
 
     view.findViewById(R.id.edit).setOnClickListener(v -> {
-      // TODO Call CategoryFormActivity
+      startActivity(CategoryFormActivity.newInstance(getActivity(), category));
+      dialog.dismiss();
     });
 
     view.findViewById(R.id.delete).setOnClickListener(v -> {
-      // TODO Call ConfirmDialog
+      ConfirmCategoryDeletionDialog.newInstance(category, this, CONFIRM_DELETE)
+          .show(getFragmentManager(), null);
+      dialog.dismiss();
     });
   }
 
@@ -102,8 +109,8 @@ public final class CategoryFragment extends Fragment implements CategoryView,
     mView.recycler.setAdapter(mAdapter);
   }
 
-  /** TODO Call CategoryFormActivity */
   private void initializeFAB() {
-    mView.fab.setOnClickListener(v -> {});
+    mView.fab.setOnClickListener(
+        v -> startActivity(CategoryFormActivity.newInstance(getActivity())));
   }
 }
