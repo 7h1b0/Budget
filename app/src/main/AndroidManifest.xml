@@ -11,14 +11,13 @@
         <activity android:name=".features.drawer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
-                <idCategory android:name="android.intent.idCategory.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.settings.SettingsActivity"/>
         <activity android:name=".features.transactionform.TransactionFormActivity"/>
         <activity android:name=".features.categoryform.CategoryFormActivity"/>
+        <activity android:name=".features.containerform.ContainerFormActivity"/>
         <activity android:name=".features.detailmonth.DetailMonthActivity"/>
 
     </application>

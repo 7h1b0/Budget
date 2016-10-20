@@ -8,7 +8,7 @@ import com.th1b0.budget.util.Presenter;
  * Created by 7h1b0.
  */
 
-public interface ContainerPresenter extends Presenter {
+interface ContainerPresenter extends Presenter {
 
   void loadContainers();
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public final class TransactionTable extends Database {
         + Transaction.ID_CATEGORY
         + ", "
         + Transaction.DESCRIPTION
+        + ", "
+        + Transaction.ID_CONTAINER
         + ", "
         + Category.COLOR
         + ", "
@@ -83,6 +86,8 @@ public final class TransactionTable extends Database {
         + Transaction.ID_CATEGORY
         + ", "
         + Transaction.DESCRIPTION
+        + ", "
+        + Transaction.ID_CONTAINER
         + ", "
         + Category.COLOR
         + ", "
@@ -137,6 +142,13 @@ public final class TransactionTable extends Database {
         String.valueOf(category.getId()));
   }
 
+  public int removeIdContainer(long idContainer) {
+    ContentValues values = new ContentValues();
+    values.put(Transaction.ID_CONTAINER, Container.NOT_DEFINED);
+    return db.update(TABLE_TRANSACTION, values, Transaction.ID_CONTAINER + " = ?",
+        String.valueOf(idContainer));
+  }
+
   public int update(Transaction transaction) {
     return db.update(TABLE_TRANSACTION, getContentValues(transaction), Transaction.ID + " = ?",
         String.valueOf(transaction.getId()));
@@ -150,6 +162,7 @@ public final class TransactionTable extends Database {
     values.put(Transaction.VALUE, transaction.getValue());
     values.put(Transaction.ID_CATEGORY, transaction.getIdCategory());
     values.put(Transaction.DESCRIPTION, transaction.getDescription());
+    values.put(Transaction.ID_CONTAINER, transaction.getIdContainer());
 
     return values;
   }
@@ -160,6 +173,6 @@ public final class TransactionTable extends Database {
         DbUtil.getInt(cursor, Transaction.YEAR), DbUtil.getDouble(cursor, Transaction.VALUE),
         DbUtil.getInt(cursor, Transaction.ID_CATEGORY),
         DbUtil.getString(cursor, Transaction.DESCRIPTION), DbUtil.getInt(cursor, Category.COLOR),
-        DbUtil.getInt(cursor, Category.ICON));
+        DbUtil.getInt(cursor, Category.ICON), DbUtil.getLong(cursor, Transaction.ID_CONTAINER));
   }
 }

@@ -1,0 +1,33 @@
+package com.th1b0.budget.features.history;
+
+import android.support.annotation.NonNull;
+import com.th1b0.budget.util.DataManager;
+import com.th1b0.budget.util.PresenterImpl;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+/**
+ * Created by 7h1b0.
+ */
+
+final class HistoryPresenterImpl extends PresenterImpl<HistoryView> implements HistoryPresenter {
+
+  HistoryPresenterImpl(@NonNull HistoryView view, @NonNull DataManager dataManager) {
+    super(view, dataManager);
+  }
+
+  @Override public void loadHistory() {
+    mSubscription.add(mDataManager.getHistory()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(histories -> {
+          if (isViewAttached()) {
+            getView().onHistoryLoaded(histories);
+          }
+        }, error -> {
+          if (isViewAttached()) {
+            getView().onError(error.getMessage());
+          }
+        }));
+  }
+}

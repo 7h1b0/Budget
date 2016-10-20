@@ -1,6 +1,8 @@
 package com.th1b0.budget.util;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import java.lang.ref.WeakReference;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -9,14 +11,22 @@ import rx.subscriptions.CompositeSubscription;
 
 public abstract class PresenterImpl<T> {
 
-  protected final T mView;
+  protected final WeakReference<T> mView;
   protected final DataManager mDataManager;
   protected final CompositeSubscription mSubscription;
 
   public PresenterImpl(@NonNull final T view, @NonNull final DataManager dataManager) {
-    mView = view;
+    mView = new WeakReference<>(view);
     mDataManager = dataManager;
     mSubscription = new CompositeSubscription();
+  }
+
+  protected boolean isViewAttached() {
+    return mView.get() != null;
+  }
+
+  @Nullable protected T getView() {
+    return mView.get();
   }
 
   public void detach() {

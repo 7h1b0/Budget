@@ -9,7 +9,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * Created by 7h1b0.
  */
 
-public interface RecyclerItem {
+public interface TransactionItem {
   @Retention(SOURCE)
   @IntDef({ TYPE_HEADER, TYPE_TRANSACTION }) @interface ViewType {}
 

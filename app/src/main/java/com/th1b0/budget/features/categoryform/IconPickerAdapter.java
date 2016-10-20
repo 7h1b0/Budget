@@ -45,11 +45,11 @@ final class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vie
     return mIcons.size();
   }
 
-  public class ViewHolder extends RecyclerView.ViewHolder {
+  class ViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView icon;
 
-    public ViewHolder(View v) {
+    ViewHolder(View v) {
       super(v);
 
       icon = (ImageView) v.findViewById(R.id.icon);

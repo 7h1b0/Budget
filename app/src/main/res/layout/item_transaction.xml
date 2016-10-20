@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height_double"
-    android:orientation="vertical"
     android:background="?attr/backgroundItem"
+    android:orientation="vertical"
     >
 
     <ImageButton
@@ -15,8 +15,8 @@
         android:background="@drawable/circle"
         android:padding="@dimen/spacing_small"
         android:src="@mipmap/ic_hobby"
-        style="@style/Icon"
         android:tint="@android:color/white"
+        style="@style/Icon"
         />
 
     <LinearLayout
@@ -50,8 +50,11 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/spacing_medium"
         android:layout_marginStart="@dimen/spacing_large"
+
         tools:text="+ 34.05€"
         style="@style/TextSubhead"
         />
+
+    <include layout="@layout/divider" />
 
 </RelativeLayout>

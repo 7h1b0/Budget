@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
 import rx.Observable;
@@ -30,9 +31,17 @@ public final class CategoryTable extends Database {
         + ","
         + Category.ICON
         + ", "
-        + Category.ID_CONTAINERS
+        + Category.ID_CONTAINER
+        + ", "
+        + Container.TITLE
         + " FROM "
         + TABLE_CATEGORY
+        + " LEFT JOIN "
+        + TABLE_CONTAINER
+        + " ON "
+        + Category.ID_CONTAINER
+        + " = "
+        + Container.ID
         + " ORDER BY "
         + Category.TITLE).map(super::getCursor).map(cursor -> {
       try {
@@ -72,19 +81,28 @@ public final class CategoryTable extends Database {
         String.valueOf(category.getId()));
   }
 
+  public int removeIdContainer(long idContainer) {
+    ContentValues values = new ContentValues();
+    values.put(Category.ID_CONTAINER, Container.NOT_DEFINED);
+    return db.update(TABLE_CATEGORY, values, Category.ID_CONTAINER + " = ?",
+        String.valueOf(idContainer));
+  }
+
   private ContentValues getContentValues(@NonNull Category category) {
     ContentValues values = new ContentValues();
     values.put(Category.TITLE, category.getTitle());
     values.put(Category.COLOR, category.getColor());
     values.put(Category.ICON, category.getIcon());
-    values.put(Category.ID_CONTAINERS, category.getIdContainers());
+    values.put(Category.ID_CONTAINER, category.getIdContainer());
 
     return values;
   }
 
   private Category getCategory(@NonNull Cursor cursor) {
-    return new Category(DbUtil.getLong(cursor, Category.ID),
-        DbUtil.getLong(cursor, Category.ID_CONTAINERS), DbUtil.getString(cursor, Category.TITLE),
+    Category category =  new Category(DbUtil.getLong(cursor, Category.ID),
+        DbUtil.getLong(cursor, Category.ID_CONTAINER), DbUtil.getString(cursor, Category.TITLE),
         DbUtil.getInt(cursor, Category.COLOR), DbUtil.getInt(cursor, Category.ICON));
+    category.setTitleContainer(DbUtil.getString(cursor, Container.TITLE));
+    return category;
   }
 }

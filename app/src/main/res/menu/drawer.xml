@@ -21,12 +21,12 @@
 
     <item
         android:id="@+id/budget"
-        android:icon="@mipmap/ic_category"
+        android:icon="@mipmap/ic_container"
         android:title="@string/budgets"/>
 
     <item
         android:id="@+id/history"
-        android:icon="@mipmap/ic_category"
+        android:icon="@mipmap/ic_history"
         android:title="@string/history"/>
   </group>
 </menu>

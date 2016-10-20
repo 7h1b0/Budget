@@ -6,4 +6,5 @@
     <attr format="color" name="dividerColor"/>
     <attr format="color" name="backgroundHeader"/>
     <attr format="color" name="backgroundItem"/>
+    <attr format="color" name="disabledTextColor" />
 </resources>

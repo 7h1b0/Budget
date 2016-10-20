@@ -1,15 +1,16 @@
 package com.th1b0.budget.database;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import com.th1b0.budget.model.Budget;
-import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.PresentationBudget;
+import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
 import rx.Observable;
+
+import static com.th1b0.budget.model.PresentationBudget.OUT;
 
 /**
  * Created by 7h1b0.
@@ -21,45 +22,81 @@ public final class BudgetTable extends Database {
     super(context);
   }
 
-  public Observable<ArrayList<Budget>> getAll(int limit) {
-    return db.createQuery(TABLE_TRANSACTION, "SELECT "
+  public Observable<ArrayList<PresentationBudget>> getAll(int month, int year) {
+    return db.createQuery(TABLE_TRANSACTION, "SELECT SUM("
+        + Transaction.VALUE
+        + ") AS "
+        + OUT
+        + ", "
+        + Container.TITLE
+        + ", "
+        + Container.VALUE
+        + ", "
+        + Container.ID
+        + " FROM "
+        + TABLE_CONTAINER
+        + " JOIN "
+        + TABLE_TRANSACTION
+        + " ON "
+        + Container.ID
+        + " = "
+        + Transaction.ID_CONTAINER
+        + " WHERE "
+        + Transaction.MONTH
+        + " = ? AND "
+        + Transaction.YEAR
+        + " = ? "
+        + " GROUP BY "
+        + Container.ID
+        + " ORDER BY "
+        + Container.TITLE, String.valueOf(month), String.valueOf(year))
+        .map(super::getCursor)
+        .map(cursor -> {
+          try {
+            ArrayList<PresentationBudget> budgets = new ArrayList<>(cursor.getCount());
+            while (cursor.moveToNext()) {
+              PresentationBudget budget =
+                  new PresentationBudget(DbUtil.getLong(cursor, Container.ID),
+                      DbUtil.getString(cursor, Container.TITLE),
+                      DbUtil.getDouble(cursor, Container.VALUE), DbUtil.getDouble(cursor, OUT));
+              budgets.add(budget);
+            }
+            return budgets;
+          } finally {
+            cursor.close();
+          }
+        });
+  }
+
+  public Observable<ArrayList<PresentationHistory>> getHistory() {
+    return db.createQuery(TABLE_TRANSACTION, "SELECT SUM("
+        + Transaction.VALUE
+        + ") AS "
+        + OUT
+        + ", "
         + Transaction.MONTH
         + ", "
         + Transaction.YEAR
-        + ", "
-        + "SUM("
-        + Transaction.VALUE
-        + ") as "
-        + Budget.VALUE
         + " FROM "
         + TABLE_TRANSACTION
-        + " AS t JOIN "
-        + TABLE_CATEGORY
-        + " AS c ON "
-        + Transaction.ID_CATEGORY
-        + " = "
-        + Category.ID
-        + " WHERE "
-        + Category.INCLUDE_IN_BUDGET
-        + " = 1 "
         + " GROUP BY "
-        + Transaction.MONTH
-        + ", "
         + Transaction.YEAR
+        + ", "
+        + Transaction.MONTH
         + " ORDER BY "
         + Transaction.YEAR
         + " DESC, "
         + Transaction.MONTH
-        + " DESC LIMIT "
-        + limit).map(super::getCursor).map(cursor -> {
+        + " DESC").map(super::getCursor).map(cursor -> {
       try {
-        ArrayList<Budget> budgets = new ArrayList<>(cursor.getCount());
+        ArrayList<PresentationHistory> histories = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
-          Budget budget = new Budget(DbUtil.getDouble(cursor, Budget.VALUE),
-              DbUtil.getInt(cursor, Transaction.MONTH), DbUtil.getInt(cursor, Transaction.YEAR));
-          budgets.add(budget);
+          PresentationHistory history =
+              new PresentationHistory(DbUtil.getInt(cursor, Transaction.MONTH),
+                  DbUtil.getInt(cursor, Transaction.YEAR), DbUtil.getDouble(cursor, OUT));
+          histories.add(history);
         }
-        return budgets;
+        return histories;
       } finally {
         cursor.close();
       }

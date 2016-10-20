@@ -1,47 +1,52 @@
 <resources>
     <string name="app_name">Budget</string>
-    <string name="transactions">Transactions</string>
-    <string name="budget">Budget</string>
-    <string name="goal_by_month">Budget par mois</string>
-    <string name="float_value">%1$.2f€</string>
     <string name="edit">Editer</string>
     <string name="delete">Supprimer</string>
+    <string name="cancel">Annuler</string>
+    <string name="valid">Valider</string>
+    <string name="loading">Chargement</string>
+
     <string name="confirm_transaction_deletion_title">Supprimer la transaction ?</string>
     <string name="confirm_category_deletion_title">Supprimer la catégorie ?</string>
     <string name="confirm_transaction_deletion">Cette transaction sera supprimée de votre appareil</string>
-    <string name="confirm_category_deletion">Cette catégorie sera supprimée de votre appareil</string>
-    <string name="cancel">Annuler</string>
+    <string name="confirm_category_deletion">Cette catégorie sera supprimée de votre appareil ainsi que toutes les transactions associées</string>
+    <string name="confirm_containers_deletion">Ce budget sera supprimé de votre appareil</string>
+    <string name="confirm_containers_deletion_title">Supprimer le budget ?</string>
+    <string name="no_budget">Aucun budget</string>
+    <string name="no_transaction">Aucune transaction</string>
+    <string name="no_history">Aucun historique</string>
+
+    <string name="float_value">%1$.2f€</string>
     <string name="budget_of_goal">%1$.2f€ sur %2$.2f€</string>
     <string name="budget_subtitle">%1$.2f€ (%2$.2f€/%3$.2f€)</string>
-    <string name="loading">Chargement</string>
+
     <string name="title">Titre</string>
     <string name="color">Couleur</string>
     <string name="icon">Icône</string>
-    <string name="include_in_budget">Inclure dans le budget</string>
-
-    <string name="settings">Paramètres</string>
-    <string name="settings_goal">Budget</string>
-    <string name="settings_display">Affichage</string>
-    <string name="settings_display_transaction">Nombre de transactions</string>
-    <string name="settings_display_budget">Nombre de bilan</string>
-    <string name="settings_add_header_budget">Afficher l\'entête bilan global</string>
     <string name="description">Description</string>
     <string name="value">Montant</string>
-    <string name="categories">Catégories</string>
+    <string name="category">Catégorie</string>
     <string name="budgets">Budgets</string>
-    <string name="history">Historique</string>
+    <string name="none">Aucun</string>
+    <string name="default_container">Budget par défaut</string>
     <string name="home">Accueil</string>
+    <string name="container">Budget</string>
+    <string name="transactions">Transactions</string>
+    <string name="categories">Catégories</string>
+    <string name="history">Historique</string>
+    <string name="incomes">Revenus</string>
+    <string name="expenses">Dépenses</string>
 
     <string name="add_transaction">Ajouter une transaction</string>
     <string name="add_category">Ajouter une catégorie</string>
     <string name="edit_transaction">Editer une transaction</string>
     <string name="edit_category">Editer une catégorie</string>
+    <string name="add_container">Ajouter un budget</string>
+    <string name="edit_container">Editer un budget</string>
     <string name="set_categorie">Choisir une categorie</string>
+    <string name="set_container">Choisir un budget</string>
     <string name="set_icon">Choisir un icône</string>
-    <string name="valid">Valider</string>
-    <string name="expense">Dépenses</string>
     <string name="no_empty_field">Ce champ ne doit pas être vide</string>
-    <string name="enlarge_first_row">Elargir le premier budget</string>
 
     <!-- Categories -->
     <string name="food">Course</string>

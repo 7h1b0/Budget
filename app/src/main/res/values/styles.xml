@@ -8,6 +8,7 @@
         <item name="textColor">@color/text</item>
         <item name="secondaryTextColor">@color/secondary_text</item>
         <item name="iconColor">@color/icon</item>
+        <item name="disabledTextColor">@color/disabled</item>
         <item name="dividerColor">@color/divider</item>
         <item name="backgroundHeader">@color/backgroundHeader</item>
         <item name="backgroundItem">@color/backgroundItem</item>

@@ -17,14 +17,14 @@
         >
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/title"
             android:gravity="center_vertical"
-            tools:text="September 2016"
+            tools:text="My Container"
             style="@style/TextSubhead"
             />
 
         <TextView
-            android:id="@+id/total"
+            android:id="@+id/detail"
             android:gravity="center_vertical"
             android:textSize="@dimen/font_label"
             tools:text="250 on 300€"
@@ -44,5 +44,7 @@
         tools:text="+ 50.00€"
         style="@style/TextSubhead"
         />
+
+    <include layout="@layout/divider" />
 
 </RelativeLayout>

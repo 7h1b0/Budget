@@ -18,7 +18,7 @@ import rx.schedulers.Schedulers;
 
 abstract class Database extends SQLiteOpenHelper {
 
-  public static final int DATABASE_VERSION = 7;
+  public static final int DATABASE_VERSION = 8;
   public static final String DATABASE_NAME = "budget";
   public static final String TABLE_TRANSACTION = "transaction_table";
   public static final String TABLE_CATEGORY = "category_table";
@@ -48,6 +48,8 @@ abstract class Database extends SQLiteOpenHelper {
         + " INTEGER, "
         + Transaction.ID_CATEGORY
         + " INTEGER, "
+        + Transaction.ID_CONTAINER
+        + " INTEGER, "
         + Transaction.DESCRIPTION
         + " TEXT ) ";
 
@@ -62,7 +64,7 @@ abstract class Database extends SQLiteOpenHelper {
         + " INTEGER, "
         + Category.ICON
         + " INTEGER, "
-        + Category.ID_CONTAINERS
+        + Category.ID_CONTAINER
         + " INTEGER )";
 
     String CREATE_CONTAINER_TABLE = "CREATE TABLE "

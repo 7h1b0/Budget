@@ -11,6 +11,7 @@
 
     <dimen name="icon_width_short">24dp</dimen>
     <dimen name="icon_width">40dp</dimen>
+    <dimen name="icon_big_width">56dp</dimen>
 
     <dimen name="font_display">50sp</dimen>
     <dimen name="font_headline">24sp</dimen>

@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.container;
+package com.th1b0.budget.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,42 +8,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.th1b0.budget.R;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.SimpleItem;
 import java.util.ArrayList;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by 7h1b0.
  */
 
-public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.ViewContainer> {
+public class SimpleItemAdapter<T extends SimpleItem>
+    extends RecyclerView.Adapter<SimpleItemAdapter.ViewContainer> {
 
-  interface OnContainerClick {
-    void onContainerClick(@NonNull Container container);
-  }
-
-  private ArrayList<Container> mContainers;
+  private ArrayList<T> mContainers;
   private Context mContext;
-  private OnContainerClick mListener;
+  private PublishSubject<T> onClick;
 
-  ContainerAdapter(@NonNull Context context, @NonNull OnContainerClick listener) {
+  public SimpleItemAdapter(@NonNull Context context) {
     mContext = context;
-    mListener = listener;
     mContainers = new ArrayList<>();
+    onClick = PublishSubject.create();
     setHasStableIds(true);
   }
 
-  @Override public ViewContainer onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public SimpleItemAdapter.ViewContainer onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container, parent, false);
     return new ViewContainer(view);
   }
 
-  @Override public void onBindViewHolder(ViewContainer holder, int position) {
-    final Container container = mContainers.get(position);
+  @Override public void onBindViewHolder(SimpleItemAdapter.ViewContainer holder, int position) {
+    final SimpleItem simpleItem = mContainers.get(position);
 
-    holder.title.setText(container.getTitle());
+    holder.title.setText(simpleItem.getTitle());
     holder.value.setText(
-        String.format(mContext.getString(R.string.float_value), container.getValue()));
+        String.format(mContext.getString(R.string.float_value), simpleItem.getValue()));
   }
 
   @Override public long getItemId(int position) {
@@ -64,13 +64,16 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
       value = (TextView) v.findViewById(R.id.value);
       title = (TextView) v.findViewById(R.id.title);
 
-      v.setOnClickListener(
-          view -> mListener.onContainerClick(mContainers.get(getLayoutPosition())));
+      v.setOnClickListener(view -> onClick.onNext(mContainers.get(getLayoutPosition())));
     }
   }
 
-  void addAll(ArrayList<Container> containers) {
+  public void addAll(ArrayList<T> containers) {
     mContainers = containers;
     notifyDataSetChanged();
+  }
+
+  public Observable<T> onClick() {
+    return onClick;
   }
 }

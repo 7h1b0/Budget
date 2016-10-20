@@ -1,10 +1,10 @@
 package com.th1b0.budget.features.categories;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +25,9 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
   }
 
   private ArrayList<Category> mCategories;
-  private Context mContext;
   private OnCategoryClick mListener;
 
-  CategoryAdapter(@NonNull Context context, @NonNull OnCategoryClick listener) {
-    mContext = context;
+  CategoryAdapter(@NonNull OnCategoryClick listener) {
     mListener = listener;
     mCategories = new ArrayList<>();
     setHasStableIds(true);
@@ -44,11 +42,16 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
   @Override public void onBindViewHolder(ViewCategory holder, int position) {
     final Category category = mCategories.get(position);
 
-    holder.title.setText(category.getTitle());
     holder.icon.setImageResource(category.getIcon());
-
     Drawable drawable = holder.icon.getBackground();
     drawable.setColorFilter(category.getColor(), PorterDuff.Mode.SRC);
+
+    holder.title.setText(category.getTitle());
+    if (TextUtils.isEmpty(category.getTitleContainer())) {
+      holder.container.setVisibility(View.GONE);
+    } else {
+      holder.container.setText(category.getTitleContainer());
+    }
   }
 
   @Override public long getItemId(int position) {
@@ -63,11 +66,13 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
 
     ImageView icon;
     TextView title;
+    TextView container;
 
     ViewCategory(View v) {
       super(v);
       icon = (ImageView) v.findViewById(R.id.icon);
       title = (TextView) v.findViewById(R.id.title);
+      container = (TextView) v.findViewById(R.id.container);
 
       v.setOnClickListener(view -> mListener.onCategoryClick(mCategories.get(getLayoutPosition())));
     }
@@ -76,5 +81,9 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
   void addAll(ArrayList<Category> items) {
     mCategories = items;
     notifyDataSetChanged();
+  }
+
+  boolean hasOnlyOneElement() {
+    return mCategories.size() == 1;
   }
 }

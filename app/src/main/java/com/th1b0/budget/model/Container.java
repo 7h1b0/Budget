@@ -7,12 +7,16 @@ import android.os.Parcelable;
  * Created by 7h1b0.
  */
 
-public class Container implements Parcelable{
+public class Container implements Parcelable, SimpleItem{
 
   public static final String CONTAINERS = "containers";
+  public static final String CONTAINER = "container";
   public static final String ID = "co_id";
   public static final String TITLE = "co_title";
   public static final String VALUE = "co_value";
+
+  public static final long NONE = -2;
+  public static final long NOT_DEFINED = -1;
 
   private long id;
   private String title;
@@ -46,7 +50,7 @@ public class Container implements Parcelable{
     this.id = id;
   }
 
-  public String getTitle() {
+  @Override public String getTitle() {
     return title;
   }
 
@@ -54,7 +58,7 @@ public class Container implements Parcelable{
     this.title = title;
   }
 
-  public double getValue() {
+  @Override public double getValue() {
     return value;
   }
 

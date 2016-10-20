@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.th1b0.budget.R;
-import com.th1b0.budget.model.RecyclerItem;
+import com.th1b0.budget.model.TransactionItem;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DateUtil;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-  private ArrayList<RecyclerItem> mItems;
+  private ArrayList<TransactionItem> mItems;
   private Context mContext;
   private OnTransactionClick mListener;
 
@@ -34,15 +34,15 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
   }
 
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
-      @RecyclerItem.ViewType int viewType) {
+      @TransactionItem.ViewType int viewType) {
     View view;
     switch (viewType) {
-      case RecyclerItem.TYPE_HEADER:
+      case TransactionItem.TYPE_HEADER:
         view =
             LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header, parent, false);
         return new ViewHeader(view);
 
-      case RecyclerItem.TYPE_TRANSACTION:
+      case TransactionItem.TYPE_TRANSACTION:
       default:
         view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.item_transaction, parent, false);
@@ -50,20 +50,20 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
   }
 
-  @Override @RecyclerItem.ViewType public int getItemViewType(int position) {
+  @Override @TransactionItem.ViewType public int getItemViewType(int position) {
     return mItems.get(position).getType();
   }
 
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-    final RecyclerItem item = mItems.get(position);
+    final TransactionItem item = mItems.get(position);
 
     switch (getItemViewType(position)) {
-      case RecyclerItem.TYPE_HEADER:
+      case TransactionItem.TYPE_HEADER:
         ViewHeader viewHeader = (ViewHeader) holder;
         viewHeader.text.setText(item.getTitle());
         break;
 
-      case RecyclerItem.TYPE_TRANSACTION:
+      case TransactionItem.TYPE_TRANSACTION:
         ViewTransaction viewTransaction = (ViewTransaction) holder;
         Transaction transaction = (Transaction) item;
         viewTransaction.description.setText(transaction.getDescription());
@@ -117,7 +117,7 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
   }
 
-  void addAll(ArrayList<RecyclerItem> items) {
+  void addAll(ArrayList<TransactionItem> items) {
     mItems = items;
     notifyDataSetChanged();
   }

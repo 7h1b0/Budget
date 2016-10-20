@@ -11,6 +11,8 @@
         android:id="@+id/edit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_height_single"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
         >
 
         <ImageView
@@ -33,6 +35,8 @@
         android:id="@+id/delete"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_height_single"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
         >
 
         <ImageView

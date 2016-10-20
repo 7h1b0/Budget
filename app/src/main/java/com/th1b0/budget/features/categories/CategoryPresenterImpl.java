@@ -11,8 +11,7 @@ import rx.schedulers.Schedulers;
  * Created by 7h1b0
  */
 
-final class CategoryPresenterImpl extends PresenterImpl<CategoryView>
-    implements CategoryPresenter {
+final class CategoryPresenterImpl extends PresenterImpl<CategoryView> implements CategoryPresenter {
 
   CategoryPresenterImpl(@NonNull CategoryView view, @NonNull DataManager dataManager) {
     super(view, dataManager);
@@ -22,7 +21,15 @@ final class CategoryPresenterImpl extends PresenterImpl<CategoryView>
     mSubscription.add(mDataManager.getCategories()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(mView::onCategoryLoaded, error -> mView.onError(error.getMessage())));
+        .subscribe(categories -> {
+          if (isViewAttached()) {
+            getView().onCategoryLoaded(categories);
+          }
+        }, error -> {
+          if (isViewAttached()) {
+            getView().onError(error.getMessage());
+          }
+        }));
   }
 
   @Override public void deleteCategory(@NonNull Category category) {
@@ -30,6 +37,10 @@ final class CategoryPresenterImpl extends PresenterImpl<CategoryView>
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(ignored -> {
-        }, error -> mView.onError(error.getMessage())));
+        }, error -> {
+          if (isViewAttached()) {
+            getView().onError(error.getMessage());
+          }
+        }));
   }
 }

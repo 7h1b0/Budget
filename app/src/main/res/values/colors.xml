@@ -10,6 +10,7 @@
     <color name="text">#1F1F1F</color>
     <color name="secondary_text">#6D6D6D</color>
     <color name="icon">#6D6D6D</color>
+    <color name="disabled">#939393</color>
     <color name="divider">#E6E6E6</color>
 
     <color name="green">#4CAF50</color>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/spacing_medium"
+            >
+
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_display"
+                tools:text="11450.00€"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <LinearLayout
+                    android:id="@+id/expense_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_small"
+                    >
+
+                    <TextView
+                        android:layout_gravity="end"
+                        android:text="@string/incomes"
+                        android:textColor="@color/divider"
+                        style="@style/TextHeader"
+                        />
+
+                    <TextView
+                        android:id="@+id/incomes"
+                        android:layout_gravity="end"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/font_title"
+                        tools:text="356.00€"
+                        style="@style/TextSubhead"
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_small"
+                    >
+
+                    <TextView
+                        android:text="@string/expenses"
+                        android:textColor="@color/divider"
+                        style="@style/TextHeader"
+                        />
+
+                    <TextView
+                        android:id="@+id/expenses"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/font_title"
+                        tools:text="250.00€"
+                        style="@style/TextSubhead"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                />
+
+            <include
+                layout="@layout/no_item"
+                android:id="@+id/included"
+                />
+            
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

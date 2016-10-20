@@ -8,11 +8,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityMainBinding;
-import com.th1b0.budget.features.home.HomeFragment;
 import com.th1b0.budget.features.categories.CategoryFragment;
+import com.th1b0.budget.features.container.ContainerFragment;
+import com.th1b0.budget.features.budget.BudgetFragment;
+import com.th1b0.budget.features.history.HistoryFragment;
 import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
@@ -33,6 +36,10 @@ public final class MainActivity extends AppCompatActivity
     initializeNavigationView();
     initializeDrawer();
     handleFirstLaunch();
+
+    if (savedInstanceState == null) {
+      display(BudgetFragment.newInstance(), null);
+    }
   }
 
   @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -42,7 +49,7 @@ public final class MainActivity extends AppCompatActivity
 
   @Override protected void onSaveInstanceState(Bundle savedInstanceState) {
     super.onSaveInstanceState(savedInstanceState);
-    if (getSupportActionBar() != null) {
+    if (getSupportActionBar() != null && !TextUtils.isEmpty(getSupportActionBar().getTitle())) {
       savedInstanceState.putString(TOOLBAR_TITLE, String.valueOf(getSupportActionBar().getTitle()));
     }
   }
@@ -78,15 +85,11 @@ public final class MainActivity extends AppCompatActivity
   }
 
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-    if (item.getItemId() != R.id.settings) {
-      item.setChecked(true);
-    }
-
     mView.drawer.closeDrawers();
 
     switch (item.getItemId()) {
       case R.id.home:
-        display(HomeFragment.newInstance(), item.getTitle());
+        display(BudgetFragment.newInstance(), null);
         return true;
 
       case R.id.transactions:
@@ -98,11 +101,11 @@ public final class MainActivity extends AppCompatActivity
         return true;
 
       case R.id.budget:
-        display(CategoryFragment.newInstance(), item.getTitle());
+        display(ContainerFragment.newInstance(), item.getTitle());
         return true;
 
       case R.id.history:
-        display(CategoryFragment.newInstance(), item.getTitle());
+        display(HistoryFragment.newInstance(), item.getTitle());
         return true;
 
       default:
@@ -111,7 +114,7 @@ public final class MainActivity extends AppCompatActivity
   }
 
   private void handleFirstLaunch() {
-    if (Preferences.firstLaunch(this)) {
+    if (Preferences.isFirstLaunch(this)) {
       initializeCategories();
       Preferences.setFirstLaunch(this, false);
     }

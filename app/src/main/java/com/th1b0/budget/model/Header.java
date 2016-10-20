@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by 7h1b0.
  */
 
-public class Header implements Parcelable, RecyclerItem {
+public class Header implements Parcelable, TransactionItem {
 
   private String title;
 

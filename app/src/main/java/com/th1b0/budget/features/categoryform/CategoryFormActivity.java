@@ -12,6 +12,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -22,18 +23,23 @@ import android.view.WindowManager;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityCategoryFormBinding;
 import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
+import com.th1b0.budget.util.ContainerPickerDialog;
 import com.th1b0.budget.util.DataManager;
+import java.util.ArrayList;
 
 /**
  * Created by 7h1b0.
  */
 
 public class CategoryFormActivity extends AppCompatActivity
-    implements ColorPickerDialog.OnColorSet, IconPickerDialog.OnIconSet {
+    implements ColorPickerDialog.OnColorSet, IconPickerDialog.OnIconSet, CategoryFormView,
+    ContainerPickerDialog.OnContainerSet {
 
   private Category mCategory;
   private CategoryFormPresenter mPresenter;
   private ActivityCategoryFormBinding mView;
+  private ArrayList<Container> mContainers;
 
   public static Intent newInstance(@NonNull Context context) {
     return new Intent(context, CategoryFormActivity.class);
@@ -49,6 +55,7 @@ public class CategoryFormActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     mView = DataBindingUtil.setContentView(this, R.layout.activity_category_form);
     mPresenter = new CategoryFormPresenterImpl(this, DataManager.getInstance(this));
+    mContainers = new ArrayList<>();
 
     if (savedInstanceState != null) {
       mCategory = savedInstanceState.getParcelable(Category.CATEGORY);
@@ -61,11 +68,15 @@ public class CategoryFormActivity extends AppCompatActivity
     setupToolbar();
     fillForm();
     setupListener();
+
+    if (!isContainersLoaded(savedInstanceState)) {
+      mPresenter.loadContainer();
+    }
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.wizard_transaction, menu);
+    inflater.inflate(R.menu.wizard, menu);
     return true;
   }
 
@@ -77,9 +88,9 @@ public class CategoryFormActivity extends AppCompatActivity
 
       case R.id.save:
         if (isFormValid()) {
-          updateTransactionFromForm();
+          updateCategoryFromForm();
           if (isEditMode()) {
-            mPresenter.editCategory(mCategory);
+            mPresenter.updateCategory(mCategory);
           } else {
             mPresenter.addCategory(mCategory);
           }
@@ -92,9 +103,26 @@ public class CategoryFormActivity extends AppCompatActivity
     }
   }
 
+  @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    mContainers = savedInstanceState.getParcelableArrayList(Container.CONTAINERS);
+    updateContainer();
+  }
+
+  @Override protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putParcelable(Category.CATEGORY, mCategory);
+    outState.putParcelableArrayList(Container.CONTAINERS, mContainers);
+  }
+
   private boolean isEditMode() {
     return getIntent().hasExtra(Category.CATEGORY)
         && getIntent().getExtras().getParcelable(Category.CATEGORY) != null;
+  }
+
+  private boolean isContainersLoaded(@Nullable Bundle savedInstanceState) {
+    return savedInstanceState != null
+        && savedInstanceState.getParcelableArrayList(Container.CONTAINERS) != null;
   }
 
   private void setupToolbar() {
@@ -103,16 +131,15 @@ public class CategoryFormActivity extends AppCompatActivity
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_close);
       if (isEditMode()) {
-        getSupportActionBar().setTitle(R.string.edit_transaction);
+        getSupportActionBar().setTitle(R.string.edit_category);
       } else {
-        getSupportActionBar().setTitle(R.string.add_transaction);
+        getSupportActionBar().setTitle(R.string.add_category);
       }
     }
   }
 
   private void fillForm() {
     mView.title.setText(mCategory.getTitle());
-    mView.includeInBudget.setChecked(mCategory.isIncludeInBudget());
     updateColor();
     updateIcon();
   }
@@ -131,6 +158,15 @@ public class CategoryFormActivity extends AppCompatActivity
 
   private void updateIcon() {
     mView.icon.setImageResource(mCategory.getIcon());
+  }
+
+  private void updateContainer() {
+    if (mContainers == null) return;
+
+    int position = findContainerPosition(mCategory.getIdContainer());
+    if (position > -1) {
+      mView.container.setText(mContainers.get(position).getTitle());
+    }
   }
 
   private int darker(int color, @FloatRange(from = 0.0, to = 1.0) float factor) {
@@ -156,7 +192,7 @@ public class CategoryFormActivity extends AppCompatActivity
     return isValid;
   }
 
-  private void updateTransactionFromForm() {
+  private void updateCategoryFromForm() {
     mCategory.setTitle(mView.title.getText().toString());
   }
 
@@ -167,8 +203,10 @@ public class CategoryFormActivity extends AppCompatActivity
     mView.iconLayout.setOnClickListener(
         v -> IconPickerDialog.newIntance().show(getFragmentManager(), null));
 
-    mView.includeInBudget.setOnCheckedChangeListener(
-        (v, isChecked) -> mCategory.setIncludeInBudget(isChecked));
+    mView.containerLayout.setOnClickListener(v -> {
+      int position = findContainerPosition(mCategory.getIdContainer());
+      ContainerPickerDialog.newInstance(mContainers, position).show(getFragmentManager(), null);
+    });
   }
 
   @Override public void onIconSet(@DrawableRes int icon) {
@@ -179,5 +217,35 @@ public class CategoryFormActivity extends AppCompatActivity
   @Override public void onColorSet(@ColorInt int color) {
     mCategory.setColor(color);
     updateColor();
+  }
+
+  @Override public void onContainerLoaded(ArrayList<Container> containers) {
+    mContainers = containers;
+    if (mCategory.getIdContainer() == -1 && !containers.isEmpty()) {
+      mCategory.setIdContainer(containers.get(0).getId());
+    }
+    updateContainer();
+  }
+
+  @Override public void onError(String error) {
+    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
+  }
+
+  @NonNull @Override public Context getContext() {
+    return this;
+  }
+
+  private int findContainerPosition(long selected) {
+    for (int index = 0; index < mContainers.size(); index++) {
+      if (mContainers.get(index).getId() == selected) {
+        return index;
+      }
+    }
+    return -1;
+  }
+
+  @Override public void onContainerSet(@NonNull Container container) {
+    mCategory.setIdContainer(container.getId());
+    updateContainer();
   }
 }

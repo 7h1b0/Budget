@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
-import com.th1b0.budget.features.transaction.TransactionFragment;
-import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.features.budget.BudgetFragment;
 import com.th1b0.budget.util.DateUtil;
+
+import static com.th1b0.budget.features.budget.BudgetFragment.MONTH;
+import static com.th1b0.budget.features.budget.BudgetFragment.YEAR;
 
 /**
  * Created by 7h1b0.
@@ -18,33 +20,26 @@ import com.th1b0.budget.util.DateUtil;
 
 public final class DetailMonthActivity extends AppCompatActivity {
 
-  public static Intent newInstance(@NonNull Context context, @NonNull Budget budget) {
+  public static Intent newInstance(@NonNull Context context, int month, int year) {
     Intent intent = new Intent(context, DetailMonthActivity.class);
-    intent.putExtra(Budget.BUDGET, budget);
+    intent.putExtra(YEAR, year);
+    intent.putExtra(MONTH, month);
     return intent;
   }
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_settings);
+    setContentView(R.layout.activity_detail_month);
 
-    final Budget budget = getIntent().getExtras().getParcelable(Budget.BUDGET);
-    if (budget == null) {
-      finish();
-      return;
-    }
+    int month = getIntent().getExtras().getInt(MONTH);
+    int year = getIntent().getExtras().getInt(YEAR);
 
-    String title = DateUtil.formatDate(budget.getYear(), budget.getMonth());
-    String subtitle =
-        String.format(getString(R.string.budget_subtitle), budget.getGoal() + budget.getValue(),
-            -budget.getValue(), budget.getGoal());
-
-    initializeToolbar(title, subtitle);
+    String title = DateUtil.formatDate(year, month);
+    initializeToolbar(title);
 
     if (savedInstanceState == null) {
       getFragmentManager().beginTransaction()
-          .replace(R.id.frame_container,
-              TransactionFragment.newInstance(budget.getYear(), budget.getMonth()))
+          .replace(R.id.frame_container, BudgetFragment.newInstance(month, year))
           .commit();
     }
   }
@@ -60,13 +55,12 @@ public final class DetailMonthActivity extends AppCompatActivity {
     }
   }
 
-  private void initializeToolbar(String title, String subtitle) {
+  private void initializeToolbar(String title) {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     if (getSupportActionBar() != null) {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       getSupportActionBar().setTitle(title);
-      getSupportActionBar().setSubtitle(subtitle);
     }
   }
 }

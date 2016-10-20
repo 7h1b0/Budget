@@ -6,15 +6,13 @@ import com.th1b0.budget.database.BudgetTable;
 import com.th1b0.budget.database.CategoryTable;
 import com.th1b0.budget.database.ContainerTable;
 import com.th1b0.budget.database.TransactionTable;
-import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.PresentationBudget;
+import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 /**
  * Created by 7h1b0.
@@ -22,26 +20,24 @@ import rx.subjects.BehaviorSubject;
 
 public class DataManager {
 
-  private static DataManager mInstance;
+  private static DataManager sInstance;
   private TransactionTable mTransactionTable;
   private BudgetTable mBudgetTable;
   private CategoryTable mCategoryTable;
   private ContainerTable mContainerTable;
-  private BehaviorSubject<String> mRxPreferences;
 
   private DataManager(@NonNull Context context) {
     mTransactionTable = new TransactionTable(context);
     mBudgetTable = new BudgetTable(context);
     mCategoryTable = new CategoryTable(context);
     mContainerTable = new ContainerTable(context);
-    mRxPreferences = BehaviorSubject.create(Preferences.START);
   }
 
   public static DataManager getInstance(@NonNull Context context) {
-    if (mInstance == null) {
-      mInstance = new DataManager(context);
+    if (sInstance == null) {
+      sInstance = new DataManager(context);
     }
-    return mInstance;
+    return sInstance;
   }
 
   public Observable<ArrayList<Transaction>> getTransactions(int limit) {
@@ -64,8 +60,12 @@ public class DataManager {
     return mTransactionTable.delete(transaction);
   }
 
-  public Observable<ArrayList<Budget>> getBudgets(int limit) {
-    return mBudgetTable.getAll(limit);
+  public Observable<ArrayList<PresentationBudget>> getBudgets(int month, int year) {
+    return mBudgetTable.getAll(month, year);
+  }
+
+  public Observable<ArrayList<PresentationHistory>> getHistory() {
+    return mBudgetTable.getHistory();
   }
 
   public Observable<ArrayList<Category>> getCategories() {
@@ -102,17 +102,14 @@ public class DataManager {
     return mContainerTable.update(container);
   }
 
-  /** TODO Update Category where idContainer = container.getId() */
-  public int deleteContainer(@NonNull Container container) {
-    return mContainerTable.delete(container);
-  }
+  public Observable<Void> deleteContainer(@NonNull Container container) {
+    return Observable.just(container)
+        .map(mContainerTable::delete)
+        .filter(rows -> rows > 0)
+        .map(ignored -> container.getId())
+        .doOnNext(mCategoryTable::removeIdContainer)
+        .doOnNext(mTransactionTable::removeIdContainer)
+        .flatMap(ignored -> Observable.empty());
 
-  public void preferenceChange(String keyPref) {
-    mRxPreferences.onNext(keyPref);
-  }
-
-  public Observable<String> onPreferenceChange(String... keys) {
-    List<String> keysList = Arrays.asList(keys);
-    return mRxPreferences.filter(keysList::contains);
   }
 }

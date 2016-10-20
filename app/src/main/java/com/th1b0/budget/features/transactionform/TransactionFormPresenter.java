@@ -14,5 +14,5 @@ interface TransactionFormPresenter extends Presenter {
 
   void updateTransaction(@NonNull Transaction transaction);
 
-  void loadCategory();
+  void loadCategoriesAndContainers();
 }
