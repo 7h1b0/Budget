@@ -1,6 +1,5 @@
 package com.th1b0.budget.util;
 
-import android.util.Pair;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,13 +57,6 @@ public final class DateUtil {
   public static int getCurrentDay() {
     long now = new Date().getTime();
     return get(now, Calendar.DAY_OF_MONTH);
-  }
-
-  public static long getDateOffset(long timestamp, int offset) {
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTimeInMillis(timestamp);
-    calendar.add(Calendar.MONTH, offset);
-    return calendar.getTimeInMillis();
   }
 }
 

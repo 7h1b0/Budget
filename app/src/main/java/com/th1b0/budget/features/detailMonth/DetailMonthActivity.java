@@ -31,6 +31,10 @@ public final class DetailMonthActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_detail_month);
 
+    if (!isArgumentValid()) {
+      throw new IllegalStateException("Missing arguments. Please use newInstance()");
+    }
+
     int month = getIntent().getExtras().getInt(MONTH);
     int year = getIntent().getExtras().getInt(YEAR);
 
@@ -62,5 +66,9 @@ public final class DetailMonthActivity extends AppCompatActivity {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       getSupportActionBar().setTitle(title);
     }
+  }
+
+  private boolean isArgumentValid() {
+    return getIntent().hasExtra(MONTH) && getIntent().hasExtra(YEAR);
   }
 }

@@ -1,7 +1,5 @@
 package com.th1b0.budget.util;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +19,9 @@ public class SimpleItemAdapter<T extends SimpleItem>
     extends RecyclerView.Adapter<SimpleItemAdapter.ViewContainer> {
 
   private ArrayList<T> mContainers;
-  private Context mContext;
   private PublishSubject<T> onClick;
 
-  public SimpleItemAdapter(@NonNull Context context) {
-    mContext = context;
+  public SimpleItemAdapter() {
     mContainers = new ArrayList<>();
     onClick = PublishSubject.create();
     setHasStableIds(true);
@@ -43,7 +39,7 @@ public class SimpleItemAdapter<T extends SimpleItem>
 
     holder.title.setText(simpleItem.getTitle());
     holder.value.setText(
-        String.format(mContext.getString(R.string.float_value), simpleItem.getValue()));
+        String.format(holder.value.getContext().getString(R.string.float_value), simpleItem.getValue()));
   }
 
   @Override public long getItemId(int position) {

@@ -23,6 +23,7 @@ public class ConfirmDeletionDialog extends DialogFragment {
 
   public static ConfirmDeletionDialog newInstance(@NonNull String title, @NonNull String msg,
       @NonNull Parcelable parcelable, @NonNull Fragment target, int requestCode) {
+
     ConfirmDeletionDialog dialog = new ConfirmDeletionDialog();
     Bundle args = new Bundle();
     args.putParcelable(PARCELABLE, parcelable);
@@ -34,6 +35,10 @@ public class ConfirmDeletionDialog extends DialogFragment {
   }
 
   @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+    if (!isArgumentValid()) {
+      throw new IllegalStateException("Missing arguments. Please use newInstance()");
+    }
+
     final Parcelable parcelable = getArguments().getParcelable(PARCELABLE);
     final String title = getArguments().getString(TITLE);
     final String msg = getArguments().getString(MESSAGE);
@@ -47,5 +52,11 @@ public class ConfirmDeletionDialog extends DialogFragment {
         })
         .setNegativeButton(R.string.cancel, null)
         .create();
+  }
+
+  private boolean isArgumentValid() {
+    return getArguments().containsKey(PARCELABLE)
+        && getArguments().containsKey(TITLE)
+        && getArguments().containsKey(MESSAGE);
   }
 }

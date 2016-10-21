@@ -1,7 +1,6 @@
 package com.th1b0.budget.features.budget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,10 +18,8 @@ import java.util.ArrayList;
 final class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewBudget> {
 
   private ArrayList<PresentationBudget> mItems;
-  private Context mContext;
 
-  BudgetAdapter(@NonNull Context context) {
-    mContext = context;
+  BudgetAdapter() {
     mItems = new ArrayList<>();
     setHasStableIds(true);
   }
@@ -34,19 +31,20 @@ final class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewBudget>
   }
 
   @Override public void onBindViewHolder(BudgetAdapter.ViewBudget holder, int position) {
+    final Context context = holder.value.getContext();
     final PresentationBudget budget = mItems.get(position);
     final double res = budget.getValue() + budget.getOut();
 
     holder.detail.setText(
-        String.format(mContext.getString(R.string.budget_of_goal), negation(budget.getOut()),
+        String.format(context.getString(R.string.budget_of_goal), negation(budget.getOut()),
             budget.getValue()));
     holder.title.setText(budget.getTitle());
 
-    holder.value.setText(String.format(mContext.getString(R.string.float_value), res));
+    holder.value.setText(String.format(context.getString(R.string.float_value), res));
     if (res >= 0) {
-      holder.value.setTextColor(ContextCompat.getColor(mContext, R.color.green));
+      holder.value.setTextColor(ContextCompat.getColor(context, R.color.green));
     } else {
-      holder.value.setTextColor(ContextCompat.getColor(mContext, R.color.red));
+      holder.value.setTextColor(ContextCompat.getColor(context, R.color.red));
     }
   }
 

@@ -1,6 +1,7 @@
 package com.th1b0.budget.features.categoryform;
 
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ final class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vie
   private final OnIconSelected mListener;
   private final ArrayList<Integer> mIcons;
 
-  IconPickerAdapter(ArrayList<Integer> icons, OnIconSelected listener) {
+  IconPickerAdapter(@NonNull ArrayList<Integer> icons, @NonNull OnIconSelected listener) {
     mIcons = icons;
     mListener = listener;
     setHasStableIds(true);

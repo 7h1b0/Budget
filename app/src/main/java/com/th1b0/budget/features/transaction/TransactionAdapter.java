@@ -1,6 +1,5 @@
 package com.th1b0.budget.features.transaction;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -11,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.th1b0.budget.R;
-import com.th1b0.budget.model.TransactionItem;
 import com.th1b0.budget.model.Transaction;
+import com.th1b0.budget.model.TransactionItem;
 import com.th1b0.budget.util.DateUtil;
 import java.util.ArrayList;
 
@@ -23,11 +22,9 @@ import java.util.ArrayList;
 final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private ArrayList<TransactionItem> mItems;
-  private Context mContext;
   private OnTransactionClick mListener;
 
-  TransactionAdapter(@NonNull Context context, @NonNull OnTransactionClick listener) {
-    mContext = context;
+  TransactionAdapter(@NonNull OnTransactionClick listener) {
     mItems = new ArrayList<>();
     mListener = listener;
     setHasStableIds(true);
@@ -71,7 +68,9 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             DateUtil.formatDate(transaction.getYear(), transaction.getMonth(),
                 transaction.getDay()));
 
-        viewTransaction.value.setText(String.format(mContext.getString(R.string.float_value), transaction.getValue()));
+        viewTransaction.value.setText(
+            String.format(viewTransaction.value.getContext().getString(R.string.float_value),
+                transaction.getValue()));
         viewTransaction.category.setImageResource(transaction.getIcon());
 
         Drawable drawable = viewTransaction.category.getBackground();

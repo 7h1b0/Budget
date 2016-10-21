@@ -31,7 +31,7 @@ public class HistoryFragment
     super.onCreate(savedInstanceState);
 
     mPresenter = new HistoryPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new SimpleItemAdapter<>(getActivity());
+    mAdapter = new SimpleItemAdapter<>();
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {

@@ -38,13 +38,17 @@ public class ContainerPickerDialog extends DialogFragment {
   @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
     if (!(activity instanceof OnContainerSet)) {
-      throw new IllegalStateException("Activity must implement OnContainerSet");
+      throw new IllegalStateException("Activity must implement OnContainerSet. Found: " + activity);
     } else {
       mListener = (OnContainerSet) activity;
     }
   }
 
   @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+    if (!isArgumentValid()) {
+      throw new IllegalStateException("Missing arguments. Please use newInstance()");
+    }
+
     final ArrayList<Container> containers =
         getArguments().getParcelableArrayList(Container.CONTAINERS);
     final int position = getArguments().getInt(SELECTED);
@@ -75,5 +79,9 @@ public class ContainerPickerDialog extends DialogFragment {
       titles.add(container.getTitle());
     }
     return titles.toArray(new String[titles.size()]);
+  }
+
+  private boolean isArgumentValid() {
+    return getArguments().containsKey(SELECTED) && getArguments().containsKey(Container.CONTAINERS);
   }
 }

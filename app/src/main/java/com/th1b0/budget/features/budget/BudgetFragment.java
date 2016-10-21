@@ -48,7 +48,7 @@ public final class BudgetFragment extends Fragment
     super.onCreate(savedInstanceState);
 
     mPresenter = new BudgetPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new BudgetAdapter(getActivity());
+    mAdapter = new BudgetAdapter();
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +59,10 @@ public final class BudgetFragment extends Fragment
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
+    if (!isArgumentValid()) {
+      throw new IllegalStateException("Missing arguments. Please use newInstance()");
+    }
 
     initializeRecycler();
 
@@ -99,5 +103,9 @@ public final class BudgetFragment extends Fragment
     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
     mView.recycler.setLayoutManager(layoutManager);
     mView.recycler.setAdapter(mAdapter);
+  }
+
+  private boolean isArgumentValid() {
+    return getArguments().containsKey(MONTH) && getArguments().containsKey(YEAR);
   }
 }

@@ -26,7 +26,7 @@ public class CategoryDialog extends DialogFragment {
 
   private OnCategorySet mListener;
 
-  public static CategoryDialog newInstance(ArrayList<Category> categories, int position) {
+  public static CategoryDialog newInstance(@NonNull ArrayList<Category> categories, int position) {
     CategoryDialog dialog = new CategoryDialog();
     Bundle args = new Bundle();
     args.putParcelableArrayList(Category.CATEGORIES, categories);
@@ -38,13 +38,17 @@ public class CategoryDialog extends DialogFragment {
   @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
     if (!(activity instanceof OnCategorySet)) {
-      throw new IllegalStateException("Activity must implement OnCategorySet");
+      throw new IllegalStateException("Activity must implement OnCategorySet: Found: " + activity);
     } else {
       mListener = (OnCategorySet) activity;
     }
   }
 
   @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+    if (!isArgumentValid()) {
+      throw new IllegalStateException("Missing arguments. Please use newInstance()");
+    }
+
     final ArrayList<Category> categories = getArguments().getParcelableArrayList(Category.CATEGORIES);
     final int position = getArguments().getInt(SELECTED);
 
@@ -74,5 +78,9 @@ public class CategoryDialog extends DialogFragment {
       titles.add(category.getTitle());
     }
     return titles.toArray(new String[titles.size()]);
+  }
+
+  private boolean isArgumentValid() {
+    return getArguments().containsKey(SELECTED) && getArguments().containsKey(Category.CATEGORIES);
   }
 }

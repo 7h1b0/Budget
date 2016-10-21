@@ -25,14 +25,14 @@ public class IconPickerDialog extends DialogFragment implements IconPickerAdapte
 
   private OnIconSet mListener;
 
-  public static IconPickerDialog newIntance() {
+  public static IconPickerDialog newInstance() {
     return new IconPickerDialog();
   }
 
   @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
     if (!(activity instanceof OnIconSet)) {
-      throw new IllegalStateException("Activity must implement OnIconSet");
+      throw new IllegalStateException("Activity must implement OnIconSet. Found: " + activity);
     } else {
       mListener = (OnIconSet) activity;
     }

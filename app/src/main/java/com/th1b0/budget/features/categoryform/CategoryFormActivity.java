@@ -201,7 +201,7 @@ public class CategoryFormActivity extends AppCompatActivity
         v -> ColorPickerDialog.newInstance(mCategory.getColor()).show(getFragmentManager(), null));
 
     mView.iconLayout.setOnClickListener(
-        v -> IconPickerDialog.newIntance().show(getFragmentManager(), null));
+        v -> IconPickerDialog.newInstance().show(getFragmentManager(), null));
 
     mView.containerLayout.setOnClickListener(v -> {
       int position = findContainerPosition(mCategory.getIdContainer());

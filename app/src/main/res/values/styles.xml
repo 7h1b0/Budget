@@ -42,6 +42,11 @@
         <item name="android:textSize">@dimen/font_body</item>
     </style>
 
+    <style name="TextBodyOneLine" parent="TextBody">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
     <style name="IconShort">
         <item name="android:layout_width">@dimen/icon_width_short</item>
         <item name="android:layout_height">@dimen/icon_width_short</item>

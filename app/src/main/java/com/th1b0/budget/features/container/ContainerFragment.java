@@ -35,7 +35,7 @@ public class ContainerFragment
     super.onCreate(savedInstanceState);
 
     mPresenter = new ContainerPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new SimpleItemAdapter<>(getActivity());
+    mAdapter = new SimpleItemAdapter<>();
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
