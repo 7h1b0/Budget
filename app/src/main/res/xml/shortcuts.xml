@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+      android:shortcutId="add_transaction"
+      android:icon="@mipmap/add"
+      android:shortcutShortLabel="@string/add_transaction_short"
+      android:shortcutLongLabel="@string/add_transaction">
+    <intent
+        android:action="com.th1b0.budget.ADD_TRANSACTION"
+        android:targetPackage="com.th1b0.budget"
+        android:targetClass="com.th1b0.budget.features.drawer.MainActivity" />
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
+
+  <shortcut
+      android:shortcutId="add_budget"
+      android:icon="@mipmap/add"
+      android:shortcutShortLabel="@string/add_budget_short"
+      android:shortcutLongLabel="@string/add_budget">
+    <intent
+        android:action="com.th1b0.budget.ADD_BUDGET"
+        android:targetPackage="com.th1b0.budget"
+        android:targetClass="com.th1b0.budget.features.drawer.MainActivity" />
+    <categories android:name="android.shortcut.conversation" />
+  </shortcut>
+</shortcuts>

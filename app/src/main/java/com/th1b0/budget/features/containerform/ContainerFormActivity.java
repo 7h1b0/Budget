@@ -92,9 +92,9 @@ public class ContainerFormActivity extends AppCompatActivity {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_close);
       if (isEditMode()) {
-        getSupportActionBar().setTitle(R.string.edit_container);
+        getSupportActionBar().setTitle(R.string.edit_budget);
       } else {
-        getSupportActionBar().setTitle(R.string.add_container);
+        getSupportActionBar().setTitle(R.string.add_budget);
       }
     }
   }

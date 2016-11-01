@@ -27,10 +27,10 @@
     <string name="value">Montant</string>
     <string name="category">Catégorie</string>
     <string name="budgets">Budgets</string>
+    <string name="budget">Budget</string>
     <string name="none">Aucun</string>
     <string name="default_container">Budget par défaut</string>
     <string name="home">Accueil</string>
-    <string name="container">Budget</string>
     <string name="transactions">Transactions</string>
     <string name="categories">Catégories</string>
     <string name="history">Historique</string>
@@ -38,11 +38,13 @@
     <string name="expenses">Dépenses</string>
 
     <string name="add_transaction">Ajouter une transaction</string>
+    <string name="add_transaction_short">Ajouter transaction</string>
     <string name="add_category">Ajouter une catégorie</string>
     <string name="edit_transaction">Editer une transaction</string>
     <string name="edit_category">Editer une catégorie</string>
-    <string name="add_container">Ajouter un budget</string>
-    <string name="edit_container">Editer un budget</string>
+    <string name="add_budget">Ajouter un budget</string>
+    <string name="add_budget_short">Ajouter budget</string>
+    <string name="edit_budget">Editer un budget</string>
     <string name="set_categorie">Choisir une categorie</string>
     <string name="set_container">Choisir un budget</string>
     <string name="set_icon">Choisir un icône</string>

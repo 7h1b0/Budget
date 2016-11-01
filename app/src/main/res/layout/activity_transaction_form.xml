@@ -153,7 +153,7 @@
                             android:layout_toEndOf="@+id/container_icon"
                             style="@style/TextBody"
                             android:layout_marginStart="32dp"
-                            android:text="@string/container"
+                            android:text="@string/budget"
                             />
 
                         <TextView
