@@ -15,8 +15,10 @@ import com.th1b0.budget.databinding.ActivityMainBinding;
 import com.th1b0.budget.features.budget.BudgetFragment;
 import com.th1b0.budget.features.categories.CategoryFragment;
 import com.th1b0.budget.features.container.ContainerFragment;
+import com.th1b0.budget.features.containerform.ContainerFormActivity;
 import com.th1b0.budget.features.history.HistoryFragment;
 import com.th1b0.budget.features.transaction.TransactionFragment;
+import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.Preferences;
@@ -25,7 +27,11 @@ import java.util.ArrayList;
 public final class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
+  private static final String ACTION_ADD_BUDGET = "com.th1b0.budget.ADD_BUDGET";
+  private static final String ACTION_ADD_TRANSACTION = "com.th1b0.budget.ADD_TRANSACTION";
+
   public static final String TOOLBAR_TITLE = "toolbar_title";
+
   private ActivityMainBinding mView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,18 @@ public final class MainActivity extends AppCompatActivity
     handleFirstLaunch();
 
     if (savedInstanceState == null) {
+      switch (getIntent().getAction()) {
+        case ACTION_ADD_BUDGET:
+          startActivity(ContainerFormActivity.newInstance(this));
+          break;
+
+        case ACTION_ADD_TRANSACTION:
+          startActivity(TransactionFormActivity.newInstance(this));
+          break;
+
+        default:
+
+      }
       display(BudgetFragment.newInstance(), null);
     }
   }
