@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import com.squareup.sqlbrite.BriteDatabase;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Container;
 import com.th1b0.budget.util.DbUtil;
@@ -60,18 +59,6 @@ public final class CategoryTable extends Database {
     return db.insert(TABLE_CATEGORY, getContentValues(category));
   }
 
-  public void add(ArrayList<Category> categories) {
-    BriteDatabase.Transaction transaction = db.newTransaction();
-    try {
-      for (Category category : categories) {
-        db.insert(TABLE_CATEGORY, getContentValues(category));
-      }
-      transaction.markSuccessful();
-    } finally {
-      transaction.end();
-    }
-  }
-
   public int delete(@NonNull Category category) {
     return db.delete(TABLE_CATEGORY, Category.ID + " = ?", String.valueOf(category.getId()));
   }
@@ -86,16 +73,6 @@ public final class CategoryTable extends Database {
     values.put(Category.ID_CONTAINER, Container.NOT_DEFINED);
     return db.update(TABLE_CATEGORY, values, Category.ID_CONTAINER + " = ?",
         String.valueOf(idContainer));
-  }
-
-  private ContentValues getContentValues(@NonNull Category category) {
-    ContentValues values = new ContentValues();
-    values.put(Category.TITLE, category.getTitle());
-    values.put(Category.COLOR, category.getColor());
-    values.put(Category.ICON, category.getIcon());
-    values.put(Category.ID_CONTAINER, category.getIdContainer());
-
-    return values;
   }
 
   private Category getCategory(@NonNull Cursor cursor) {

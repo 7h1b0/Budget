@@ -20,6 +20,7 @@ import com.th1b0.budget.features.history.HistoryFragment;
 import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Category;
+import com.th1b0.budget.model.Container;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.Preferences;
 import java.util.ArrayList;
@@ -133,12 +134,19 @@ public final class MainActivity extends AppCompatActivity
 
   private void handleFirstLaunch() {
     if (Preferences.isFirstLaunch(this)) {
-      initializeCategories();
+      initializeDatabase();
       Preferences.setFirstLaunch(this, false);
     }
   }
 
-  private void initializeCategories() {
+  private void initializeDatabase() {
+    ArrayList<Container> containers = new ArrayList<>(5);
+    containers.add(new Container(getString(R.string.food), 100));
+    containers.add(new Container(getString(R.string.diner), 100));
+    containers.add(new Container(getString(R.string.hobby), 100));
+    containers.add(new Container(getString(R.string.shopping), 100));
+    containers.add(new Container(getString(R.string.transport), 100));
+
     ArrayList<Category> categories = new ArrayList<>(5);
     categories.add(
         new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food),
@@ -152,6 +160,6 @@ public final class MainActivity extends AppCompatActivity
     categories.add(new Category(getString(R.string.transport),
         ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
 
-    DataManager.getInstance(this).addCategories(categories);
+    DataManager.getInstance(this).initializeDatabase(containers, categories);
   }
 }

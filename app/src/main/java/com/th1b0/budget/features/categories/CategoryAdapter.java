@@ -1,5 +1,6 @@
 package com.th1b0.budget.features.categories;
 
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -41,6 +42,7 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
 
   @Override public void onBindViewHolder(ViewCategory holder, int position) {
     final Category category = mCategories.get(position);
+    final Context context = holder.title.getContext();
 
     holder.icon.setImageResource(category.getIcon());
     Drawable drawable = holder.icon.getBackground();
@@ -48,9 +50,10 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
 
     holder.title.setText(category.getTitle());
     if (TextUtils.isEmpty(category.getTitleContainer())) {
-      holder.container.setVisibility(View.GONE);
+      holder.budget.setVisibility(View.GONE);
     } else {
-      holder.container.setText(category.getTitleContainer());
+      String budgetLabel = String.format(context.getString(R.string.budget_label), category.getTitleContainer());
+      holder.budget.setText(budgetLabel);
     }
   }
 
@@ -66,13 +69,13 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
 
     ImageView icon;
     TextView title;
-    TextView container;
+    TextView budget;
 
     ViewCategory(View v) {
       super(v);
       icon = (ImageView) v.findViewById(R.id.icon);
       title = (TextView) v.findViewById(R.id.title);
-      container = (TextView) v.findViewById(R.id.container);
+      budget = (TextView) v.findViewById(R.id.budget);
 
       v.setOnClickListener(view -> mListener.onCategoryClick(mCategories.get(getLayoutPosition())));
     }

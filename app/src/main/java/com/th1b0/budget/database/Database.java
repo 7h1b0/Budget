@@ -1,5 +1,6 @@
 package com.th1b0.budget.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -91,5 +92,22 @@ abstract class Database extends SQLiteOpenHelper {
 
   Cursor getCursor(@NonNull SqlBrite.Query query) {
     return query.run();
+  }
+
+  ContentValues getContentValues(@NonNull Category category) {
+    ContentValues values = new ContentValues();
+    values.put(Category.TITLE, category.getTitle());
+    values.put(Category.COLOR, category.getColor());
+    values.put(Category.ICON, category.getIcon());
+    values.put(Category.ID_CONTAINER, category.getIdContainer());
+
+    return values;
+  }
+
+  ContentValues getContentValues(@NonNull Container container) {
+    ContentValues values = new ContentValues();
+    values.put(Container.TITLE, container.getTitle());
+    values.put(Container.VALUE, container.getValue());
+    return values;
   }
 }

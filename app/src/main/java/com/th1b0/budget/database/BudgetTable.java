@@ -2,6 +2,8 @@ package com.th1b0.budget.database;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import com.squareup.sqlbrite.BriteDatabase;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.PresentationHistory;
@@ -101,5 +103,26 @@ public final class BudgetTable extends Database {
         cursor.close();
       }
     });
+  }
+
+  public void initializeDatabase(ArrayList<Container> containers, ArrayList<Category> categories) {
+    if (containers.size() != categories.size()) {
+      return;
+    }
+
+    BriteDatabase.Transaction transaction = db.newTransaction();
+    try {
+      for(int i =0; i < containers.size(); i++) {
+        Container container = containers.get(i);
+        long idContainer = db.insert(TABLE_CONTAINER, getContentValues(container));
+
+        Category category = categories.get(i);
+        category.setIdContainer(idContainer);
+        db.insert(TABLE_CATEGORY, getContentValues(category));
+      }
+      transaction.markSuccessful();
+    } finally {
+      transaction.end();
+    }
   }
 }

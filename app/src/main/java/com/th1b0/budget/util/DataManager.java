@@ -76,10 +76,6 @@ public class DataManager {
     return mCategoryTable.add(category);
   }
 
-  public void addCategories(ArrayList<Category> categories) {
-    mCategoryTable.add(categories);
-  }
-
   public int updateCategory(@NonNull Category category) {
     return mCategoryTable.update(category);
   }
@@ -111,5 +107,9 @@ public class DataManager {
         .doOnNext(mTransactionTable::removeIdContainer)
         .flatMap(ignored -> Observable.empty());
 
+  }
+
+  public void initializeDatabase(ArrayList<Container> containers, ArrayList<Category> categories) {
+    mBudgetTable.initializeDatabase(containers, categories);
   }
 }

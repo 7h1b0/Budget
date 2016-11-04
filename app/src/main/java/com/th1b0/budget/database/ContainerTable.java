@@ -1,6 +1,5 @@
 package com.th1b0.budget.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -53,13 +52,6 @@ public final class ContainerTable extends Database {
   public int update(@NonNull Container container) {
     return db.update(TABLE_CONTAINER, getContentValues(container), Container.ID + " = ?",
         String.valueOf(container.getId()));
-  }
-
-  private ContentValues getContentValues(@NonNull Container container) {
-    ContentValues values = new ContentValues();
-    values.put(Container.TITLE, container.getTitle());
-    values.put(Container.VALUE, container.getValue());
-    return values;
   }
 
   private Container getContainer(@NonNull Cursor cursor) {

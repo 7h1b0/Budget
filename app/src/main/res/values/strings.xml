@@ -28,6 +28,7 @@
     <string name="category">Catégorie</string>
     <string name="budgets">Budgets</string>
     <string name="budget">Budget</string>
+    <string name="budget_label">Budget: %1$s</string>
     <string name="none">Aucun</string>
     <string name="default_container">Budget par défaut</string>
     <string name="home">Accueil</string>

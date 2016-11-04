@@ -15,7 +15,6 @@ import android.util.Log;
 import com.jakewharton.rxbinding.widget.RxSeekBar;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.DialogColorPickerBinding;
-import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
