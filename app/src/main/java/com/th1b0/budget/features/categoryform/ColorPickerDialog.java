@@ -82,7 +82,6 @@ public class ColorPickerDialog extends DialogFragment {
               mView.blueValue.setText(String.valueOf(b));
               return Color.rgb(r, g, b);
             })
-            .debounce(300, TimeUnit.MILLISECONDS)
             .skip(1)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(AndroidSchedulers.mainThread())

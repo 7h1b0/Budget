@@ -1,5 +1,7 @@
 package com.th1b0.budget.util;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +22,17 @@ public class SimpleItemAdapter<T extends SimpleItem>
 
   private ArrayList<T> mContainers;
   private PublishSubject<T> onClick;
+  private boolean showColor;
 
-  public SimpleItemAdapter() {
+  public SimpleItemAdapter(boolean showColor) {
     mContainers = new ArrayList<>();
     onClick = PublishSubject.create();
     setHasStableIds(true);
+    this.showColor = showColor;
+  }
+
+  public SimpleItemAdapter() {
+    this(false);
   }
 
   @Override
@@ -40,6 +48,15 @@ public class SimpleItemAdapter<T extends SimpleItem>
     holder.title.setText(simpleItem.getTitle());
     holder.value.setText(
         String.format(holder.value.getContext().getString(R.string.float_value), simpleItem.getValue()));
+
+    if (showColor) {
+      final Context context = holder.value.getContext();
+      if (simpleItem.getValue() >= 0) {
+        holder.value.setTextColor(ContextCompat.getColor(context, R.color.green));
+      } else {
+        holder.value.setTextColor(ContextCompat.getColor(context, R.color.red));
+      }
+    }
   }
 
   @Override public long getItemId(int position) {
