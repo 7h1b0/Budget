@@ -19,4 +19,6 @@
     <dimen name="font_subhead">16sp</dimen>
     <dimen name="font_body">14sp</dimen>
     <dimen name="font_label">12sp</dimen>
+
+    <dimen name="height_header_color_picker">250dp</dimen>
 </resources>
