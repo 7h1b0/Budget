@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
 import rx.Observable;
@@ -30,17 +30,17 @@ public final class CategoryTable extends Database {
         + ","
         + Category.ICON
         + ", "
-        + Category.ID_CONTAINER
+        + Category.ID_BUDGET
         + ", "
-        + Container.TITLE
+        + Budget.TITLE
         + " FROM "
         + TABLE_CATEGORY
         + " LEFT JOIN "
-        + TABLE_CONTAINER
+        + TABLE_BUDGET
         + " ON "
-        + Category.ID_CONTAINER
+        + Category.ID_BUDGET
         + " = "
-        + Container.ID
+        + Budget.ID
         + " ORDER BY "
         + Category.TITLE).map(super::getCursor).map(cursor -> {
       try {
@@ -68,18 +68,18 @@ public final class CategoryTable extends Database {
         String.valueOf(category.getId()));
   }
 
-  public int removeIdContainer(long idContainer) {
+  public int removeIdBudget(long idBudget) {
     ContentValues values = new ContentValues();
-    values.put(Category.ID_CONTAINER, Container.NOT_DEFINED);
-    return db.update(TABLE_CATEGORY, values, Category.ID_CONTAINER + " = ?",
-        String.valueOf(idContainer));
+    values.put(Category.ID_BUDGET, Budget.NOT_DEFINED);
+    return db.update(TABLE_CATEGORY, values, Category.ID_BUDGET + " = ?",
+        String.valueOf(idBudget));
   }
 
   private Category getCategory(@NonNull Cursor cursor) {
     Category category =  new Category(DbUtil.getLong(cursor, Category.ID),
-        DbUtil.getLong(cursor, Category.ID_CONTAINER), DbUtil.getString(cursor, Category.TITLE),
+        DbUtil.getLong(cursor, Category.ID_BUDGET), DbUtil.getString(cursor, Category.TITLE),
         DbUtil.getInt(cursor, Category.COLOR), DbUtil.getInt(cursor, Category.ICON));
-    category.setTitleContainer(DbUtil.getString(cursor, Container.TITLE));
+    category.setTitleBudget(DbUtil.getString(cursor, Budget.TITLE));
     return category;
   }
 }

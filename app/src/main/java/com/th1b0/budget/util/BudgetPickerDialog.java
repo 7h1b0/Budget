@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import com.th1b0.budget.R;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.Budget;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +16,20 @@ import java.util.List;
  * Created by 7h1b0.
  */
 
-public class ContainerPickerDialog extends DialogFragment {
+public class BudgetPickerDialog extends DialogFragment {
 
   public static final String SELECTED = "position";
 
-  public interface OnContainerSet {
-    void onContainerSet(@NonNull Container container);
+  public interface OnBudgetSet {
+    void onBudgetSet(@NonNull Budget budget);
   }
 
-  private OnContainerSet mListener;
+  private OnBudgetSet mListener;
 
-  public static ContainerPickerDialog newInstance(ArrayList<Container> containers, int position) {
-    ContainerPickerDialog dialog = new ContainerPickerDialog();
+  public static BudgetPickerDialog newInstance(ArrayList<Budget> budgets, int position) {
+    BudgetPickerDialog dialog = new BudgetPickerDialog();
     Bundle args = new Bundle();
-    args.putParcelableArrayList(Container.CONTAINERS, containers);
+    args.putParcelableArrayList(Budget.BUDGETS, budgets);
     args.putInt(SELECTED, position);
     dialog.setArguments(args);
     return dialog;
@@ -37,10 +37,10 @@ public class ContainerPickerDialog extends DialogFragment {
 
   @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
-    if (!(activity instanceof OnContainerSet)) {
-      throw new IllegalStateException("Activity must implement OnContainerSet. Found: " + activity);
+    if (!(activity instanceof OnBudgetSet)) {
+      throw new IllegalStateException("Activity must implement OnBudgetSet. Found: " + activity);
     } else {
-      mListener = (OnContainerSet) activity;
+      mListener = (OnBudgetSet) activity;
     }
   }
 
@@ -49,19 +49,19 @@ public class ContainerPickerDialog extends DialogFragment {
       throw new IllegalStateException("Missing arguments. Please use newInstance()");
     }
 
-    final ArrayList<Container> containers =
-        getArguments().getParcelableArrayList(Container.CONTAINERS);
+    final ArrayList<Budget> budgets =
+        getArguments().getParcelableArrayList(Budget.BUDGETS);
     final int position = getArguments().getInt(SELECTED);
 
-    final String[] titles = getCategoryTitles(containers);
+    final String[] titles = getCategoryTitles(budgets);
 
-    return new AlertDialog.Builder(getActivity()).setTitle(R.string.set_container)
+    return new AlertDialog.Builder(getActivity()).setTitle(R.string.set_budget)
         .setSingleChoiceItems(titles, position, null)
         .setPositiveButton(R.string.valid, (dialog, which) -> {
           final int selectedCategory =
               ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-          if (mListener != null && selectedCategory < containers.size() && selectedCategory >= 0) {
-            mListener.onContainerSet(containers.get(selectedCategory));
+          if (mListener != null && selectedCategory < budgets.size() && selectedCategory >= 0) {
+            mListener.onBudgetSet(budgets.get(selectedCategory));
           }
         })
         .setNegativeButton(R.string.cancel, null)
@@ -73,15 +73,15 @@ public class ContainerPickerDialog extends DialogFragment {
     mListener = null;
   }
 
-  private String[] getCategoryTitles(List<Container> containers) {
-    List<String> titles = new ArrayList<>(containers.size());
-    for (Container container : containers) {
-      titles.add(container.getTitle());
+  private String[] getCategoryTitles(List<Budget> budgets) {
+    List<String> titles = new ArrayList<>(budgets.size());
+    for (Budget budget : budgets) {
+      titles.add(budget.getTitle());
     }
     return titles.toArray(new String[titles.size()]);
   }
 
   private boolean isArgumentValid() {
-    return getArguments().containsKey(SELECTED) && getArguments().containsKey(Container.CONTAINERS);
+    return getArguments().containsKey(SELECTED) && getArguments().containsKey(Budget.BUDGETS);
   }
 }

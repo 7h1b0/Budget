@@ -130,7 +130,7 @@
 
                     </RelativeLayout>
 
-                    <!-- Container -->
+                    <!-- Budget -->
                     <RelativeLayout
                         android:id="@+id/container_layout"
                         android:layout_width="match_parent"
@@ -157,7 +157,7 @@
                             />
 
                         <TextView
-                            android:id="@+id/container"
+                            android:id="@+id/budget"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/container_title"

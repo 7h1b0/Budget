@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.containerform;
+package com.th1b0.budget.features.budgetform;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,41 +11,41 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
-import com.th1b0.budget.databinding.ActivityContainerFormBinding;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.databinding.ActivityBudgetFormBinding;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.DataManager;
 
 /**
  * Created by 7h1b0.
  */
 
-public class ContainerFormActivity extends AppCompatActivity {
+public class BudgetFormActivity extends AppCompatActivity {
 
-  private Container mContainer;
-  private ContainerFormPresenter mPresenter;
-  private ActivityContainerFormBinding mView;
+  private Budget mBudget;
+  private BudgetFormPresenter mPresenter;
+  private ActivityBudgetFormBinding mView;
 
   public static Intent newInstance(@NonNull Context context) {
-    return new Intent(context, ContainerFormActivity.class);
+    return new Intent(context, BudgetFormActivity.class);
   }
 
-  public static Intent newInstance(@NonNull Context context, @Nullable Container container) {
-    Intent intent = new Intent(context, ContainerFormActivity.class);
-    intent.putExtra(Container.CONTAINER, container);
+  public static Intent newInstance(@NonNull Context context, @Nullable Budget budget) {
+    Intent intent = new Intent(context, BudgetFormActivity.class);
+    intent.putExtra(Budget.BUDGET, budget);
     return intent;
   }
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mView = DataBindingUtil.setContentView(this, R.layout.activity_container_form);
-    mPresenter = new ContainerFormPresenterImpl(this, DataManager.getInstance(this));
+    mView = DataBindingUtil.setContentView(this, R.layout.activity_budget_form);
+    mPresenter = new BudgetFormPresenterImpl(this, DataManager.getInstance(this));
 
     if (savedInstanceState != null) {
-      mContainer = savedInstanceState.getParcelable(Container.CONTAINER);
+      mBudget = savedInstanceState.getParcelable(Budget.BUDGET);
     } else if (isEditMode()) {
-      mContainer = getIntent().getExtras().getParcelable(Container.CONTAINER);
+      mBudget = getIntent().getExtras().getParcelable(Budget.BUDGET);
     } else {
-      mContainer = new Container();
+      mBudget = new Budget();
     }
 
     setupToolbar();
@@ -66,11 +66,11 @@ public class ContainerFormActivity extends AppCompatActivity {
 
       case R.id.save:
         if (isFormValid()) {
-          updateContainerFromForm();
+          updateBudgetFromForm();
           if (isEditMode()) {
-            mPresenter.updateContainer(mContainer);
+            mPresenter.updateBudget(mBudget);
           } else {
-            mPresenter.addContainer(mContainer);
+            mPresenter.addBudget(mBudget);
           }
           finish();
         }
@@ -82,8 +82,8 @@ public class ContainerFormActivity extends AppCompatActivity {
   }
 
   private boolean isEditMode() {
-    return getIntent().hasExtra(Container.CONTAINER)
-        && getIntent().getExtras().getParcelable(Container.CONTAINER) != null;
+    return getIntent().hasExtra(Budget.BUDGET)
+        && getIntent().getExtras().getParcelable(Budget.BUDGET) != null;
   }
 
   private void setupToolbar() {
@@ -100,9 +100,9 @@ public class ContainerFormActivity extends AppCompatActivity {
   }
 
   private void fillForm() {
-    mView.title.setText(mContainer.getTitle());
-    if (mContainer.getValue() != 0) {
-      mView.value.setText(String.valueOf(mContainer.getValue()));
+    mView.title.setText(mBudget.getTitle());
+    if (mBudget.getValue() != 0) {
+      mView.value.setText(String.valueOf(mBudget.getValue()));
     }
   }
 
@@ -127,10 +127,10 @@ public class ContainerFormActivity extends AppCompatActivity {
     return isValid;
   }
 
-  private void updateContainerFromForm() {
-    mContainer.setTitle(mView.title.getText().toString());
+  private void updateBudgetFromForm() {
+    mBudget.setTitle(mView.title.getText().toString());
     try {
-      mContainer.setValue(Double.parseDouble(mView.value.getText().toString()));
+      mBudget.setValue(Double.parseDouble(mView.value.getText().toString()));
     } catch (NumberFormatException e) {
       // Nothing
     }

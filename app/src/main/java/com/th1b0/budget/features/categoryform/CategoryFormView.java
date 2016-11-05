@@ -2,7 +2,7 @@ package com.th1b0.budget.features.categoryform;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.Budget;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 interface CategoryFormView {
 
-  void onContainerLoaded(ArrayList<Container> containers);
+  void onBudgetLoaded(ArrayList<Budget> budgets);
 
   void onError(String error);
 

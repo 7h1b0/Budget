@@ -2,8 +2,8 @@ package com.th1b0.budget.features.transactionform;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 interface TransactionFormView {
   void onCategoriesLoaded(ArrayList<Category> categories);
 
-  void onContainersLoaded(ArrayList<Container> containers);
+  void onBudgetsLoaded(ArrayList<Budget> budgets);
 
   void onError(String error);
 

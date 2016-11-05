@@ -2,8 +2,8 @@ package com.th1b0.budget.features.categoryform;
 
 import android.support.annotation.NonNull;
 import com.th1b0.budget.R;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.PresenterImpl;
 import rx.android.schedulers.AndroidSchedulers;
@@ -28,18 +28,18 @@ final class CategoryFormPresenterImpl extends PresenterImpl<CategoryFormView>
     mDataManager.updateCategory(category);
   }
 
-  @Override public void loadContainer() {
-    mSubscription.add(mDataManager.getContainers()
-        .map(containers -> {
-          containers.add(0,
-              new Container(Container.NONE, getView().getContext().getString(R.string.none), 0));
-          return containers;
+  @Override public void loadBudget() {
+    mSubscription.add(mDataManager.getBudgets()
+        .map(budgets -> {
+          budgets.add(0,
+              new Budget(Budget.NONE, getView().getContext().getString(R.string.none), 0));
+          return budgets;
         })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(containers -> {
+        .subscribe(budgets -> {
           if (isViewAttached()) {
-            getView().onContainerLoaded(containers);
+            getView().onBudgetLoaded(budgets);
           }
         }, error -> {
           if (isViewAttached()) {

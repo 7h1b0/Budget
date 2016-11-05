@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.detail;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -15,22 +15,22 @@ import java.util.ArrayList;
  * Created by 7h1b0.
  */
 
-final class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewBudget> {
+final class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewBudget> {
 
   private ArrayList<PresentationBudget> mItems;
 
-  BudgetAdapter() {
+  DetailAdapter() {
     mItems = new ArrayList<>();
     setHasStableIds(true);
   }
 
-  @Override public BudgetAdapter.ViewBudget onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override public DetailAdapter.ViewBudget onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_budget, parent, false);
     return new ViewBudget(view);
   }
 
-  @Override public void onBindViewHolder(BudgetAdapter.ViewBudget holder, int position) {
+  @Override public void onBindViewHolder(DetailAdapter.ViewBudget holder, int position) {
     final Context context = holder.value.getContext();
     final PresentationBudget budget = mItems.get(position);
     final double res = budget.getValue() + budget.getOut();

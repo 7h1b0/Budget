@@ -8,11 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
-import com.th1b0.budget.features.budget.BudgetFragment;
+import com.th1b0.budget.features.detail.DetailFragment;
 import com.th1b0.budget.util.DateUtil;
 
-import static com.th1b0.budget.features.budget.BudgetFragment.MONTH;
-import static com.th1b0.budget.features.budget.BudgetFragment.YEAR;
+import static com.th1b0.budget.features.detail.DetailFragment.MONTH;
+import static com.th1b0.budget.features.detail.DetailFragment.YEAR;
 
 /**
  * Created by 7h1b0.
@@ -43,7 +43,7 @@ public final class DetailMonthActivity extends AppCompatActivity {
 
     if (savedInstanceState == null) {
       getFragmentManager().beginTransaction()
-          .replace(R.id.frame_container, BudgetFragment.newInstance(month, year))
+          .replace(R.id.frame_container, DetailFragment.newInstance(month, year))
           .commit();
     }
   }

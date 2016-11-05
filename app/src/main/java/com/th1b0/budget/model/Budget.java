@@ -7,37 +7,58 @@ import android.os.Parcelable;
  * Created by 7h1b0.
  */
 
-public class Budget implements Parcelable {
+public class Budget implements Parcelable, SimpleItem{
 
+  public static final String BUDGETS = "budgets";
   public static final String BUDGET = "budget";
-  public static final String VALUE = "value";
+  public static final String ID = "b_id";
+  public static final String TITLE = "b_title";
+  public static final String VALUE = "b_value";
 
+  public static final long NONE = -2;
+  public static final long NOT_DEFINED = -1;
+
+  private long id;
+  private String title;
   private double value;
-  private double goal;
-  private int month;
-  private int year;
-  private String date;
+
+  public Budget() {
+
+  }
+
+  public Budget(String title, double value) {
+    this(-1, title, value);
+  }
+
+  public Budget(long id, String title, double value) {
+    this.id = id;
+    this.title = title;
+    this.value = value;
+  }
 
   public Budget(Parcel in) {
-    value = in.readDouble();
-    month = in.readInt();
-    year = in.readInt();
-    goal = in.readDouble();
-    date = in.readString();
+    this.id = in.readLong();
+    this.title = in.readString();
+    this.value = in.readDouble();
   }
 
-  public Budget(double value, int month, int year) {
-    this(value, month, year, 0);
+  public long getId() {
+    return id;
   }
 
-  public Budget(double value, int month, int year, double goal) {
-    this.value = value;
-    this.month = month;
-    this.year = year;
-    this.goal = goal;
+  public void setId(long id) {
+    this.id = id;
   }
 
-  public double getValue() {
+  @Override public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  @Override public double getValue() {
     return value;
   }
 
@@ -45,40 +66,14 @@ public class Budget implements Parcelable {
     this.value = value;
   }
 
-  public int getMonth() {
-    return month;
-  }
-
-  public void setMonth(int month) {
-    this.month = month;
-  }
-
-  public int getYear() {
-    return year;
-  }
-
-  public void setYear(int year) {
-    this.year = year;
-  }
-
-  public double getGoal() {
-    return goal;
-  }
-
-  public void setGoal(double goal) {
-    this.goal = goal;
-  }
-
   @Override public int describeContents() {
     return 0;
   }
 
   @Override public void writeToParcel(Parcel dest, int flags) {
+    dest.writeLong(id);
+    dest.writeString(title);
     dest.writeDouble(value);
-    dest.writeInt(month);
-    dest.writeInt(year);
-    dest.writeDouble(goal);
-    dest.writeString(date);
   }
 
   public static final Parcelable.Creator<Budget> CREATOR = new Parcelable.Creator<Budget>() {
@@ -91,16 +86,16 @@ public class Budget implements Parcelable {
     }
   };
 
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Budget that = (Budget) o;
+
+    return id == that.id;
+  }
+
   @Override public int hashCode() {
-    int result;
-    long temp;
-    temp = Double.doubleToLongBits(value);
-    result = (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(goal);
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
-    result = 31 * result + month;
-    result = 31 * result + year;
-    result = 31 * result + (date != null ? date.hashCode() : 0);
-    return result;
+    return (int) (id ^ (id >>> 32));
   }
 }

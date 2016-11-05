@@ -1,85 +1,83 @@
 package com.th1b0.budget.features.budget;
 
-import android.app.Fragment;
-import android.databinding.DataBindingUtil;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 import com.th1b0.budget.R;
-import com.th1b0.budget.databinding.FragmentHomeBinding;
-import com.th1b0.budget.model.PresentationBalance;
-import com.th1b0.budget.model.PresentationBudget;
+import com.th1b0.budget.features.budgetform.BudgetFormActivity;
+import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.util.ConfirmDeletionDialog;
 import com.th1b0.budget.util.DataManager;
-import com.th1b0.budget.util.DateUtil;
+import com.th1b0.budget.util.FragmentRecycler;
+import com.th1b0.budget.util.SimpleItemAdapter;
 import java.util.ArrayList;
+import rx.Subscription;
 
 /**
  * Created by 7h1b0.
  */
 
-public final class BudgetFragment extends Fragment
+public class BudgetFragment
+    extends FragmentRecycler<BudgetPresenter, SimpleItemAdapter<Budget>>
     implements BudgetView {
 
-  public static final String YEAR = "year";
-  public static final String MONTH = "month";
-
-  private BudgetPresenter mPresenter;
-  private BudgetAdapter mAdapter;
-  private FragmentHomeBinding mView;
+  private Subscription mSubscription;
 
   public static BudgetFragment newInstance() {
-    return newInstance(DateUtil.getCurrentMonth(), DateUtil.getCurrentYear());
-  }
-
-  public static BudgetFragment newInstance(int month, int year) {
-    BudgetFragment dialog = new BudgetFragment();
-    Bundle args = new Bundle();
-    args.putInt(YEAR, year);
-    args.putInt(MONTH, month);
-    dialog.setArguments(args);
-    return dialog;
+    return new BudgetFragment();
   }
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     mPresenter = new BudgetPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new BudgetAdapter();
-  }
-
-  @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    mView = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-    return mView.getRoot();
+    mAdapter = new SimpleItemAdapter<>();
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    if (!isArgumentValid()) {
-      throw new IllegalStateException("Missing arguments. Please use newInstance()");
-    }
-
     initializeRecycler();
+    initializeFAB();
 
-    int month = getArguments().getInt(MONTH);
-    int year = getArguments().getInt(YEAR);
+    mSubscription = mAdapter.onClick().subscribe(this::onBudgetClick);
+    mPresenter.loadBudgets();
+  }
 
-    mView.included.noItem.setVisibility(View.GONE);
-    mPresenter.loadBudgets(month, year);
-    mPresenter.loadBalance(month, year);
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch (requestCode) {
+      case CONFIRM_DELETE:
+        if (resultCode == Activity.RESULT_OK && data.hasExtra(ConfirmDeletionDialog.PARCELABLE)) {
+          Budget budget = data.getParcelableExtra(ConfirmDeletionDialog.PARCELABLE);
+          mPresenter.deleteBudget(budget);
+        }
+        break;
+    }
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
-    mPresenter.detach();
+    if (mSubscription != null) {
+      mSubscription.unsubscribe();
+    }
   }
 
-  @Override public void onBudgetLoaded(ArrayList<PresentationBudget> budgets) {
+  private void initializeRecycler() {
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+    mView.recycler.setLayoutManager(layoutManager);
+    mView.recycler.setAdapter(mAdapter);
+  }
+
+  private void initializeFAB() {
+    mView.fab.setOnClickListener(
+        v -> startActivity(BudgetFormActivity.newInstance(getActivity())));
+  }
+
+  @Override public void onBudgetsLoaded(ArrayList<Budget> budgets) {
     mAdapter.addAll(budgets);
     if (budgets.isEmpty()) {
       mView.included.text.setText(getString(R.string.no_budget));
@@ -89,23 +87,27 @@ public final class BudgetFragment extends Fragment
     }
   }
 
-  @Override public void onBalanceLoaded(PresentationBalance balance) {
-    mView.balance.setText(String.format(getString(R.string.float_value), balance.getBalance()));
-    mView.incomes.setText(String.format(getString(R.string.float_value), balance.getIncomes()));
-    mView.expenses.setText(String.format(getString(R.string.float_value), balance.getExpenses()));
-  }
-
   @Override public void onError(String error) {
-    Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+    super.onError(error);
   }
 
-  private void initializeRecycler() {
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-    mView.recycler.setLayoutManager(layoutManager);
-    mView.recycler.setAdapter(mAdapter);
-  }
+  private void onBudgetClick(@NonNull Budget budget) {
+    View view = View.inflate(getActivity(), R.layout.bottomsheet_edit, null);
+    BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
+    dialog.setContentView(view);
+    dialog.show();
 
-  private boolean isArgumentValid() {
-    return getArguments().containsKey(MONTH) && getArguments().containsKey(YEAR);
+    view.findViewById(R.id.edit).setOnClickListener(v -> {
+      startActivity(BudgetFormActivity.newInstance(getActivity(), budget));
+      dialog.dismiss();
+    });
+
+    view.findViewById(R.id.delete).setOnClickListener(v -> {
+      String title = getString(R.string.confirm_budget_deletion_title);
+      String msg = getString(R.string.confirm_budget_deletion);
+      ConfirmDeletionDialog.newInstance(title, msg, budget, this, CONFIRM_DELETE)
+          .show(getFragmentManager(), null);
+      dialog.dismiss();
+    });
   }
 }

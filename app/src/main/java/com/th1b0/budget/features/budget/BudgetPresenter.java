@@ -1,5 +1,7 @@
 package com.th1b0.budget.features.budget;
 
+import android.support.annotation.NonNull;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.Presenter;
 
 /**
@@ -7,7 +9,8 @@ import com.th1b0.budget.util.Presenter;
  */
 
 interface BudgetPresenter extends Presenter {
-  void loadBudgets(int month, int year);
 
-  void loadBalance(int month, int year);
+  void loadBudgets();
+
+  void deleteBudget(@NonNull Budget budget);
 }

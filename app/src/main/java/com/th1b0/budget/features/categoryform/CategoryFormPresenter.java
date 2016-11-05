@@ -14,5 +14,5 @@ interface CategoryFormPresenter extends Presenter {
 
   void updateCategory(@NonNull Category category);
 
-  void loadContainer();
+  void loadBudget();
 }

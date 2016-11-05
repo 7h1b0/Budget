@@ -18,11 +18,11 @@ public class Category implements Parcelable {
   public static final String TITLE = "c_title";
   public static final String COLOR = "c_color";
   public static final String ICON = "c_icon";
-  public static final String ID_CONTAINER = "c_id_container";
+  public static final String ID_BUDGET = "c_id_budget";
 
   private long id;
-  private long idContainer;
-  private String titleContainer;
+  private long idBudget;
+  private String titleBudget;
   private String title;
   @ColorInt private int color;
   @DrawableRes private int icon;
@@ -32,24 +32,24 @@ public class Category implements Parcelable {
     title = in.readString();
     color = in.readInt();
     icon = in.readInt();
-    idContainer = in.readLong();
-    titleContainer = in.readString();
+    idBudget = in.readLong();
+    titleBudget = in.readString();
   }
 
   public Category(@ColorInt int color) {
     this(-1, -1, null, color, R.mipmap.ic_category);
   }
 
-  public Category(long id, long idContainers, String title, @ColorInt int color, @DrawableRes int icon) {
+  public Category(long id, long idBudget, String title, @ColorInt int color, @DrawableRes int icon) {
     this.id = id;
-    this.idContainer = idContainers;
+    this.idBudget = idBudget;
     this.title = title;
     this.color = color;
     this.icon = icon;
   }
 
-  public Category(long idContainers, String title, @ColorInt int color, @DrawableRes int icon) {
-    this(-1, idContainers, title, color, icon);
+  public Category(long idBudget, String title, @ColorInt int color, @DrawableRes int icon) {
+    this(-1, idBudget, title, color, icon);
   }
 
   public Category(String title, @ColorInt int color, @DrawableRes int icon) {
@@ -88,24 +88,24 @@ public class Category implements Parcelable {
     this.icon = icon;
   }
 
-  public long getIdContainer() {
-    return idContainer;
+  public long getIdBudget() {
+    return idBudget;
   }
 
-  public void setIdContainer(long idContainer) {
-    this.idContainer = idContainer;
+  public void setIdBudget(long idBudget) {
+    this.idBudget = idBudget;
   }
 
-  public String getTitleContainer() {
-    return titleContainer;
+  public String getTitleBudget() {
+    return titleBudget;
   }
 
-  public void setTitleContainer(String titleContainer) {
-    this.titleContainer = titleContainer;
+  public void setTitleBudget(String titleBudget) {
+    this.titleBudget = titleBudget;
   }
 
-  public boolean isContainerIdDefined() {
-    return idContainer != Container.NOT_DEFINED;
+  public boolean isBudgetIdDefined() {
+    return idBudget != Budget.NOT_DEFINED;
   }
 
   @Override public int describeContents() {
@@ -117,8 +117,8 @@ public class Category implements Parcelable {
     dest.writeString(title);
     dest.writeInt(color);
     dest.writeInt(icon);
-    dest.writeLong(idContainer);
-    dest.writeString(titleContainer);
+    dest.writeLong(idBudget);
+    dest.writeString(titleBudget);
   }
 
   public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
@@ -138,7 +138,7 @@ public class Category implements Parcelable {
     Category category = (Category) o;
 
     if (id != category.id) return false;
-    if (idContainer != category.idContainer) return false;
+    if (idBudget != category.idBudget) return false;
     if (color != category.color) return false;
     if (icon != category.icon) return false;
     return title != null ? title.equals(category.title) : category.title == null;
@@ -146,7 +146,7 @@ public class Category implements Parcelable {
 
   @Override public int hashCode() {
     int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + (int) (idContainer ^ (idContainer >>> 32));
+    result = 31 * result + (int) (idBudget ^ (idBudget >>> 32));
     result = 31 * result + (title != null ? title.hashCode() : 0);
     result = 31 * result + color;
     result = 31 * result + icon;

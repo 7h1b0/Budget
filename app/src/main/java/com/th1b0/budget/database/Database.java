@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.Transaction;
 import rx.schedulers.Schedulers;
 
@@ -19,11 +19,11 @@ import rx.schedulers.Schedulers;
 
 abstract class Database extends SQLiteOpenHelper {
 
-  private static final int DATABASE_VERSION = 8;
+  private static final int DATABASE_VERSION = 9;
   private static final String DATABASE_NAME = "budget";
   static final String TABLE_TRANSACTION = "transaction_table";
   static final String TABLE_CATEGORY = "category_table";
-  static final String TABLE_CONTAINER = "container_table";
+  static final String TABLE_BUDGET = "budget_table";
 
   static BriteDatabase db;
 
@@ -49,7 +49,7 @@ abstract class Database extends SQLiteOpenHelper {
         + " INTEGER, "
         + Transaction.ID_CATEGORY
         + " INTEGER, "
-        + Transaction.ID_CONTAINER
+        + Transaction.ID_BUDGET
         + " INTEGER, "
         + Transaction.DESCRIPTION
         + " TEXT ) ";
@@ -65,28 +65,28 @@ abstract class Database extends SQLiteOpenHelper {
         + " INTEGER, "
         + Category.ICON
         + " INTEGER, "
-        + Category.ID_CONTAINER
+        + Category.ID_BUDGET
         + " INTEGER )";
 
-    String CREATE_CONTAINER_TABLE = "CREATE TABLE "
-        + TABLE_CONTAINER
+    String CREATE_BUDGET_TABLE = "CREATE TABLE "
+        + TABLE_BUDGET
         + " ( "
-        + Container.ID
+        + Budget.ID
         + " INTEGER PRIMARY KEY, "
-        + Container.TITLE
+        + Budget.TITLE
         + " TEXT, "
-        + Container.VALUE
+        + Budget.VALUE
         + " INTEGER ) ";
 
     db.execSQL(CREATE_TRANSACTION_TABLE);
     db.execSQL(CREATE_CATEGORY_TABLE);
-    db.execSQL(CREATE_CONTAINER_TABLE);
+    db.execSQL(CREATE_BUDGET_TABLE);
   }
 
   @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION);
     db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
-    db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTAINER);
+    db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUDGET);
     onCreate(db);
   }
 
@@ -99,15 +99,15 @@ abstract class Database extends SQLiteOpenHelper {
     values.put(Category.TITLE, category.getTitle());
     values.put(Category.COLOR, category.getColor());
     values.put(Category.ICON, category.getIcon());
-    values.put(Category.ID_CONTAINER, category.getIdContainer());
+    values.put(Category.ID_BUDGET, category.getIdBudget());
 
     return values;
   }
 
-  ContentValues getContentValues(@NonNull Container container) {
+  ContentValues getContentValues(@NonNull Budget budget) {
     ContentValues values = new ContentValues();
-    values.put(Container.TITLE, container.getTitle());
-    values.put(Container.VALUE, container.getValue());
+    values.put(Budget.TITLE, budget.getTitle());
+    values.put(Budget.VALUE, budget.getValue());
     return values;
   }
 }

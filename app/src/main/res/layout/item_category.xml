@@ -37,7 +37,7 @@
 
         <TextView
             android:id="@+id/budget"
-            tools:text="my container"
+            tools:text="my budget"
             style="@style/TextBody"
             android:ellipsize="end"
             android:maxLines="1"

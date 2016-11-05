@@ -1,18 +1,12 @@
 package com.th1b0.budget.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
-import com.squareup.sqlbrite.BriteDatabase;
-import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
-import com.th1b0.budget.model.PresentationBudget;
-import com.th1b0.budget.model.PresentationHistory;
-import com.th1b0.budget.model.Transaction;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
 import rx.Observable;
-
-import static com.th1b0.budget.model.PresentationBudget.OUT;
 
 /**
  * Created by 7h1b0.
@@ -24,105 +18,44 @@ public final class BudgetTable extends Database {
     super(context);
   }
 
-  public Observable<ArrayList<PresentationBudget>> getAll(int month, int year) {
-    return db.createQuery(TABLE_TRANSACTION, "SELECT SUM("
-        + Transaction.VALUE
-        + ") AS "
-        + OUT
+  public Observable<ArrayList<Budget>> getAll() {
+    return db.createQuery(TABLE_BUDGET, "SELECT "
+        + Budget.ID
         + ", "
-        + Container.TITLE
+        + Budget.TITLE
         + ", "
-        + Container.VALUE
-        + ", "
-        + Container.ID
+        + Budget.VALUE
         + " FROM "
-        + TABLE_CONTAINER
-        + " JOIN "
-        + TABLE_TRANSACTION
-        + " ON "
-        + Container.ID
-        + " = "
-        + Transaction.ID_CONTAINER
-        + " WHERE "
-        + Transaction.MONTH
-        + " = ? AND "
-        + Transaction.YEAR
-        + " = ? "
-        + " GROUP BY "
-        + Container.ID
+        + TABLE_BUDGET
         + " ORDER BY "
-        + Container.TITLE, String.valueOf(month), String.valueOf(year))
-        .map(super::getCursor)
-        .map(cursor -> {
-          try {
-            ArrayList<PresentationBudget> budgets = new ArrayList<>(cursor.getCount());
-            while (cursor.moveToNext()) {
-              PresentationBudget budget =
-                  new PresentationBudget(DbUtil.getLong(cursor, Container.ID),
-                      DbUtil.getString(cursor, Container.TITLE),
-                      DbUtil.getDouble(cursor, Container.VALUE), DbUtil.getDouble(cursor, OUT));
-              budgets.add(budget);
-            }
-            return budgets;
-          } finally {
-            cursor.close();
-          }
-        });
-  }
-
-  public Observable<ArrayList<PresentationHistory>> getHistory() {
-    return db.createQuery(TABLE_TRANSACTION, "SELECT SUM("
-        + Transaction.VALUE
-        + ") AS "
-        + OUT
-        + ", "
-        + Transaction.MONTH
-        + ", "
-        + Transaction.YEAR
-        + " FROM "
-        + TABLE_TRANSACTION
-        + " GROUP BY "
-        + Transaction.YEAR
-        + ", "
-        + Transaction.MONTH
-        + " ORDER BY "
-        + Transaction.YEAR
-        + " DESC, "
-        + Transaction.MONTH
-        + " DESC").map(super::getCursor).map(cursor -> {
+        + Budget.TITLE).map(super::getCursor).map(cursor -> {
       try {
-        ArrayList<PresentationHistory> histories = new ArrayList<>(cursor.getCount());
+        ArrayList<Budget> budgets = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
-          PresentationHistory history =
-              new PresentationHistory(DbUtil.getInt(cursor, Transaction.MONTH),
-                  DbUtil.getInt(cursor, Transaction.YEAR), DbUtil.getDouble(cursor, OUT));
-          histories.add(history);
+          budgets.add(getBudget(cursor));
         }
-        return histories;
+        return budgets;
       } finally {
         cursor.close();
       }
     });
   }
 
-  public void initializeDatabase(ArrayList<Container> containers, ArrayList<Category> categories) {
-    if (containers.size() != categories.size()) {
-      return;
-    }
+  public long add(@NonNull Budget budget) {
+    return db.insert(TABLE_BUDGET, getContentValues(budget));
+  }
 
-    BriteDatabase.Transaction transaction = db.newTransaction();
-    try {
-      for(int i =0; i < containers.size(); i++) {
-        Container container = containers.get(i);
-        long idContainer = db.insert(TABLE_CONTAINER, getContentValues(container));
+  public int delete(@NonNull Budget budget) {
+    return db.delete(TABLE_BUDGET, Budget.ID + " = ?", String.valueOf(budget.getId()));
+  }
 
-        Category category = categories.get(i);
-        category.setIdContainer(idContainer);
-        db.insert(TABLE_CATEGORY, getContentValues(category));
-      }
-      transaction.markSuccessful();
-    } finally {
-      transaction.end();
-    }
+  public int update(@NonNull Budget budget) {
+    return db.update(TABLE_BUDGET, getContentValues(budget), Budget.ID + " = ?",
+        String.valueOf(budget.getId()));
+  }
+
+  private Budget getBudget(@NonNull Cursor cursor) {
+    return new Budget(DbUtil.getLong(cursor, Budget.ID),
+        DbUtil.getString(cursor, Budget.TITLE), DbUtil.getDouble(cursor, Budget.VALUE));
   }
 }

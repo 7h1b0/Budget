@@ -16,10 +16,10 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityTransactionFormBinding;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.Transaction;
-import com.th1b0.budget.util.ContainerPickerDialog;
+import com.th1b0.budget.util.BudgetPickerDialog;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DateUtil;
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ import java.util.ArrayList;
 
 public final class TransactionFormActivity extends AppCompatActivity
     implements DatePickerDialog.OnDateSetListener, CategoryDialog.OnCategorySet,
-    TransactionFormView, ContainerPickerDialog.OnContainerSet {
+    TransactionFormView, BudgetPickerDialog.OnBudgetSet {
 
   private ActivityTransactionFormBinding mView;
   private Transaction mTransaction;
   private TransactionFormPresenter mPresenter;
   private ArrayList<Category> mCategories;
-  private ArrayList<Container> mContainers;
+  private ArrayList<Budget> mBudgets;
 
   public static Intent newInstance(@NonNull Context context) {
     return new Intent(context, TransactionFormActivity.class);
@@ -53,7 +53,7 @@ public final class TransactionFormActivity extends AppCompatActivity
     mView = DataBindingUtil.setContentView(this, R.layout.activity_transaction_form);
     mPresenter = new TransactionFormPresenterImpl(this, DataManager.getInstance(this));
     mCategories = new ArrayList<>();
-    mContainers = new ArrayList<>();
+    mBudgets = new ArrayList<>();
 
     if (savedInstanceState != null) {
       mTransaction = savedInstanceState.getParcelable(Transaction.TRANSACTION);
@@ -67,8 +67,8 @@ public final class TransactionFormActivity extends AppCompatActivity
     fillForm();
     setupListener();
 
-    if (!isCategoriesAndContainersLoaded(savedInstanceState)) {
-      mPresenter.loadCategoriesAndContainers();
+    if (!isCategoriesAndBudgetsLoaded(savedInstanceState)) {
+      mPresenter.loadCategoriesAndBudgets();
     }
   }
 
@@ -104,16 +104,16 @@ public final class TransactionFormActivity extends AppCompatActivity
   @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
     mCategories = savedInstanceState.getParcelableArrayList(Category.CATEGORIES);
-    mContainers = savedInstanceState.getParcelableArrayList(Container.CONTAINERS);
+    mBudgets = savedInstanceState.getParcelableArrayList(Budget.BUDGETS);
     updateCategory();
-    updateContainer();
+    updateBudget();
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelable(Transaction.TRANSACTION, mTransaction);
     outState.putParcelableArrayList(Category.CATEGORIES, mCategories);
-    outState.putParcelableArrayList(Container.CONTAINERS, mContainers);
+    outState.putParcelableArrayList(Budget.BUDGETS, mBudgets);
   }
 
   @Override protected void onStop() {
@@ -154,10 +154,10 @@ public final class TransactionFormActivity extends AppCompatActivity
     }
   }
 
-  private void updateContainer() {
-    int position = findContainerPosition(mTransaction.getIdContainer());
+  private void updateBudget() {
+    int position = findBudgetPosition(mTransaction.getIdBudget());
     if (position > -1) {
-      mView.container.setText(mContainers.get(position).getTitle());
+      mView.budget.setText(mBudgets.get(position).getTitle());
     }
   }
 
@@ -175,8 +175,8 @@ public final class TransactionFormActivity extends AppCompatActivity
     });
 
     mView.containerLayout.setOnClickListener(v -> {
-      int position = findContainerPosition(mTransaction.getIdContainer());
-      ContainerPickerDialog.newInstance(mContainers, position).show(getFragmentManager(), null);
+      int position = findBudgetPosition(mTransaction.getIdBudget());
+      BudgetPickerDialog.newInstance(mBudgets, position).show(getFragmentManager(), null);
     });
   }
 
@@ -217,10 +217,10 @@ public final class TransactionFormActivity extends AppCompatActivity
     return isValid;
   }
 
-  private boolean isCategoriesAndContainersLoaded(@Nullable Bundle savedInstanceState) {
+  private boolean isCategoriesAndBudgetsLoaded(@Nullable Bundle savedInstanceState) {
     return savedInstanceState != null
         && savedInstanceState.getParcelableArray(Category.CATEGORY) != null
-        && savedInstanceState.getParcelableArray(Container.CONTAINERS) != null;
+        && savedInstanceState.getParcelableArray(Budget.BUDGETS) != null;
   }
 
   @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -232,14 +232,14 @@ public final class TransactionFormActivity extends AppCompatActivity
 
   @Override public void onCategorySet(@NonNull Category category) {
     mTransaction.setIdCategory(category.getId());
-    mTransaction.setIdContainer(category.getIdContainer());
+    mTransaction.setIdBudget(category.getIdBudget());
     updateCategory();
-    updateContainer();
+    updateBudget();
   }
 
-  @Override public void onContainerSet(@NonNull Container container) {
-    mTransaction.setIdContainer(container.getId());
-    mView.container.setText(container.getTitle());
+  @Override public void onBudgetSet(@NonNull Budget budget) {
+    mTransaction.setIdBudget(budget.getId());
+    mView.budget.setText(budget.getTitle());
   }
 
   @Override public void onCategoriesLoaded(ArrayList<Category> categories) {
@@ -254,20 +254,20 @@ public final class TransactionFormActivity extends AppCompatActivity
       category = mCategories.get(positionCategory);
     }
 
-    if (!mTransaction.isContainerIdDefined()) {
-      if (category.isContainerIdDefined()) {
-        mTransaction.setIdContainer(category.getIdContainer());
+    if (!mTransaction.isBudgetIdDefined()) {
+      if (category.isBudgetIdDefined()) {
+        mTransaction.setIdBudget(category.getIdBudget());
       } else {
-        mTransaction.setIdContainer(mContainers.get(0).getId());
+        mTransaction.setIdBudget(mBudgets.get(0).getId());
       }
     }
 
     updateCategory();
-    updateContainer();
+    updateBudget();
   }
 
-  @Override public void onContainersLoaded(ArrayList<Container> containers) {
-    mContainers = containers;
+  @Override public void onBudgetsLoaded(ArrayList<Budget> budgets) {
+    mBudgets = budgets;
   }
 
   @Override public void onError(String error) {
@@ -287,9 +287,9 @@ public final class TransactionFormActivity extends AppCompatActivity
     return -1;
   }
 
-  private int findContainerPosition(long selected) {
-    for (int index = 0; index < mContainers.size(); index++) {
-      if (mContainers.get(index).getId() == selected) {
+  private int findBudgetPosition(long selected) {
+    for (int index = 0; index < mBudgets.size(); index++) {
+      if (mBudgets.get(index).getId() == selected) {
         return index;
       }
     }

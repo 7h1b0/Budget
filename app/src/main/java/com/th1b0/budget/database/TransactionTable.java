@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public final class TransactionTable extends Database {
         + ", "
         + Transaction.DESCRIPTION
         + ", "
-        + Transaction.ID_CONTAINER
+        + Transaction.ID_BUDGET
         + ", "
         + Category.COLOR
         + ", "
@@ -87,7 +87,7 @@ public final class TransactionTable extends Database {
         + ", "
         + Transaction.DESCRIPTION
         + ", "
-        + Transaction.ID_CONTAINER
+        + Transaction.ID_BUDGET
         + ", "
         + Category.COLOR
         + ", "
@@ -142,11 +142,11 @@ public final class TransactionTable extends Database {
         String.valueOf(category.getId()));
   }
 
-  public int removeIdContainer(long idContainer) {
+  public int removeIdBudget(long idBudget) {
     ContentValues values = new ContentValues();
-    values.put(Transaction.ID_CONTAINER, Container.NOT_DEFINED);
-    return db.update(TABLE_TRANSACTION, values, Transaction.ID_CONTAINER + " = ?",
-        String.valueOf(idContainer));
+    values.put(Transaction.ID_BUDGET, Budget.NOT_DEFINED);
+    return db.update(TABLE_TRANSACTION, values, Transaction.ID_BUDGET + " = ?",
+        String.valueOf(idBudget));
   }
 
   public int update(Transaction transaction) {
@@ -162,7 +162,7 @@ public final class TransactionTable extends Database {
     values.put(Transaction.VALUE, transaction.getValue());
     values.put(Transaction.ID_CATEGORY, transaction.getIdCategory());
     values.put(Transaction.DESCRIPTION, transaction.getDescription());
-    values.put(Transaction.ID_CONTAINER, transaction.getIdContainer());
+    values.put(Transaction.ID_BUDGET, transaction.getIdBudget());
 
     return values;
   }
@@ -173,6 +173,6 @@ public final class TransactionTable extends Database {
         DbUtil.getInt(cursor, Transaction.YEAR), DbUtil.getDouble(cursor, Transaction.VALUE),
         DbUtil.getInt(cursor, Transaction.ID_CATEGORY),
         DbUtil.getString(cursor, Transaction.DESCRIPTION), DbUtil.getInt(cursor, Category.COLOR),
-        DbUtil.getInt(cursor, Category.ICON), DbUtil.getLong(cursor, Transaction.ID_CONTAINER));
+        DbUtil.getInt(cursor, Category.ICON), DbUtil.getLong(cursor, Transaction.ID_BUDGET));
   }
 }

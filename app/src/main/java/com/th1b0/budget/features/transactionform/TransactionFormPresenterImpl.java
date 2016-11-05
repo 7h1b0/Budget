@@ -2,7 +2,7 @@ package com.th1b0.budget.features.transactionform;
 
 import android.support.annotation.NonNull;
 import com.th1b0.budget.R;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.PresenterImpl;
@@ -28,17 +28,17 @@ final class TransactionFormPresenterImpl extends PresenterImpl<TransactionFormVi
     mDataManager.updateTransaction(transaction);
   }
 
-  @Override public void loadCategoriesAndContainers() {
-    mSubscription.add(mDataManager.getContainers()
-        .map(containers -> {
-          containers.add(0, new Container(Container.NONE, getView().getContext().getString(R.string.none), 0));
-          return containers;
+  @Override public void loadCategoriesAndBudgets() {
+    mSubscription.add(mDataManager.getBudgets()
+        .map(budgets -> {
+          budgets.add(0, new Budget(Budget.NONE, getView().getContext().getString(R.string.none), 0));
+          return budgets;
         })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnNext(containers -> {
+        .doOnNext(budgets -> {
           if (isViewAttached()) {
-            getView().onContainersLoaded(containers);
+            getView().onBudgetsLoaded(budgets);
           }
         })
         .observeOn(Schedulers.io())

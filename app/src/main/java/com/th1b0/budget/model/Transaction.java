@@ -20,7 +20,7 @@ public class Transaction implements Parcelable, TransactionItem {
   public static final String VALUE = "t_value";
   public static final String ID_CATEGORY = "t_category";
   public static final String DESCRIPTION = "t_description";
-  public static final String ID_CONTAINER = "t_container";
+  public static final String ID_BUDGET = "t_budget";
 
   private long id;
   private int day;
@@ -31,7 +31,7 @@ public class Transaction implements Parcelable, TransactionItem {
   private int color;
   private int icon;
   private String description;
-  private long idContainer;
+  private long idBudget;
 
   public Transaction() {
     this(-1, DateUtil.getCurrentDay(), DateUtil.getCurrentMonth(), DateUtil.getCurrentYear(), 0, -1, null, -1);
@@ -47,18 +47,18 @@ public class Transaction implements Parcelable, TransactionItem {
     this.description = in.readString();
     this.color = in.readInt();
     this.icon = in.readInt();
-    this.idContainer = in.readLong();
+    this.idBudget = in.readLong();
   }
 
-  public Transaction(int day, int month, int year, double value, int idCategory, String description, long idContainer) {
-    this(-1, day, month, year, value, idCategory, description, idContainer);
+  public Transaction(int day, int month, int year, double value, int idCategory, String description, long idBudget) {
+    this(-1, day, month, year, value, idCategory, description, idBudget);
   }
 
-  public Transaction(long id, int day, int month, int year, double value, long idCategory, String description, long idContainer) {
-    this(id, day, month, year, value, idCategory, description, -1, -1, idContainer);
+  public Transaction(long id, int day, int month, int year, double value, long idCategory, String description, long idBudget) {
+    this(id, day, month, year, value, idCategory, description, -1, -1, idBudget);
   }
 
-  public Transaction(long id, int day, int month, int year, double value, long idCategory, String description, @ColorInt int color, @DimenRes int icon, long idContainer) {
+  public Transaction(long id, int day, int month, int year, double value, long idCategory, String description, @ColorInt int color, @DimenRes int icon, long idBudget) {
     this.id = id;
     this.day = day;
     this.month = month;
@@ -68,7 +68,7 @@ public class Transaction implements Parcelable, TransactionItem {
     this.description = description;
     this.color = color;
     this.icon = icon;
-    this.idContainer = idContainer;
+    this.idBudget = idBudget;
   }
 
   public long getId() {
@@ -135,16 +135,16 @@ public class Transaction implements Parcelable, TransactionItem {
     return icon;
   }
 
-  public long getIdContainer() {
-    return idContainer;
+  public long getIdBudget() {
+    return idBudget;
   }
 
-  public void setIdContainer(long idContainer) {
-    this.idContainer = idContainer;
+  public void setIdBudget(long idBudget) {
+    this.idBudget = idBudget;
   }
 
-  public boolean isContainerIdDefined() {
-    return idContainer != Container.NOT_DEFINED;
+  public boolean isBudgetIdDefined() {
+    return idBudget != Budget.NOT_DEFINED;
   }
 
   @Override public int describeContents() {
@@ -161,7 +161,7 @@ public class Transaction implements Parcelable, TransactionItem {
     dest.writeString(description);
     dest.writeInt(color);
     dest.writeInt(icon);
-    dest.writeLong(idContainer);
+    dest.writeLong(idBudget);
   }
 
   public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {

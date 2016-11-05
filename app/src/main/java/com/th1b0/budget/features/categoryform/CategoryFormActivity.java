@@ -22,9 +22,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityCategoryFormBinding;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
-import com.th1b0.budget.util.ContainerPickerDialog;
+import com.th1b0.budget.util.BudgetPickerDialog;
 import com.th1b0.budget.util.DataManager;
 import java.util.ArrayList;
 
@@ -34,12 +34,12 @@ import java.util.ArrayList;
 
 public class CategoryFormActivity extends AppCompatActivity
     implements ColorPickerDialog.OnColorSet, IconPickerDialog.OnIconSet, CategoryFormView,
-    ContainerPickerDialog.OnContainerSet {
+    BudgetPickerDialog.OnBudgetSet {
 
   private Category mCategory;
   private CategoryFormPresenter mPresenter;
   private ActivityCategoryFormBinding mView;
-  private ArrayList<Container> mContainers;
+  private ArrayList<Budget> mBudgets;
 
   public static Intent newInstance(@NonNull Context context) {
     return new Intent(context, CategoryFormActivity.class);
@@ -55,7 +55,7 @@ public class CategoryFormActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     mView = DataBindingUtil.setContentView(this, R.layout.activity_category_form);
     mPresenter = new CategoryFormPresenterImpl(this, DataManager.getInstance(this));
-    mContainers = new ArrayList<>();
+    mBudgets = new ArrayList<>();
 
     if (savedInstanceState != null) {
       mCategory = savedInstanceState.getParcelable(Category.CATEGORY);
@@ -69,8 +69,8 @@ public class CategoryFormActivity extends AppCompatActivity
     fillForm();
     setupListener();
 
-    if (!isContainersLoaded(savedInstanceState)) {
-      mPresenter.loadContainer();
+    if (!isBudgetsLoaded(savedInstanceState)) {
+      mPresenter.loadBudget();
     }
   }
 
@@ -105,14 +105,14 @@ public class CategoryFormActivity extends AppCompatActivity
 
   @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
-    mContainers = savedInstanceState.getParcelableArrayList(Container.CONTAINERS);
-    updateContainer();
+    mBudgets = savedInstanceState.getParcelableArrayList(Budget.BUDGETS);
+    updateBudget();
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelable(Category.CATEGORY, mCategory);
-    outState.putParcelableArrayList(Container.CONTAINERS, mContainers);
+    outState.putParcelableArrayList(Budget.BUDGETS, mBudgets);
   }
 
   private boolean isEditMode() {
@@ -120,9 +120,9 @@ public class CategoryFormActivity extends AppCompatActivity
         && getIntent().getExtras().getParcelable(Category.CATEGORY) != null;
   }
 
-  private boolean isContainersLoaded(@Nullable Bundle savedInstanceState) {
+  private boolean isBudgetsLoaded(@Nullable Bundle savedInstanceState) {
     return savedInstanceState != null
-        && savedInstanceState.getParcelableArrayList(Container.CONTAINERS) != null;
+        && savedInstanceState.getParcelableArrayList(Budget.BUDGETS) != null;
   }
 
   private void setupToolbar() {
@@ -160,12 +160,12 @@ public class CategoryFormActivity extends AppCompatActivity
     mView.icon.setImageResource(mCategory.getIcon());
   }
 
-  private void updateContainer() {
-    if (mContainers == null) return;
+  private void updateBudget() {
+    if (mBudgets == null) return;
 
-    int position = findContainerPosition(mCategory.getIdContainer());
+    int position = findBudgetPosition(mCategory.getIdBudget());
     if (position > -1) {
-      mView.container.setText(mContainers.get(position).getTitle());
+      mView.budget.setText(mBudgets.get(position).getTitle());
     }
   }
 
@@ -204,8 +204,8 @@ public class CategoryFormActivity extends AppCompatActivity
         v -> IconPickerDialog.newInstance().show(getFragmentManager(), null));
 
     mView.containerLayout.setOnClickListener(v -> {
-      int position = findContainerPosition(mCategory.getIdContainer());
-      ContainerPickerDialog.newInstance(mContainers, position).show(getFragmentManager(), null);
+      int position = findBudgetPosition(mCategory.getIdBudget());
+      BudgetPickerDialog.newInstance(mBudgets, position).show(getFragmentManager(), null);
     });
   }
 
@@ -219,12 +219,12 @@ public class CategoryFormActivity extends AppCompatActivity
     updateColor();
   }
 
-  @Override public void onContainerLoaded(ArrayList<Container> containers) {
-    mContainers = containers;
-    if (mCategory.getIdContainer() == -1 && !containers.isEmpty()) {
-      mCategory.setIdContainer(containers.get(0).getId());
+  @Override public void onBudgetLoaded(ArrayList<Budget> budgets) {
+    mBudgets = budgets;
+    if (mCategory.getIdBudget() == -1 && !budgets.isEmpty()) {
+      mCategory.setIdBudget(budgets.get(0).getId());
     }
-    updateContainer();
+    updateBudget();
   }
 
   @Override public void onError(String error) {
@@ -235,17 +235,17 @@ public class CategoryFormActivity extends AppCompatActivity
     return this;
   }
 
-  private int findContainerPosition(long selected) {
-    for (int index = 0; index < mContainers.size(); index++) {
-      if (mContainers.get(index).getId() == selected) {
+  private int findBudgetPosition(long selected) {
+    for (int index = 0; index < mBudgets.size(); index++) {
+      if (mBudgets.get(index).getId() == selected) {
         return index;
       }
     }
     return -1;
   }
 
-  @Override public void onContainerSet(@NonNull Container container) {
-    mCategory.setIdContainer(container.getId());
-    updateContainer();
+  @Override public void onBudgetSet(@NonNull Budget budget) {
+    mCategory.setIdBudget(budget.getId());
+    updateBudget();
   }
 }

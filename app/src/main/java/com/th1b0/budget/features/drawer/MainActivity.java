@@ -12,15 +12,15 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityMainBinding;
-import com.th1b0.budget.features.budget.BudgetFragment;
+import com.th1b0.budget.features.detail.DetailFragment;
 import com.th1b0.budget.features.categories.CategoryFragment;
-import com.th1b0.budget.features.container.ContainerFragment;
-import com.th1b0.budget.features.containerform.ContainerFormActivity;
+import com.th1b0.budget.features.budget.BudgetFragment;
+import com.th1b0.budget.features.budgetform.BudgetFormActivity;
 import com.th1b0.budget.features.history.HistoryFragment;
 import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.Preferences;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public final class MainActivity extends AppCompatActivity
     if (savedInstanceState == null) {
       switch (getIntent().getAction()) {
         case ACTION_ADD_BUDGET:
-          startActivity(ContainerFormActivity.newInstance(this));
+          startActivity(BudgetFormActivity.newInstance(this));
           break;
 
         case ACTION_ADD_TRANSACTION:
@@ -57,7 +57,7 @@ public final class MainActivity extends AppCompatActivity
         default:
 
       }
-      display(BudgetFragment.newInstance(), null);
+      display(DetailFragment.newInstance(), null);
     }
   }
 
@@ -108,7 +108,7 @@ public final class MainActivity extends AppCompatActivity
 
     switch (item.getItemId()) {
       case R.id.home:
-        display(BudgetFragment.newInstance(), null);
+        display(DetailFragment.newInstance(), null);
         return true;
 
       case R.id.transactions:
@@ -120,7 +120,7 @@ public final class MainActivity extends AppCompatActivity
         return true;
 
       case R.id.budget:
-        display(ContainerFragment.newInstance(), item.getTitle());
+        display(BudgetFragment.newInstance(), item.getTitle());
         return true;
 
       case R.id.history:
@@ -140,12 +140,12 @@ public final class MainActivity extends AppCompatActivity
   }
 
   private void initializeDatabase() {
-    ArrayList<Container> containers = new ArrayList<>(5);
-    containers.add(new Container(getString(R.string.food), 100));
-    containers.add(new Container(getString(R.string.diner), 100));
-    containers.add(new Container(getString(R.string.hobby), 100));
-    containers.add(new Container(getString(R.string.shopping), 100));
-    containers.add(new Container(getString(R.string.transport), 100));
+    ArrayList<Budget> budgets = new ArrayList<>(5);
+    budgets.add(new Budget(getString(R.string.food), 100));
+    budgets.add(new Budget(getString(R.string.diner), 100));
+    budgets.add(new Budget(getString(R.string.hobby), 100));
+    budgets.add(new Budget(getString(R.string.shopping), 100));
+    budgets.add(new Budget(getString(R.string.transport), 100));
 
     ArrayList<Category> categories = new ArrayList<>(5);
     categories.add(
@@ -160,6 +160,6 @@ public final class MainActivity extends AppCompatActivity
     categories.add(new Category(getString(R.string.transport),
         ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
 
-    DataManager.getInstance(this).initializeDatabase(containers, categories);
+    DataManager.getInstance(this).initializeDatabase(budgets, categories);
   }
 }

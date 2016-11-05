@@ -49,10 +49,10 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
     drawable.setColorFilter(category.getColor(), PorterDuff.Mode.SRC);
 
     holder.title.setText(category.getTitle());
-    if (TextUtils.isEmpty(category.getTitleContainer())) {
+    if (TextUtils.isEmpty(category.getTitleBudget())) {
       holder.budget.setVisibility(View.GONE);
     } else {
-      String budgetLabel = String.format(context.getString(R.string.budget_label), category.getTitleContainer());
+      String budgetLabel = String.format(context.getString(R.string.budget_label), category.getTitleBudget());
       holder.budget.setText(budgetLabel);
     }
   }

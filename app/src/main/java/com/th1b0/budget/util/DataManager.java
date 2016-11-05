@@ -2,12 +2,12 @@ package com.th1b0.budget.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.th1b0.budget.database.BudgetTable;
+import com.th1b0.budget.database.QueryUtil;
 import com.th1b0.budget.database.CategoryTable;
-import com.th1b0.budget.database.ContainerTable;
+import com.th1b0.budget.database.BudgetTable;
 import com.th1b0.budget.database.TransactionTable;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
-import com.th1b0.budget.model.Container;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
@@ -22,15 +22,15 @@ public class DataManager {
 
   private static DataManager sInstance;
   private TransactionTable mTransactionTable;
-  private BudgetTable mBudgetTable;
+  private QueryUtil mQueryUtil;
   private CategoryTable mCategoryTable;
-  private ContainerTable mContainerTable;
+  private BudgetTable mBudgetTable;
 
   private DataManager(@NonNull Context context) {
     mTransactionTable = new TransactionTable(context);
-    mBudgetTable = new BudgetTable(context);
+    mQueryUtil = new QueryUtil(context);
     mCategoryTable = new CategoryTable(context);
-    mContainerTable = new ContainerTable(context);
+    mBudgetTable = new BudgetTable(context);
   }
 
   public static DataManager getInstance(@NonNull Context context) {
@@ -61,11 +61,11 @@ public class DataManager {
   }
 
   public Observable<ArrayList<PresentationBudget>> getBudgets(int month, int year) {
-    return mBudgetTable.getAll(month, year);
+    return mQueryUtil.getAll(month, year);
   }
 
   public Observable<ArrayList<PresentationHistory>> getHistory() {
-    return mBudgetTable.getHistory();
+    return mQueryUtil.getHistory();
   }
 
   public Observable<ArrayList<Category>> getCategories() {
@@ -86,30 +86,30 @@ public class DataManager {
         .map(ignored -> mTransactionTable.delete(category));
   }
 
-  public Observable<ArrayList<Container>> getContainers(){
-    return mContainerTable.getAll();
+  public Observable<ArrayList<Budget>> getBudgets(){
+    return mBudgetTable.getAll();
   }
 
-  public long addContainers(@NonNull Container container) {
-    return mContainerTable.add(container);
+  public long addBudget(@NonNull Budget budget) {
+    return mBudgetTable.add(budget);
   }
 
-  public int updateContainer(@NonNull Container container) {
-    return mContainerTable.update(container);
+  public int updateBudget(@NonNull Budget budget) {
+    return mBudgetTable.update(budget);
   }
 
-  public Observable<Void> deleteContainer(@NonNull Container container) {
-    return Observable.just(container)
-        .map(mContainerTable::delete)
+  public Observable<Void> deleteBudget(@NonNull Budget budget) {
+    return Observable.just(budget)
+        .map(mBudgetTable::delete)
         .filter(rows -> rows > 0)
-        .map(ignored -> container.getId())
-        .doOnNext(mCategoryTable::removeIdContainer)
-        .doOnNext(mTransactionTable::removeIdContainer)
+        .map(ignored -> budget.getId())
+        .doOnNext(mCategoryTable::removeIdBudget)
+        .doOnNext(mTransactionTable::removeIdBudget)
         .flatMap(ignored -> Observable.empty());
 
   }
 
-  public void initializeDatabase(ArrayList<Container> containers, ArrayList<Category> categories) {
-    mBudgetTable.initializeDatabase(containers, categories);
+  public void initializeDatabase(ArrayList<Budget> budgets, ArrayList<Category> categories) {
+    mQueryUtil.initializeDatabase(budgets, categories);
   }
 }
