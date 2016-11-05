@@ -18,8 +18,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityCategoryFormBinding;
 import com.th1b0.budget.model.Budget;
@@ -197,13 +199,18 @@ public class CategoryFormActivity extends AppCompatActivity
   }
 
   private void setupListener() {
-    mView.colorLayout.setOnClickListener(
-        v -> ColorPickerDialog.newInstance(mCategory.getColor()).show(getFragmentManager(), null));
+    mView.colorLayout.setOnClickListener(v -> {
+      hideKeyboard();
+      ColorPickerDialog.newInstance(mCategory.getColor()).show(getFragmentManager(), null);
+    });
 
-    mView.iconLayout.setOnClickListener(
-        v -> IconPickerDialog.newInstance().show(getFragmentManager(), null));
+    mView.iconLayout.setOnClickListener(v -> {
+      hideKeyboard();
+      IconPickerDialog.newInstance().show(getFragmentManager(), null);
+    });
 
     mView.containerLayout.setOnClickListener(v -> {
+      hideKeyboard();
       int position = findBudgetPosition(mCategory.getIdBudget());
       BudgetPickerDialog.newInstance(mBudgets, position).show(getFragmentManager(), null);
     });
@@ -247,5 +254,10 @@ public class CategoryFormActivity extends AppCompatActivity
   @Override public void onBudgetSet(@NonNull Budget budget) {
     mCategory.setIdBudget(budget.getId());
     updateBudget();
+  }
+
+  private void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(mView.getRoot().getWindowToken(), 0);
   }
 }

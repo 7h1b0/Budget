@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityBudgetFormBinding;
 import com.th1b0.budget.model.Budget;

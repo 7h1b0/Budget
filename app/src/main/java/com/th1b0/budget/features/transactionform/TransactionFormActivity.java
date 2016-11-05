@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityTransactionFormBinding;
@@ -163,6 +164,7 @@ public final class TransactionFormActivity extends AppCompatActivity
 
   private void setupListener() {
     mView.dateLayout.setOnClickListener(v -> {
+      hideKeyboard();
       AlertDialog dialog =
           new DatePickerDialog(this, this, mTransaction.getYear(), mTransaction.getMonth(),
               mTransaction.getDay());
@@ -170,11 +172,13 @@ public final class TransactionFormActivity extends AppCompatActivity
     });
 
     mView.categoryLayout.setOnClickListener(v -> {
+      hideKeyboard();
       int position = findCategoryPosition(mTransaction.getIdCategory());
       CategoryDialog.newInstance(mCategories, position).show(getFragmentManager(), null);
     });
 
     mView.containerLayout.setOnClickListener(v -> {
+      hideKeyboard();
       int position = findBudgetPosition(mTransaction.getIdBudget());
       BudgetPickerDialog.newInstance(mBudgets, position).show(getFragmentManager(), null);
     });
@@ -294,5 +298,10 @@ public final class TransactionFormActivity extends AppCompatActivity
       }
     }
     return -1;
+  }
+
+  private void hideKeyboard() {
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(mView.getRoot().getWindowToken(), 0);
   }
 }
