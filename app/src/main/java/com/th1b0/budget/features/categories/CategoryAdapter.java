@@ -50,7 +50,7 @@ final class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewCat
 
     holder.title.setText(category.getTitle());
     if (TextUtils.isEmpty(category.getTitleBudget())) {
-      holder.budget.setVisibility(View.GONE);
+      holder.budget.setText(context.getString(R.string.no_default_budget));
     } else {
       String budgetLabel = String.format(context.getString(R.string.budget_label), category.getTitleBudget());
       holder.budget.setText(budgetLabel);

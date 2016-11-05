@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Budget</string>
+
     <string name="edit">Editer</string>
     <string name="delete">Supprimer</string>
     <string name="cancel">Annuler</string>
@@ -8,17 +9,17 @@
 
     <string name="confirm_transaction_deletion_title">Supprimer la transaction ?</string>
     <string name="confirm_category_deletion_title">Supprimer la catégorie ?</string>
+    <string name="confirm_budget_deletion_title">Supprimer le budget ?</string>
     <string name="confirm_transaction_deletion">Cette transaction sera supprimée de votre appareil</string>
     <string name="confirm_category_deletion">Cette catégorie sera supprimée de votre appareil ainsi que toutes les transactions associées</string>
     <string name="confirm_budget_deletion">Ce budget sera supprimé de votre appareil</string>
-    <string name="confirm_budget_deletion_title">Supprimer le budget ?</string>
+
     <string name="no_budget">Aucun budget</string>
     <string name="no_transaction">Aucune transaction</string>
     <string name="no_history">Aucun historique</string>
 
     <string name="float_value">%1$.2f€</string>
     <string name="budget_of_goal">%1$.2f€ sur %2$.2f€</string>
-    <string name="budget_subtitle">%1$.2f€ (%2$.2f€/%3$.2f€)</string>
 
     <string name="title">Titre</string>
     <string name="color">Couleur</string>
@@ -29,8 +30,9 @@
     <string name="budgets">Budgets</string>
     <string name="budget">Budget</string>
     <string name="budget_label">Budget: %1$s</string>
-    <string name="none">Aucun</string>
+    <string name="no_default_budget">Aucun budget défini</string>
     <string name="default_budget">Budget par défaut</string>
+    <string name="none">Aucun</string>
     <string name="home">Accueil</string>
     <string name="transactions">Transactions</string>
     <string name="categories">Catégories</string>
@@ -46,7 +48,7 @@
     <string name="add_budget">Ajouter un budget</string>
     <string name="add_budget_short">Ajouter budget</string>
     <string name="edit_budget">Editer un budget</string>
-    <string name="set_categorie">Choisir une categorie</string>
+    <string name="set_category">Choisir une categorie</string>
     <string name="set_budget">Choisir un budget</string>
     <string name="set_icon">Choisir un icône</string>
     <string name="no_empty_field">Ce champ ne doit pas être vide</string>
