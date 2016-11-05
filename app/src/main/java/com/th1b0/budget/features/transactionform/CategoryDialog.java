@@ -16,7 +16,7 @@ import java.util.List;
  * Created by 7h1b0.
  */
 
-public class CategoryDialog extends DialogFragment {
+public final class CategoryDialog extends DialogFragment {
 
   public static final String SELECTED = "position";
 

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by 7h1b0.
  */
 
-public class IconPickerDialog extends DialogFragment implements IconPickerAdapter.OnIconSelected {
+public final class IconPickerDialog extends DialogFragment implements IconPickerAdapter.OnIconSelected {
 
   interface OnIconSet {
     void onIconSet(@DrawableRes int icon);

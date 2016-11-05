@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityBudgetFormBinding;
 import com.th1b0.budget.model.Budget;
@@ -20,7 +19,7 @@ import com.th1b0.budget.util.DataManager;
  * Created by 7h1b0.
  */
 
-public class BudgetFormActivity extends AppCompatActivity {
+public final class BudgetFormActivity extends AppCompatActivity {
 
   private Budget mBudget;
   private BudgetFormPresenter mPresenter;

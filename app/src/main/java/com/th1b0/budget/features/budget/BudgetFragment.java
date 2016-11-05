@@ -21,7 +21,7 @@ import rx.Subscription;
  * Created by 7h1b0.
  */
 
-public class BudgetFragment
+public final class BudgetFragment
     extends FragmentRecycler<BudgetPresenter, SimpleItemAdapter<Budget>>
     implements BudgetView {
 

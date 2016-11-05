@@ -17,7 +17,7 @@ import rx.Subscription;
  * Created by 7h1b0.
  */
 
-public class HistoryFragment
+public final class HistoryFragment
     extends FragmentRecycler<HistoryPresenter, SimpleItemAdapter<PresentationHistory>>
     implements HistoryView {
 

@@ -6,9 +6,10 @@ import android.util.Log;
 
 /**
  * Created by 7h1b0.
+ * DEBUG Only
  */
 
-public class Logger {
+public final class Logger {
 
   public static void e(@NonNull String tag, @Nullable String message) {
     if (tag.length() > 21) {

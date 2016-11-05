@@ -16,7 +16,7 @@ import java.util.List;
  * Created by 7h1b0.
  */
 
-public class BudgetPickerDialog extends DialogFragment {
+public final class BudgetPickerDialog extends DialogFragment {
 
   public static final String SELECTED = "position";
 

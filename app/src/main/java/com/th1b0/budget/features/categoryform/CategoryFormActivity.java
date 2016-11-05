@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * Created by 7h1b0.
  */
 
-public class CategoryFormActivity extends AppCompatActivity
+public final class CategoryFormActivity extends AppCompatActivity
     implements ColorPickerDialog.OnColorSet, IconPickerDialog.OnIconSet, CategoryFormView,
     BudgetPickerDialog.OnBudgetSet {
 

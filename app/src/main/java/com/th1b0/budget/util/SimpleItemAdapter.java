@@ -17,7 +17,7 @@ import rx.subjects.PublishSubject;
  * Created by 7h1b0.
  */
 
-public class SimpleItemAdapter<T extends SimpleItem>
+public final class SimpleItemAdapter<T extends SimpleItem>
     extends RecyclerView.Adapter<SimpleItemAdapter.ViewContainer> {
 
   private ArrayList<T> mContainers;

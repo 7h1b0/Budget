@@ -15,7 +15,7 @@ import com.th1b0.budget.R;
  * Created by 7h1b0.
  */
 
-public class ConfirmDeletionDialog extends DialogFragment {
+public final class ConfirmDeletionDialog extends DialogFragment {
 
   public static final String TITLE = "title";
   public static final String MESSAGE = "msg";

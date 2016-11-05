@@ -23,7 +23,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by 7h1b0.
  */
 
-public class ColorPickerDialog extends DialogFragment {
+public final class ColorPickerDialog extends DialogFragment {
   public static final String COLOR = "color";
 
   private int mCurrentColor;
