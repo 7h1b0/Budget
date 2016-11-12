@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
  */
 
 public class Preferences {
-  public static final String PREF_FIRST_LAUNCH = "pref_first_launch";
+  private static final String PREF_FIRST_LAUNCH = "pref_first_launch";
 
   public static boolean isFirstLaunch(@NonNull final Context context) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

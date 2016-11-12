@@ -7,6 +7,8 @@
     <string name="valid">Valider</string>
     <string name="loading">Chargement</string>
 
+    <string name="error_occurred">Une erreur est survenue</string>
+
     <string name="confirm_transaction_deletion_title">Supprimer la transaction ?</string>
     <string name="confirm_category_deletion_title">Supprimer la catégorie ?</string>
     <string name="confirm_budget_deletion_title">Supprimer le budget ?</string>

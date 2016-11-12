@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,12 @@ public abstract class FragmentRecycler<T extends Presenter, S> extends Fragment 
     mPresenter.detach();
   }
 
-  protected void onError(String error) {
-    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
+  protected void onError(final String error) {
+    String msg = error;
+    if (TextUtils.isEmpty(msg)) {
+      msg = getString(R.string.error_occurred);
+    }
+
+    Snackbar.make(mView.coordinator, msg, Snackbar.LENGTH_LONG).show();
   }
 }
