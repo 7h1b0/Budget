@@ -37,21 +37,23 @@ final class TransactionFormPresenterImpl extends PresenterImpl<TransactionFormVi
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .doOnNext(budgets -> {
-          if (isViewAttached()) {
-            getView().onBudgetsLoaded(budgets);
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onBudgetsLoaded(budgets);
           }
         })
         .observeOn(Schedulers.io())
-        .filter(ignored -> isViewAttached())
         .flatMap(ignored -> mDataManager.getCategories())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(categories -> {
-          if (isViewAttached()) {
-            getView().onCategoriesLoaded(categories);
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onCategoriesLoaded(categories);
           }
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }

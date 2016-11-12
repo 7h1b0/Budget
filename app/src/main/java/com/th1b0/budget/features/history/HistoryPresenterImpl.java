@@ -21,12 +21,14 @@ final class HistoryPresenterImpl extends PresenterImpl<HistoryView> implements H
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(histories -> {
-          if (isViewAttached()) {
-            getView().onHistoryLoaded(histories);
+          HistoryView view = getView();
+          if (view != null) {
+            view.onHistoryLoaded(histories);
           }
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          HistoryView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }

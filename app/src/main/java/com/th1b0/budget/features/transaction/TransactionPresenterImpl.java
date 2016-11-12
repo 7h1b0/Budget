@@ -29,12 +29,14 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(transactions -> {
-          if (isViewAttached()) {
-            getView().onTransactionLoaded(transactions);
+          TransactionView view = getView();
+          if (view != null) {
+            view.onTransactionLoaded(transactions);
           }
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          TransactionView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }
@@ -45,12 +47,14 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(transactions -> {
-          if (isViewAttached()) {
-            getView().onTransactionLoaded(transactions);
+          TransactionView view = getView();
+          if (view != null) {
+            view.onTransactionLoaded(transactions);
           }
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          TransactionView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }

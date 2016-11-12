@@ -21,10 +21,6 @@ public abstract class PresenterImpl<T> {
     mSubscription = new CompositeSubscription();
   }
 
-  protected boolean isViewAttached() {
-    return mView.get() != null;
-  }
-
   @Nullable protected T getView() {
     return mView.get();
   }

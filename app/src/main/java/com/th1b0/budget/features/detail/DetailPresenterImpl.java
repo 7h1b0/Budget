@@ -35,12 +35,14 @@ final class DetailPresenterImpl extends PresenterImpl<DetailView> implements Det
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(presentationBudgets -> {
-              if (isViewAttached()) {
-                getView().onBudgetLoaded(presentationBudgets);
+              DetailView view = getView();
+              if (view != null) {
+                view.onBudgetLoaded(presentationBudgets);
               }
             }, error -> {
-              if (isViewAttached()) {
-                getView().onError(error.getMessage());
+              DetailView view = getView();
+              if (view != null) {
+                view.onError(error.getMessage());
               }
             }));
   }
@@ -58,12 +60,15 @@ final class DetailPresenterImpl extends PresenterImpl<DetailView> implements Det
       }
       return new PresentationBalance(incomes, expenses, incomes - expenses);
     }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(balance -> {
-      if (isViewAttached()) {
-        getView().onBalanceLoaded(balance);
+
+      DetailView view = getView();
+      if (view != null) {
+        view.onBalanceLoaded(balance);
       }
     }, error -> {
-      if (isViewAttached()) {
-        getView().onError(error.getMessage());
+      DetailView view = getView();
+      if (view != null) {
+        view.onError(error.getMessage());
       }
     }));
   }
@@ -73,8 +78,7 @@ final class DetailPresenterImpl extends PresenterImpl<DetailView> implements Det
     for (Budget budget : budgets) {
       if (!isInclude(presentationBudgets, budget)) {
         PresentationBudget presentationBudget =
-            new PresentationBudget(budget.getId(), budget.getTitle(), budget.getValue(),
-                0);
+            new PresentationBudget(budget.getId(), budget.getTitle(), budget.getValue(), 0);
         presentationBudgets.add(presentationBudget);
       }
     }

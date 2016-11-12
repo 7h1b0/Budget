@@ -22,12 +22,14 @@ final class CategoryPresenterImpl extends PresenterImpl<CategoryView> implements
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(categories -> {
-          if (isViewAttached()) {
-            getView().onCategoryLoaded(categories);
+          CategoryView view = getView();
+          if (view != null) {
+            view.onCategoryLoaded(categories);
           }
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          CategoryView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }
@@ -38,8 +40,9 @@ final class CategoryPresenterImpl extends PresenterImpl<CategoryView> implements
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(ignored -> {
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          CategoryView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }

@@ -38,12 +38,14 @@ final class CategoryFormPresenterImpl extends PresenterImpl<CategoryFormView>
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(budgets -> {
-          if (isViewAttached()) {
-            getView().onBudgetLoaded(budgets);
+          CategoryFormView view = getView();
+          if (view != null) {
+            view.onBudgetLoaded(budgets);
           }
         }, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          CategoryFormView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }

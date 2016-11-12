@@ -23,11 +23,13 @@ final class BudgetPresenterImpl extends PresenterImpl<BudgetView>
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(budgets -> {
-          if (isViewAttached()) {
-            getView().onBudgetsLoaded(budgets);
+          BudgetView view = getView();
+          if (view != null) {
+            view.onBudgetsLoaded(budgets);
           }}, error -> {
-          if (isViewAttached()) {
-            getView().onError(error.getMessage());
+          BudgetView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
           }
         }));
   }
