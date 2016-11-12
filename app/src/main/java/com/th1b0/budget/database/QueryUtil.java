@@ -9,6 +9,7 @@ import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
+import com.th1b0.budget.util.Logger;
 import java.util.ArrayList;
 import rx.Observable;
 
@@ -105,18 +106,19 @@ public final class QueryUtil extends Database {
     });
   }
 
-  public void initializeDatabase(ArrayList<Budget> budgets, ArrayList<Category> categories) {
+  public void initializeDatabase(@NonNull ArrayList<Budget> budgets, @NonNull ArrayList<Category> categories) {
     if (budgets.size() != categories.size()) {
-      return;
+      throw new IllegalStateException("Lists are not equals in size");
     }
 
     BriteDatabase.Transaction transaction = db.newTransaction();
     try {
       for(int i =0; i < budgets.size(); i++) {
         Budget budget = budgets.get(i);
+        Category category = categories.get(i);
+
         long idBudget = db.insert(TABLE_BUDGET, getContentValues(budget));
 
-        Category category = categories.get(i);
         category.setIdBudget(idBudget);
         db.insert(TABLE_CATEGORY, getContentValues(category));
       }
