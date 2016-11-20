@@ -68,10 +68,10 @@ final class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             DateUtil.formatDate(transaction.getYear(), transaction.getMonth(),
                 transaction.getDay()));
 
-        viewTransaction.value.setText(
-            String.format(viewTransaction.value.getContext().getString(R.string.float_value),
-                transaction.getValue()));
-        viewTransaction.category.setImageResource(transaction.getIcon());
+        viewTransaction.value.setText(viewTransaction.value.getContext()
+            .getString(R.string.float_value,
+                transaction.getValue())); viewTransaction.category.setImageResource(
+          transaction.getIcon());
 
         Drawable drawable = viewTransaction.category.getBackground();
         drawable.setColorFilter(transaction.getColor(), PorterDuff.Mode.SRC);

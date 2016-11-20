@@ -90,9 +90,9 @@ public final class DetailFragment extends Fragment
   }
 
   @Override public void onBalanceLoaded(PresentationBalance balance) {
-    mView.balance.setText(String.format(getString(R.string.float_value), balance.getBalance()));
-    mView.incomes.setText(String.format(getString(R.string.float_value), balance.getIncomes()));
-    mView.expenses.setText(String.format(getString(R.string.float_value), balance.getExpenses()));
+    mView.balance.setText(getString(R.string.float_value, balance.getBalance()));
+    mView.incomes.setText(getString(R.string.float_value, balance.getIncomes()));
+    mView.expenses.setText(getString(R.string.float_value, balance.getExpenses()));
   }
 
   @Override public void onError(String error) {

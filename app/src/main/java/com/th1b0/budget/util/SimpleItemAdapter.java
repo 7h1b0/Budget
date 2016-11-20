@@ -47,7 +47,7 @@ public final class SimpleItemAdapter<T extends SimpleItem>
 
     holder.title.setText(simpleItem.getTitle());
     holder.value.setText(
-        String.format(holder.value.getContext().getString(R.string.float_value), simpleItem.getValue()));
+        holder.value.getContext().getString(R.string.float_value, simpleItem.getValue()));
 
     if (showColor) {
       final Context context = holder.value.getContext();

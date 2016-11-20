@@ -50,9 +50,9 @@
     <string name="add_budget">Add budget</string>
     <string name="add_budget_short">Add budget</string>
     <string name="edit_budget">Edit budget</string>
-    <string name="set_category">Choose category</string>
-    <string name="set_budget">Choose budget</string>
-    <string name="set_icon">Choose icon</string>
+    <string name="set_category">Set category</string>
+    <string name="set_budget">Set budget</string>
+    <string name="set_icon">Set icon</string>
     <string name="no_empty_field">This field cannot be empty</string>
 
     <!-- Categories -->

@@ -36,11 +36,10 @@ final class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewBudget>
     final double res = budget.getValue() + budget.getOut();
 
     holder.detail.setText(
-        String.format(context.getString(R.string.budget_of_goal), negation(budget.getOut()),
-            budget.getValue()));
+        context.getString(R.string.budget_of_goal, negation(budget.getOut()), budget.getValue()));
     holder.title.setText(budget.getTitle());
 
-    holder.value.setText(String.format(context.getString(R.string.float_value), res));
+    holder.value.setText(context.getString(R.string.float_value, res));
     if (res >= 0) {
       holder.value.setTextColor(ContextCompat.getColor(context, R.color.green));
     } else {
