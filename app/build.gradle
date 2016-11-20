@@ -28,8 +28,8 @@ android {
 
 dependencies {
   // Support
-  compile 'com.android.support:design:25.0.0'
-  compile 'com.android.support:support-v13:25.0.0'
+  compile 'com.android.support:design:25.0.1'
+  compile 'com.android.support:support-v13:25.0.1'
   compile 'com.google.code.gson:gson:2.7'
   // RxAndroid
   compile 'io.reactivex:rxandroid:1.2.1'
