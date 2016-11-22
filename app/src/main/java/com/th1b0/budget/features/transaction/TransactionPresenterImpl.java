@@ -24,7 +24,7 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
   }
 
   @Override public void loadTransaction() {
-    mSubscription.add(mDataManager.getTransactions(12)
+    mSubscription.add(mDataManager.getTransactions(250)
         .map(this::addHeader)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
