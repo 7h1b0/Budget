@@ -3,6 +3,7 @@ package com.th1b0.budget.features.detail;
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentHomeBinding;
+import com.th1b0.budget.features.detailbudget.DetailBudgetActivity;
 import com.th1b0.budget.model.PresentationBalance;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.util.DataManager;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
  */
 
 public final class DetailFragment extends Fragment
-    implements DetailView {
+    implements DetailView, DetailAdapter.OnClickBudget {
 
   public static final String YEAR = "year";
   public static final String MONTH = "month";
@@ -36,19 +38,19 @@ public final class DetailFragment extends Fragment
   }
 
   public static DetailFragment newInstance(int month, int year) {
-    DetailFragment dialog = new DetailFragment();
+    DetailFragment fragment = new DetailFragment();
     Bundle args = new Bundle();
     args.putInt(YEAR, year);
     args.putInt(MONTH, month);
-    dialog.setArguments(args);
-    return dialog;
+    fragment.setArguments(args);
+    return fragment;
   }
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     mPresenter = new DetailPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new DetailAdapter();
+    mAdapter = new DetailAdapter(this);
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,5 +109,10 @@ public final class DetailFragment extends Fragment
 
   private boolean isArgumentValid() {
     return getArguments().containsKey(MONTH) && getArguments().containsKey(YEAR);
+  }
+
+  @Override public void onClickBudget(@NonNull PresentationBudget budget) {
+    startActivity(DetailBudgetActivity.newInstance(getActivity(), getArguments().getInt(YEAR),
+        getArguments().getInt(MONTH), budget.getId(), budget.getTitle()));
   }
 }

@@ -128,6 +128,65 @@ public final class TransactionTable extends Database {
         });
   }
 
+  public Observable<ArrayList<Transaction>> getAll(int year, int month, long idBudget) {
+    return db.createQuery(TABLE_TRANSACTION, "SELECT "
+        + Transaction.ID
+        + ", "
+        + Transaction.DAY
+        + ", "
+        + Transaction.MONTH
+        + ","
+        + Transaction.YEAR
+        + ", "
+        + Transaction.VALUE
+        + ", "
+        + Transaction.ID_CATEGORY
+        + ", "
+        + Transaction.DESCRIPTION
+        + ", "
+        + Transaction.ID_BUDGET
+        + ", "
+        + Category.COLOR
+        + ", "
+        + Category.ICON
+        + " FROM "
+        + TABLE_TRANSACTION
+        + " AS t JOIN "
+        + TABLE_CATEGORY
+        + " AS c ON "
+        + Transaction.ID_CATEGORY
+        + " = "
+        + Category.ID
+        + " WHERE "
+        + Transaction.MONTH
+        + " = ? AND "
+        + Transaction.YEAR
+        + " = ? AND "
+        + Transaction.ID_BUDGET
+        + " = ? "
+        + " ORDER BY "
+        + Transaction.YEAR
+        + " DESC, "
+        + Transaction.MONTH
+        + " DESC, "
+        + Transaction.DAY
+        + " DESC, "
+        + Transaction.ID
+        + " DESC", String.valueOf(month), String.valueOf(year), String.valueOf(idBudget))
+        .map(super::getCursor)
+        .map(cursor -> {
+          try {
+            ArrayList<Transaction> transactions = new ArrayList<>(cursor.getCount());
+            while (cursor.moveToNext()) {
+              transactions.add(getTransaction(cursor));
+            }
+            return transactions;
+          } finally {
+            cursor.close();
+          }
+        });
+  }
+
   public long add(Transaction transaction) {
     return db.insert(TABLE_TRANSACTION, getContentValues(transaction));
   }

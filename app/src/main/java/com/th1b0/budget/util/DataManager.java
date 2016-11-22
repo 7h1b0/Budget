@@ -48,6 +48,10 @@ public class DataManager {
     return mTransactionTable.getAll(month, year);
   }
 
+  public Observable<ArrayList<Transaction>> getTransactions(int year, int month, long idBudget) {
+    return mTransactionTable.getAll(year, month, idBudget);
+  }
+
   public void updateTransaction(@NonNull Transaction transaction) {
     mTransactionTable.update(transaction);
   }

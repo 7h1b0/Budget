@@ -1,6 +1,7 @@
 package com.th1b0.budget.features.detail;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,10 +18,15 @@ import java.util.ArrayList;
 
 final class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewBudget> {
 
+  interface OnClickBudget {
+    void onClickBudget(@NonNull PresentationBudget budget);
+  }
   private ArrayList<PresentationBudget> mItems;
+  private OnClickBudget mListener;
 
-  DetailAdapter() {
+  DetailAdapter(@NonNull OnClickBudget listener) {
     mItems = new ArrayList<>();
+    mListener = listener;
     setHasStableIds(true);
   }
 
@@ -66,6 +72,8 @@ final class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewBudget>
       title = (TextView) v.findViewById(R.id.title);
       value = (TextView) v.findViewById(R.id.value);
       detail = (TextView) v.findViewById(R.id.detail);
+
+      v.setOnClickListener(view -> mListener.onClickBudget(mItems.get(getLayoutPosition())));
     }
   }
 

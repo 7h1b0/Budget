@@ -41,8 +41,8 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
         }));
   }
 
-  @Override public void loadTransaction(int month, int year) {
-    mSubscription.add(mDataManager.getTransactions(month, year)
+  @Override public void loadTransaction(int year, int month, long idBudget) {
+    mSubscription.add(mDataManager.getTransactions(year, month, idBudget)
         .map((Func1<ArrayList<Transaction>, ArrayList<TransactionItem>>) ArrayList::new)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

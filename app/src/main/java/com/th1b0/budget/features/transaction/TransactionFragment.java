@@ -28,6 +28,16 @@ public final class TransactionFragment
     return new TransactionFragment();
   }
 
+  public static TransactionFragment newInstance(int year, int month, long idBudget) {
+    TransactionFragment fragment = new TransactionFragment();
+    Bundle args = new Bundle();
+    args.putInt(Transaction.YEAR, year);
+    args.putInt(Transaction.MONTH, month);
+    args.putLong(Transaction.ID_BUDGET, idBudget);
+    fragment.setArguments(args);
+    return fragment;
+  }
+
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -41,6 +51,10 @@ public final class TransactionFragment
     initializeRecycler();
     initializeFAB();
     loadTransactions();
+
+    if (isDetailBudget()) {
+      mView.fab.setVisibility(View.GONE);
+    }
   }
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -89,10 +103,11 @@ public final class TransactionFragment
     });
   }
 
-  private boolean isDetailMonth() {
+  private boolean isDetailBudget() {
     return getArguments() != null
         && getArguments().containsKey(Transaction.YEAR)
-        && getArguments().containsKey(Transaction.MONTH);
+        && getArguments().containsKey(Transaction.MONTH)
+        && getArguments().containsKey(Transaction.ID_BUDGET);
   }
 
   private void initializeRecycler() {
@@ -107,9 +122,9 @@ public final class TransactionFragment
   }
 
   private void loadTransactions() {
-    if (isDetailMonth()) {
-      mPresenter.loadTransaction(getArguments().getInt(Transaction.MONTH),
-          getArguments().getInt(Transaction.YEAR));
+    if (isDetailBudget()) {
+      mPresenter.loadTransaction(getArguments().getInt(Transaction.YEAR),
+          getArguments().getInt(Transaction.MONTH), getArguments().getLong(Transaction.ID_BUDGET));
     } else {
       mPresenter.loadTransaction();
     }

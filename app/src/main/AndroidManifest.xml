@@ -24,6 +24,7 @@
     <activity android:name=".features.categoryform.CategoryFormActivity"/>
     <activity android:name=".features.budgetform.BudgetFormActivity"/>
     <activity android:name=".features.detailmonth.DetailMonthActivity"/>
+    <activity android:name=".features.detailbudget.DetailBudgetActivity"/>
 
   </application>
 
