@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height_double"
     android:background="?attr/backgroundItem"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical"
     >
 

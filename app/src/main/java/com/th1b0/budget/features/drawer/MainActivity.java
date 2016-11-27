@@ -12,9 +12,9 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityMainBinding;
-import com.th1b0.budget.features.detail.DetailFragment;
+import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.features.categories.CategoryFragment;
-import com.th1b0.budget.features.budget.BudgetFragment;
+import com.th1b0.budget.features.budgets.BudgetFragment;
 import com.th1b0.budget.features.budgetform.BudgetFormActivity;
 import com.th1b0.budget.features.history.HistoryFragment;
 import com.th1b0.budget.features.transaction.TransactionFragment;
@@ -57,7 +57,7 @@ public final class MainActivity extends AppCompatActivity
         default:
 
       }
-      display(DetailFragment.newInstance(), null);
+      display(PagerFragment.newInstance(), null);
     }
   }
 
@@ -108,7 +108,7 @@ public final class MainActivity extends AppCompatActivity
 
     switch (item.getItemId()) {
       case R.id.home:
-        display(DetailFragment.newInstance(), null);
+        display(PagerFragment.newInstance(), null);
         return true;
 
       case R.id.transactions:

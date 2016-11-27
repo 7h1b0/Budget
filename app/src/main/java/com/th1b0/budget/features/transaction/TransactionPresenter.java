@@ -12,5 +12,7 @@ interface TransactionPresenter extends Presenter {
 
   void loadTransaction(int year, int month, long idBudget);
 
+  void loadTransaction(int year, int month);
+
   void deleteTransaction(Transaction transaction);
 }

@@ -1,44 +1,40 @@
-package com.th1b0.budget.features.detail;
+package com.th1b0.budget.features.pager;
 
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.th1b0.budget.R;
-import com.th1b0.budget.databinding.FragmentHomeBinding;
-import com.th1b0.budget.features.detailbudget.DetailBudgetActivity;
+import com.th1b0.budget.databinding.FragmentPagerBinding;
+import com.th1b0.budget.features.budgetmonth.BudgetMonthFragment;
+import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.model.PresentationBalance;
-import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DateUtil;
-import java.util.ArrayList;
 
 /**
  * Created by 7h1b0.
  */
 
-public final class DetailFragment extends Fragment
-    implements DetailView, DetailAdapter.OnClickBudget {
+public final class PagerFragment extends Fragment
+    implements PagerView {
 
   public static final String YEAR = "year";
   public static final String MONTH = "month";
 
-  private DetailPresenter mPresenter;
-  private DetailAdapter mAdapter;
-  private FragmentHomeBinding mView;
+  private PagerPresenter mPresenter;
+  private FragmentPagerBinding mView;
 
-  public static DetailFragment newInstance() {
+  public static PagerFragment newInstance() {
     return newInstance(DateUtil.getCurrentMonth(), DateUtil.getCurrentYear());
   }
 
-  public static DetailFragment newInstance(int month, int year) {
-    DetailFragment fragment = new DetailFragment();
+  public static PagerFragment newInstance(int month, int year) {
+    PagerFragment fragment = new PagerFragment();
     Bundle args = new Bundle();
     args.putInt(YEAR, year);
     args.putInt(MONTH, month);
@@ -49,13 +45,12 @@ public final class DetailFragment extends Fragment
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new DetailPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new DetailAdapter(this);
+    mPresenter = new PagerPresenterImpl(this, DataManager.getInstance(getActivity()));
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    mView = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+    mView = DataBindingUtil.inflate(inflater, R.layout.fragment_pager, container, false);
     return mView.getRoot();
   }
 
@@ -66,29 +61,18 @@ public final class DetailFragment extends Fragment
       throw new IllegalStateException("Missing arguments. Please use newInstance()");
     }
 
-    initializeRecycler();
-
     int month = getArguments().getInt(MONTH);
     int year = getArguments().getInt(YEAR);
 
-    mView.included.noItem.setVisibility(View.GONE);
-    mPresenter.loadBudgets(month, year);
+    mView.viewpager.setAdapter(getPagerAdapter(year, month));
+    mView.tabs.setupWithViewPager(mView.viewpager);
+
     mPresenter.loadBalance(month, year);
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
     mPresenter.detach();
-  }
-
-  @Override public void onBudgetLoaded(ArrayList<PresentationBudget> budgets) {
-    mAdapter.addAll(budgets);
-    if (budgets.isEmpty()) {
-      mView.included.text.setText(getString(R.string.no_budget));
-      mView.included.noItem.setVisibility(View.VISIBLE);
-    } else {
-      mView.included.noItem.setVisibility(View.GONE);
-    }
   }
 
   @Override public void onBalanceLoaded(PresentationBalance balance) {
@@ -101,18 +85,16 @@ public final class DetailFragment extends Fragment
     Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
   }
 
-  private void initializeRecycler() {
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-    mView.recycler.setLayoutManager(layoutManager);
-    mView.recycler.setAdapter(mAdapter);
-  }
-
   private boolean isArgumentValid() {
     return getArguments().containsKey(MONTH) && getArguments().containsKey(YEAR);
   }
 
-  @Override public void onClickBudget(@NonNull PresentationBudget budget) {
-    startActivity(DetailBudgetActivity.newInstance(getActivity(), getArguments().getInt(YEAR),
-        getArguments().getInt(MONTH), budget.getId(), budget.getTitle()));
+  private PagerAdapter getPagerAdapter(int year, int month) {
+    PagerAdapter adapter = new PagerAdapter(getChildFragmentManager());
+
+    adapter.add(BudgetMonthFragment.newInstance(year, month), getString(R.string.budgets));
+    adapter.add(TransactionFragment.newInstance(year, month), getString(R.string.transactions));
+
+    return adapter;
   }
 }

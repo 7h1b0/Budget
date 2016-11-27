@@ -44,8 +44,8 @@ public class DataManager {
     return mTransactionTable.getAll(limit);
   }
 
-  public Observable<ArrayList<Transaction>> getTransactions(int month, int year) {
-    return mTransactionTable.getAll(month, year);
+  public Observable<ArrayList<Transaction>> getTransactions(int year, int month) {
+    return mTransactionTable.getAll(year, month);
   }
 
   public Observable<ArrayList<Transaction>> getTransactions(int year, int month, long idBudget) {

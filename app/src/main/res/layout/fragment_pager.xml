@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/spacing_medium"
             >
 
             <TextView
@@ -91,24 +90,17 @@
 
         </LinearLayout>
 
-        <FrameLayout
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            style="@style/TabLayout"
+            />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                />
-
-            <include
-                layout="@layout/no_item"
-                android:id="@+id/included"
-                />
-            
-        </FrameLayout>
+            android:layout_below="@+id/tabs"
+            />
 
     </LinearLayout>
 </layout>

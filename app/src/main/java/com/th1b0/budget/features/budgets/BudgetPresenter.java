@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.budgets;
 
 import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Budget;

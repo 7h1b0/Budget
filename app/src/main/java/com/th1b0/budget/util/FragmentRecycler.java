@@ -40,7 +40,7 @@ public abstract class FragmentRecycler<T extends Presenter, S> extends Fragment 
     mPresenter.detach();
   }
 
-  protected void onError(final String error) {
+  protected void onError(@Nullable String error) {
     String msg = error;
     if (TextUtils.isEmpty(msg)) {
       msg = getString(R.string.error_occurred);

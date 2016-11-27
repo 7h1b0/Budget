@@ -1,9 +1,10 @@
-package com.th1b0.budget.features.budget;
+package com.th1b0.budget.features.budgets;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -77,7 +78,7 @@ public final class BudgetFragment
         v -> startActivity(BudgetFormActivity.newInstance(getActivity())));
   }
 
-  @Override public void onBudgetsLoaded(ArrayList<Budget> budgets) {
+  @Override public void onBudgetsLoaded(@NonNull ArrayList<Budget> budgets) {
     mAdapter.addAll(budgets);
     if (budgets.isEmpty()) {
       mView.included.text.setText(getString(R.string.no_budget));
@@ -87,7 +88,7 @@ public final class BudgetFragment
     }
   }
 
-  @Override public void onError(String error) {
+  @Override public void onError(@Nullable String error) {
     super.onError(error);
   }
 

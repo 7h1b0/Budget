@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
+import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.model.TransactionItem;
@@ -26,6 +27,15 @@ public final class TransactionFragment
 
   public static TransactionFragment newInstance() {
     return new TransactionFragment();
+  }
+
+  public static TransactionFragment newInstance(int year, int month) {
+    TransactionFragment fragment = new TransactionFragment();
+    Bundle args = new Bundle();
+    args.putInt(Transaction.YEAR, year);
+    args.putInt(Transaction.MONTH, month);
+    fragment.setArguments(args);
+    return fragment;
   }
 
   public static TransactionFragment newInstance(int year, int month, long idBudget) {
@@ -52,7 +62,7 @@ public final class TransactionFragment
     initializeFAB();
     loadTransactions();
 
-    if (isDetailBudget()) {
+    if (isDetailBudget() || isDetailMonth()) {
       mView.fab.setVisibility(View.GONE);
     }
   }
@@ -110,6 +120,13 @@ public final class TransactionFragment
         && getArguments().containsKey(Transaction.ID_BUDGET);
   }
 
+  private boolean isDetailMonth() {
+    return getArguments() != null
+        && getArguments().containsKey(Transaction.YEAR)
+        && getArguments().containsKey(Transaction.MONTH)
+        && !getArguments().containsKey(Transaction.ID_BUDGET);
+  }
+
   private void initializeRecycler() {
     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
     mView.recycler.setLayoutManager(layoutManager);
@@ -125,6 +142,9 @@ public final class TransactionFragment
     if (isDetailBudget()) {
       mPresenter.loadTransaction(getArguments().getInt(Transaction.YEAR),
           getArguments().getInt(Transaction.MONTH), getArguments().getLong(Transaction.ID_BUDGET));
+    } else if (isDetailMonth()) {
+      mPresenter.loadTransaction(getArguments().getInt(Transaction.YEAR),
+          getArguments().getInt(Transaction.MONTH));
     } else {
       mPresenter.loadTransaction();
     }

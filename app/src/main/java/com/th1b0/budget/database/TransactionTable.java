@@ -8,6 +8,7 @@ import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
+import com.th1b0.budget.util.Logger;
 import java.util.ArrayList;
 import rx.Observable;
 
@@ -71,7 +72,7 @@ public final class TransactionTable extends Database {
     });
   }
 
-  public Observable<ArrayList<Transaction>> getAll(int month, int year) {
+  public Observable<ArrayList<Transaction>> getAll(int year, int month) {
     return db.createQuery(TABLE_TRANSACTION, "SELECT "
         + Transaction.ID
         + ", "
@@ -116,6 +117,7 @@ public final class TransactionTable extends Database {
         + " DESC", String.valueOf(month), String.valueOf(year))
         .map(super::getCursor)
         .map(cursor -> {
+          Logger.e("TransactionTable", year + " " + month);
           try {
             ArrayList<Transaction> transactions = new ArrayList<>(cursor.getCount());
             while (cursor.moveToNext()) {

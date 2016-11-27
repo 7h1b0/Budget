@@ -30,9 +30,10 @@ dependencies {
   // Support
   compile 'com.android.support:design:25.0.1'
   compile 'com.android.support:support-v13:25.0.1'
+  compile 'com.android.support:support-v13:25.0.1'
   compile 'com.google.code.gson:gson:2.7'
   // RxAndroid
   compile 'io.reactivex:rxandroid:1.2.1'
   compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-  compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
+  compile 'com.squareup.sqlbrite:sqlbrite:0.8.0'
 }

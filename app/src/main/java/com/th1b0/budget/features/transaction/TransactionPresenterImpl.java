@@ -59,6 +59,24 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
         }));
   }
 
+  @Override public void loadTransaction(int year, int month) {
+    mSubscription.add(mDataManager.getTransactions(year, month)
+        .map((Func1<ArrayList<Transaction>, ArrayList<TransactionItem>>) ArrayList::new)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(transactions -> {
+          TransactionView view = getView();
+          if (view != null) {
+            view.onTransactionLoaded(transactions);
+          }
+        }, error -> {
+          TransactionView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
+          }
+        }));
+  }
+
   @Override public void deleteTransaction(Transaction transaction) {
     mDataManager.deleteTransaction(transaction);
   }
