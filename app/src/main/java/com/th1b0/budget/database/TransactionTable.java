@@ -236,4 +236,18 @@ public final class TransactionTable extends Database {
         DbUtil.getString(cursor, Transaction.DESCRIPTION), DbUtil.getInt(cursor, Category.COLOR),
         DbUtil.getInt(cursor, Category.ICON), DbUtil.getLong(cursor, Transaction.ID_BUDGET));
   }
+
+  public Observable<Boolean> isEmpty() {
+    return db.createQuery(TABLE_TRANSACTION, "SELECT "
+        + Transaction.ID
+        + " FROM "
+        + TABLE_TRANSACTION)
+        .map(super::getCursor).map(cursor -> {
+          try {
+            return cursor.getCount() == 0;
+          } finally {
+            cursor.close();
+          }
+        });
+  }
 }

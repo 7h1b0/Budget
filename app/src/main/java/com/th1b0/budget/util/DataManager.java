@@ -2,9 +2,9 @@ package com.th1b0.budget.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.th1b0.budget.database.QueryUtil;
-import com.th1b0.budget.database.CategoryTable;
 import com.th1b0.budget.database.BudgetTable;
+import com.th1b0.budget.database.CategoryTable;
+import com.th1b0.budget.database.QueryUtil;
 import com.th1b0.budget.database.TransactionTable;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
@@ -90,7 +90,7 @@ public class DataManager {
         .map(ignored -> mTransactionTable.delete(category));
   }
 
-  public Observable<ArrayList<Budget>> getBudgets(){
+  public Observable<ArrayList<Budget>> getBudgets() {
     return mBudgetTable.getAll();
   }
 
@@ -110,10 +110,14 @@ public class DataManager {
         .doOnNext(mCategoryTable::removeIdBudget)
         .doOnNext(mTransactionTable::removeIdBudget)
         .flatMap(ignored -> Observable.empty());
-
   }
 
   public void initializeDatabase(ArrayList<Budget> budgets, ArrayList<Category> categories) {
     mQueryUtil.initializeDatabase(budgets, categories);
+  }
+
+  public Observable<Boolean> isDatabaseEmpty() {
+    return Observable.combineLatest(mCategoryTable.isEmpty(), mTransactionTable.isEmpty(),
+        (isCategoryEmpty, isTransactionEmpty) -> isCategoryEmpty != null && isCategoryEmpty && isTransactionEmpty != null && isTransactionEmpty);
   }
 }

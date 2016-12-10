@@ -82,4 +82,18 @@ public final class CategoryTable extends Database {
     category.setTitleBudget(DbUtil.getString(cursor, Budget.TITLE));
     return category;
   }
+
+  public Observable<Boolean> isEmpty() {
+    return db.createQuery(TABLE_CATEGORY, "SELECT "
+        + Category.ID
+        + " FROM "
+        + TABLE_CATEGORY)
+        .map(super::getCursor).map(cursor -> {
+      try {
+        return cursor.getCount() == 0;
+      } finally {
+        cursor.close();
+      }
+    });
+  }
 }

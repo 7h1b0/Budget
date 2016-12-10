@@ -12,18 +12,19 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityMainBinding;
-import com.th1b0.budget.features.pager.PagerFragment;
-import com.th1b0.budget.features.categories.CategoryFragment;
-import com.th1b0.budget.features.budgets.BudgetFragment;
 import com.th1b0.budget.features.budgetform.BudgetFormActivity;
+import com.th1b0.budget.features.budgets.BudgetFragment;
+import com.th1b0.budget.features.categories.CategoryFragment;
 import com.th1b0.budget.features.history.HistoryFragment;
+import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
-import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
-import com.th1b0.budget.util.Preferences;
 import java.util.ArrayList;
+import rx.Subscription;
+import rx.schedulers.Schedulers;
 
 public final class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +35,7 @@ public final class MainActivity extends AppCompatActivity
   public static final String TOOLBAR_TITLE = "toolbar_title";
 
   private ActivityMainBinding mView;
+  private Subscription mSubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -55,7 +57,6 @@ public final class MainActivity extends AppCompatActivity
           break;
 
         default:
-
       }
       display(PagerFragment.newInstance(), null);
     }
@@ -70,6 +71,13 @@ public final class MainActivity extends AppCompatActivity
     super.onSaveInstanceState(savedInstanceState);
     if (getSupportActionBar() != null && !TextUtils.isEmpty(getSupportActionBar().getTitle())) {
       savedInstanceState.putString(TOOLBAR_TITLE, String.valueOf(getSupportActionBar().getTitle()));
+    }
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    if (mSubscription != null) {
+      mSubscription.unsubscribe();
     }
   }
 
@@ -133,10 +141,13 @@ public final class MainActivity extends AppCompatActivity
   }
 
   private void handleFirstLaunch() {
-    if (Preferences.isFirstLaunch(this)) {
-      initializeDatabase();
-      Preferences.setFirstLaunch(this, false);
-    }
+    mSubscription = DataManager.getInstance(this)
+        .isDatabaseEmpty()
+        .filter(isDatabaseEmpty -> isDatabaseEmpty)
+        .doOnNext(ignored -> initializeDatabase())
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .subscribe();
   }
 
   private void initializeDatabase() {
