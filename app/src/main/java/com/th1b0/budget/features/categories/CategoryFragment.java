@@ -55,7 +55,7 @@ public final class CategoryFragment extends FragmentRecycler<CategoryPresenter, 
     }
   }
 
-  @Override public void onCategoryLoaded(ArrayList<Category> categories) {
+  @Override public void onCategoryLoaded(@NonNull ArrayList<Category> categories) {
     mAdapter.addAll(categories);
   }
 

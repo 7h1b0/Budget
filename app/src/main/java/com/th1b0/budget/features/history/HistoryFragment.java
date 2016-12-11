@@ -2,6 +2,7 @@ package com.th1b0.budget.features.history;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
@@ -19,9 +20,7 @@ import rx.Subscription;
 
 public final class HistoryFragment
     extends FragmentRecycler<HistoryPresenter, SimpleItemAdapter<PresentationHistory>>
-    implements HistoryView {
-
-  private Subscription mSubscription;
+    implements HistoryView, SimpleItemAdapter.OnSimpleItemClick<PresentationHistory> {
 
   public static HistoryFragment newInstance() {
     return new HistoryFragment();
@@ -31,7 +30,7 @@ public final class HistoryFragment
     super.onCreate(savedInstanceState);
 
     mPresenter = new HistoryPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new SimpleItemAdapter<>(true);
+    mAdapter = new SimpleItemAdapter<>(this, true);
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -40,16 +39,9 @@ public final class HistoryFragment
     initializeRecycler();
     initializeFAB();
 
-    mSubscription = mAdapter.onClick().subscribe(this::onHistoryClick);
     mPresenter.loadHistory();
   }
 
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    if (mSubscription != null) {
-      mSubscription.unsubscribe();
-    }
-  }
 
   private void initializeRecycler() {
     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -61,7 +53,7 @@ public final class HistoryFragment
     mView.fab.setVisibility(View.GONE);
   }
 
-  @Override public void onHistoryLoaded(ArrayList<PresentationHistory> histories) {
+  @Override public void onHistoryLoaded(@NonNull ArrayList<PresentationHistory> histories) {
     mAdapter.addAll(histories);
     if (histories.isEmpty()) {
       mView.included.text.setText(getString(R.string.no_history));
@@ -71,11 +63,11 @@ public final class HistoryFragment
     }
   }
 
-  @Override public void onError(String error) {
+  @Override public void onError(@Nullable String error) {
     super.onError(error);
   }
 
-  private void onHistoryClick(@NonNull PresentationHistory history) {
+  @Override public void onSimpleItemClick(@NonNull PresentationHistory history) {
     startActivity(DetailMonthActivity.newInstance(getActivity(), history.getMonth(), history.getYear()));
   }
 }

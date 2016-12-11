@@ -3,7 +3,9 @@ package com.th1b0.budget.features.pager;
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,13 +77,16 @@ public final class PagerFragment extends Fragment
     mPresenter.detach();
   }
 
-  @Override public void onBalanceLoaded(PresentationBalance balance) {
+  @Override public void onBalanceLoaded(@NonNull PresentationBalance balance) {
     mView.balance.setText(getString(R.string.float_value, balance.getBalance()));
     mView.incomes.setText(getString(R.string.float_value, balance.getIncomes()));
     mView.expenses.setText(getString(R.string.float_value, balance.getExpenses()));
   }
 
-  @Override public void onError(String error) {
+  @Override public void onError(@Nullable String error) {
+    if (TextUtils.isEmpty(error)) {
+      error = getString(R.string.error_occurred);
+    }
     Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
   }
 

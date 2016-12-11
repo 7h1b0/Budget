@@ -1,5 +1,7 @@
 package com.th1b0.budget.features.history;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.th1b0.budget.model.PresentationHistory;
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 interface HistoryView {
 
-  void onHistoryLoaded(ArrayList<PresentationHistory> histories);
+  void onHistoryLoaded(@NonNull ArrayList<PresentationHistory> histories);
 
-  void onError(String error);
+  void onError(@Nullable String error);
 }

@@ -77,7 +77,7 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
         }));
   }
 
-  @Override public void deleteTransaction(Transaction transaction) {
+  @Override public void deleteTransaction(@NonNull Transaction transaction) {
     mDataManager.deleteTransaction(transaction);
   }
 

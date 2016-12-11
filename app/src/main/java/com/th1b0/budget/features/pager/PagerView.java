@@ -1,6 +1,8 @@
 package com.th1b0.budget.features.pager;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.th1b0.budget.model.PresentationBalance;
 
 /**
@@ -8,11 +10,9 @@ import com.th1b0.budget.model.PresentationBalance;
  */
 
 interface PagerView {
-  //void onBudgetLoaded(ArrayList<PresentationBudget> budgets);
+  void onBalanceLoaded(@NonNull PresentationBalance balance);
 
-  void onBalanceLoaded(PresentationBalance balance);
-
-  void onError(String error);
+  void onError(@Nullable String error);
 
   Context getContext();
 }

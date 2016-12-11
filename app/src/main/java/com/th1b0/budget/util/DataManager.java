@@ -18,7 +18,7 @@ import rx.Observable;
  * Created by 7h1b0.
  */
 
-public class DataManager {
+public final class DataManager {
 
   private static DataManager sInstance;
   private TransactionTable mTransactionTable;

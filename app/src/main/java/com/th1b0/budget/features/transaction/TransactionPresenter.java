@@ -1,5 +1,6 @@
 package com.th1b0.budget.features.transaction;
 
+import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.Presenter;
 
@@ -14,5 +15,5 @@ interface TransactionPresenter extends Presenter {
 
   void loadTransaction(int year, int month);
 
-  void deleteTransaction(Transaction transaction);
+  void deleteTransaction(@NonNull Transaction transaction);
 }

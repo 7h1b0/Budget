@@ -16,7 +16,6 @@ import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.FragmentRecycler;
 import com.th1b0.budget.util.SimpleItemAdapter;
 import java.util.ArrayList;
-import rx.Subscription;
 
 /**
  * Created by 7h1b0.
@@ -24,9 +23,7 @@ import rx.Subscription;
 
 public final class BudgetFragment
     extends FragmentRecycler<BudgetPresenter, SimpleItemAdapter<Budget>>
-    implements BudgetView {
-
-  private Subscription mSubscription;
+    implements BudgetView, SimpleItemAdapter.OnSimpleItemClick<Budget> {
 
   public static BudgetFragment newInstance() {
     return new BudgetFragment();
@@ -36,7 +33,7 @@ public final class BudgetFragment
     super.onCreate(savedInstanceState);
 
     mPresenter = new BudgetPresenterImpl(this, DataManager.getInstance(getActivity()));
-    mAdapter = new SimpleItemAdapter<>();
+    mAdapter = new SimpleItemAdapter<>(this);
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -45,7 +42,6 @@ public final class BudgetFragment
     initializeRecycler();
     initializeFAB();
 
-    mSubscription = mAdapter.onClick().subscribe(this::onBudgetClick);
     mPresenter.loadBudgets();
   }
 
@@ -57,13 +53,6 @@ public final class BudgetFragment
           mPresenter.deleteBudget(budget);
         }
         break;
-    }
-  }
-
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    if (mSubscription != null) {
-      mSubscription.unsubscribe();
     }
   }
 
@@ -92,7 +81,7 @@ public final class BudgetFragment
     super.onError(error);
   }
 
-  private void onBudgetClick(@NonNull Budget budget) {
+  @Override public void onSimpleItemClick(@NonNull Budget budget) {
     View view = View.inflate(getActivity(), R.layout.bottomsheet_edit, null);
     BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
     dialog.setContentView(view);

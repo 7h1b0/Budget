@@ -15,8 +15,8 @@ final class PagerAdapter extends FragmentPagerAdapter {
 
   PagerAdapter(FragmentManager fm) {
     super(fm);
-    mPages = new ArrayList<>(3);
-    mTitles = new ArrayList<>(3);
+    mPages = new ArrayList<>(2);
+    mTitles = new ArrayList<>(2);
   }
 
   public void add(Fragment fragment, String title) {

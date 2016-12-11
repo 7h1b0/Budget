@@ -79,7 +79,7 @@ public final class TransactionFragment
     }
   }
 
-  @Override public void onTransactionLoaded(ArrayList<TransactionItem> transactions) {
+  @Override public void onTransactionLoaded(@NonNull ArrayList<TransactionItem> transactions) {
     mAdapter.addAll(transactions);
     if (transactions.isEmpty()) {
       mView.included.text.setText(getString(R.string.no_transaction));

@@ -31,8 +31,12 @@ final class TransactionFormPresenterImpl extends PresenterImpl<TransactionFormVi
   @Override public void loadCategoriesAndBudgets() {
     mSubscription.add(mDataManager.getBudgets()
         .map(budgets -> {
-          budgets.add(0, new Budget(Budget.NONE, getView().getContext().getString(R.string.none), 0));
-          return budgets;
+          TransactionFormView view = getView();
+          if (view != null) {
+            budgets.add(0, new Budget(Budget.NONE, getView().getContext().getString(R.string.none), 0));
+            return budgets;
+          }
+          return null;
         })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

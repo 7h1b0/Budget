@@ -11,7 +11,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public abstract class PresenterImpl<T> {
 
-  protected final WeakReference<T> mView;
+  private final WeakReference<T> mView;
   protected final DataManager mDataManager;
   protected final CompositeSubscription mSubscription;
 
