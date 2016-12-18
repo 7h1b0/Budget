@@ -38,6 +38,7 @@ public final class MainActivity extends AppCompatActivity
   private Subscription mSubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
+    setTheme(R.style.AppTheme);
     super.onCreate(savedInstanceState);
     mView = DataBindingUtil.setContentView(this, R.layout.activity_main);
 

@@ -2,30 +2,46 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.th1b0.budget">
 
-  <application
-      android:allowBackup="true"
-      android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
-      android:label="@string/app_name"
-      android:supportsRtl="true"
-      android:theme="@style/AppTheme">
-    <activity android:name=".features.drawer.MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-      <meta-data
-          android:name="android.app.shortcuts"
-          android:resource="@xml/shortcuts"/>
-    </activity>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Launcher">
 
-    <activity android:name=".features.transactionform.TransactionFormActivity"/>
-    <activity android:name=".features.categoryform.CategoryFormActivity"/>
-    <activity android:name=".features.budgetform.BudgetFormActivity"/>
-    <activity android:name=".features.detailmonth.DetailMonthActivity"/>
-    <activity android:name=".features.detailbudget.DetailBudgetActivity"/>
+        <activity android:name=".features.drawer.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-  </application>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+        </activity>
+
+        <activity
+            android:name=".features.transactionform.TransactionFormActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".features.categoryform.CategoryFormActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".features.budgetform.BudgetFormActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".features.detailmonth.DetailMonthActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".features.detailbudget.DetailBudgetActivity"
+            android:theme="@style/AppTheme"/>
+
+    </application>
 
 </manifest>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque"
+    >
+
+    <item>
+        <shape>
+            <solid android:color="@android:color/white"/>
+        </shape>
+    </item>
+
+    <item android:gravity="top">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorPrimary"/>
+            <size android:height="228dp"/> <!-- Toolbar + TabBar + StatusBar + Extended info -->
+        </shape>
+    </item>
+</layer-list>
