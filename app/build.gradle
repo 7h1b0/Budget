@@ -33,7 +33,8 @@ dependencies {
   compile 'com.android.support:support-v13:25.1.0'
   compile 'com.google.code.gson:gson:2.8.0'
   // RxAndroid
+  compile 'io.reactivex:rxjava:1.2.4'
   compile 'io.reactivex:rxandroid:1.2.1'
   compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
-  compile 'com.squareup.sqlbrite:sqlbrite:1.1.0'
+  compile 'com.squareup.sqlbrite:sqlbrite:1.1.1'
 }
