@@ -33,7 +33,7 @@ public final class DataManager {
     mBudgetTable = new BudgetTable(context);
   }
 
-  public static DataManager getInstance(@NonNull Context context) {
+  public static synchronized DataManager getInstance(@NonNull Context context) {
     if (sInstance == null) {
       sInstance = new DataManager(context);
     }
