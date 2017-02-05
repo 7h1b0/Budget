@@ -1,11 +1,13 @@
 package com.th1b0.budget.features.drawer;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -27,7 +29,8 @@ import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public final class MainActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+    implements NavigationView.OnNavigationItemSelectedListener,
+    FragmentManager.OnBackStackChangedListener {
 
   private static final String ACTION_ADD_BUDGET = "com.th1b0.budget.ADD_BUDGET";
   private static final String ACTION_ADD_TRANSACTION = "com.th1b0.budget.ADD_TRANSACTION";
@@ -36,6 +39,7 @@ public final class MainActivity extends AppCompatActivity
 
   private ActivityMainBinding mView;
   private Subscription mSubscription;
+  private ActionBarDrawerToggle mDrawerToggle;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.AppTheme);
@@ -46,6 +50,8 @@ public final class MainActivity extends AppCompatActivity
     initializeNavigationView();
     initializeDrawer();
     handleFirstLaunch();
+
+    getFragmentManager().addOnBackStackChangedListener(this);
 
     if (savedInstanceState == null) {
       switch (getIntent().getAction()) {
@@ -60,6 +66,8 @@ public final class MainActivity extends AppCompatActivity
         default:
       }
       display(PagerFragment.newInstance(), null);
+    } else {
+      this.onBackStackChanged();
     }
   }
 
@@ -91,10 +99,10 @@ public final class MainActivity extends AppCompatActivity
   }
 
   private void initializeDrawer() {
-    final ActionBarDrawerToggle actionBarDrawerToggle =
-        new ActionBarDrawerToggle(this, mView.drawer, mView.included.toolbar, 0, 0);
-    mView.drawer.addDrawerListener(actionBarDrawerToggle);
-    actionBarDrawerToggle.syncState();
+    mDrawerToggle = new ActionBarDrawerToggle(this, mView.drawer, mView.included.toolbar, 0, 0);
+    mView.drawer.addDrawerListener(mDrawerToggle);
+    mDrawerToggle.syncState();
+    mDrawerToggle.setToolbarNavigationClickListener(v -> onBackPressed());
   }
 
   private void display(@NonNull Fragment fragment, CharSequence title) {
@@ -173,5 +181,22 @@ public final class MainActivity extends AppCompatActivity
         ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
 
     DataManager.getInstance(this).initializeDatabase(budgets, categories);
+  }
+
+  @Override public void onBackStackChanged() {
+    if (getFragmentManager().getBackStackEntryCount() > 0) {
+      mDrawerToggle.setDrawerIndicatorEnabled(false);
+      if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    } else {
+      if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+      mDrawerToggle.setDrawerIndicatorEnabled(true);
+    }
+  }
+
+  @Override public void onBackPressed() {
+    if (mView.drawer.isDrawerOpen(GravityCompat.START)) {
+      mView.drawer.closeDrawers();
+    }
+    super.onBackPressed();
   }
 }

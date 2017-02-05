@@ -45,4 +45,25 @@ public class PresentationHistory implements SimpleItem {
   public void setValue(double value) {
     this.value = value;
   }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PresentationHistory that = (PresentationHistory) o;
+
+    if (month != that.month) return false;
+    if (year != that.year) return false;
+    return Double.compare(that.value, value) == 0;
+  }
+
+  @Override public int hashCode() {
+    int result;
+    long temp;
+    result = month;
+    result = 31 * result + year;
+    temp = Double.doubleToLongBits(value);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
 }

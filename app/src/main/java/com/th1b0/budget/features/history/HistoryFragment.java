@@ -6,13 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
-import com.th1b0.budget.features.detailmonth.DetailMonthActivity;
+import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.FragmentRecycler;
+import com.th1b0.budget.util.Logger;
 import com.th1b0.budget.util.SimpleItemAdapter;
 import java.util.ArrayList;
-import rx.Subscription;
 
 /**
  * Created by 7h1b0.
@@ -68,7 +68,10 @@ public final class HistoryFragment
   }
 
   @Override public void onSimpleItemClick(@NonNull PresentationHistory history) {
-    startActivity(DetailMonthActivity.newInstance(getActivity(), history.getMonth(), history.getYear()));
+    getFragmentManager().beginTransaction()
+        .replace(R.id.frame_container, PagerFragment.newInstance(history.getMonth(), history.getYear()))
+        .addToBackStack("PagerFragment")
+        .commit();
   }
 }
 
