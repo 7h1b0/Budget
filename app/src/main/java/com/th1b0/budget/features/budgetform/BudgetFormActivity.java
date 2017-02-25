@@ -19,7 +19,7 @@ import com.th1b0.budget.util.DataManager;
  * Created by 7h1b0.
  */
 
-public final class BudgetFormActivity extends AppCompatActivity {
+public final class BudgetFormActivity extends AppCompatActivity implements BudgetFormView {
 
   private Budget mBudget;
   private BudgetFormPresenter mPresenter;
@@ -72,7 +72,6 @@ public final class BudgetFormActivity extends AppCompatActivity {
           } else {
             mPresenter.addBudget(mBudget);
           }
-          finish();
         }
         return true;
 
@@ -134,6 +133,18 @@ public final class BudgetFormActivity extends AppCompatActivity {
     } catch (NumberFormatException e) {
       // Nothing
     }
+  }
+
+  @Override public void onAddSucceeded() {
+    finish();
+  }
+
+  @Override public void onUpdateSucceeded() {
+    finish();
+  }
+
+  @Override public void onError(@Nullable String error) {
+    // Nothing yet
   }
 }
 

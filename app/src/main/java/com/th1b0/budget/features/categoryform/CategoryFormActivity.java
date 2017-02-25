@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -96,7 +97,6 @@ public final class CategoryFormActivity extends AppCompatActivity
           } else {
             mPresenter.addCategory(mCategory);
           }
-          finish();
         }
         return true;
 
@@ -226,7 +226,7 @@ public final class CategoryFormActivity extends AppCompatActivity
     updateColor();
   }
 
-  @Override public void onBudgetLoaded(ArrayList<Budget> budgets) {
+  @Override public void onBudgetLoaded(@NonNull ArrayList<Budget> budgets) {
     mBudgets = budgets;
     if (mCategory.getIdBudget() == -1 && !budgets.isEmpty()) {
       mCategory.setIdBudget(budgets.get(0).getId());
@@ -234,8 +234,21 @@ public final class CategoryFormActivity extends AppCompatActivity
     updateBudget();
   }
 
-  @Override public void onError(String error) {
-    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
+  @Override public void onError(@Nullable final String error) {
+    String msg = error;
+    if (TextUtils.isEmpty(msg)) {
+      msg = getString(R.string.error_occurred);
+    }
+
+    Snackbar.make(mView.coordinator, msg, Snackbar.LENGTH_LONG).show();
+  }
+
+  @Override public void onAddSucceeded() {
+    finish();
+  }
+
+  @Override public void onUpdateSucceeded() {
+    finish();
   }
 
   @NonNull @Override public Context getContext() {

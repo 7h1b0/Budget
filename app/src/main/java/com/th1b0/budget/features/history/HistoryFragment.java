@@ -10,7 +10,6 @@ import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.FragmentRecycler;
-import com.th1b0.budget.util.Logger;
 import com.th1b0.budget.util.SimpleItemAdapter;
 import java.util.ArrayList;
 

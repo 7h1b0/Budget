@@ -40,11 +40,12 @@ public abstract class FragmentRecycler<T extends Presenter, S> extends Fragment 
     mPresenter.detach();
   }
 
-  protected void onError(@Nullable String error) {
+  protected void onError(@Nullable final String error) {
+    String msg = error;
     if (TextUtils.isEmpty(error)) {
-      error = getString(R.string.error_occurred);
+      msg = getString(R.string.error_occurred);
     }
 
-    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
+    Snackbar.make(mView.coordinator, msg, Snackbar.LENGTH_LONG).show();
   }
 }

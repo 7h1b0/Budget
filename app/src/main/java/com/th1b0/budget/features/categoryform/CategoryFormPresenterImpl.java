@@ -16,16 +16,40 @@ import rx.schedulers.Schedulers;
 final class CategoryFormPresenterImpl extends PresenterImpl<CategoryFormView>
     implements CategoryFormPresenter {
 
-  CategoryFormPresenterImpl(@NonNull CategoryFormView view, @NonNull DataManager dataManager) {
+  CategoryFormPresenterImpl(@NonNull final CategoryFormView view, @NonNull final DataManager dataManager) {
     super(view, dataManager);
   }
 
-  @Override public void addCategory(@NonNull Category category) {
-    mDataManager.addCategory(category);
+  @Override public void addCategory(@NonNull final Category category) {
+    mSubscription.add(mDataManager.addCategory(category).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(id -> {
+          CategoryFormView view = getView();
+          if (view != null) {
+            view.onAddSucceeded();
+          }
+        }, err -> {
+          CategoryFormView view = getView();
+          if (view != null) {
+            view.onError(err.getMessage());
+          }
+        }));
   }
 
-  @Override public void updateCategory(@NonNull Category category) {
-    mDataManager.updateCategory(category);
+  @Override public void updateCategory(@NonNull final Category category) {
+    mSubscription.add(mDataManager.updateCategory(category).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(id -> {
+          CategoryFormView view = getView();
+          if (view != null) {
+            view.onUpdateSucceeded();
+          }
+        }, err -> {
+          CategoryFormView view = getView();
+          if (view != null) {
+            view.onError(err.getMessage());
+          }
+        }));
   }
 
   @Override public void loadBudget() {

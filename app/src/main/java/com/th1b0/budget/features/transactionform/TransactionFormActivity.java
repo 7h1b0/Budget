@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -93,7 +94,6 @@ public final class TransactionFormActivity extends AppCompatActivity
           } else {
             mPresenter.addTransaction(mTransaction);
           }
-          finish();
         }
         return true;
 
@@ -274,8 +274,21 @@ public final class TransactionFormActivity extends AppCompatActivity
     mBudgets = budgets;
   }
 
-  @Override public void onError(String error) {
-    Snackbar.make(mView.coordinator, error, Snackbar.LENGTH_LONG).show();
+  @Override public void onError(@Nullable final String error) {
+    String msg = error;
+    if (TextUtils.isEmpty(error)) {
+      msg = getString(R.string.error_occurred);
+    }
+
+    Snackbar.make(mView.coordinator, msg, Snackbar.LENGTH_LONG).show();
+  }
+
+  @Override public void onAddSucceeded() {
+    finish();
+  }
+
+  @Override public void onUpdateSucceeded() {
+    finish();
   }
 
   @NonNull @Override public Context getContext() {

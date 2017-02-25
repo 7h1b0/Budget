@@ -78,7 +78,16 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
   }
 
   @Override public void deleteTransaction(@NonNull Transaction transaction) {
-    mDataManager.deleteTransaction(transaction);
+    mSubscription.add(mDataManager.deleteTransaction(transaction)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(transactions -> {
+        }, error -> {
+          TransactionView view = getView();
+          if (view != null) {
+            view.onError(error.getMessage());
+          }
+        }));
   }
 
   private ArrayList<TransactionItem> addHeader(ArrayList<Transaction> transactions) {

@@ -9,7 +9,6 @@ import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
-import com.th1b0.budget.util.Logger;
 import java.util.ArrayList;
 import rx.Observable;
 

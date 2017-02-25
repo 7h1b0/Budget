@@ -16,16 +16,43 @@ import rx.schedulers.Schedulers;
 final class TransactionFormPresenterImpl extends PresenterImpl<TransactionFormView>
     implements TransactionFormPresenter {
 
-  TransactionFormPresenterImpl(TransactionFormView view, DataManager dataManager) {
+  TransactionFormPresenterImpl(@NonNull final TransactionFormView view,
+      @NonNull final DataManager dataManager) {
     super(view, dataManager);
   }
 
-  @Override public void addTransaction(@NonNull Transaction transaction) {
-    mDataManager.addTransaction(transaction);
+  @Override public void addTransaction(@NonNull final Transaction transaction) {
+    mSubscription.add(mDataManager.addTransaction(transaction)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(id -> {
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onAddSucceeded();
+          }
+        }, err -> {
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onError(err.getMessage());
+          }
+        }));
   }
 
-  @Override public void updateTransaction(@NonNull Transaction transaction) {
-    mDataManager.updateTransaction(transaction);
+  @Override public void updateTransaction(@NonNull final Transaction transaction) {
+    mSubscription.add(mDataManager.updateTransaction(transaction)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(id -> {
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onUpdateSucceeded();
+          }
+        }, err -> {
+          TransactionFormView view = getView();
+          if (view != null) {
+            view.onError(err.getMessage());
+          }
+        }));
   }
 
   @Override public void loadCategoriesAndBudgets() {
@@ -33,7 +60,8 @@ final class TransactionFormPresenterImpl extends PresenterImpl<TransactionFormVi
         .map(budgets -> {
           TransactionFormView view = getView();
           if (view != null) {
-            budgets.add(0, new Budget(Budget.NONE, getView().getContext().getString(R.string.none), 0));
+            budgets.add(0,
+                new Budget(Budget.NONE, getView().getContext().getString(R.string.none), 0));
             return budgets;
           }
           return null;

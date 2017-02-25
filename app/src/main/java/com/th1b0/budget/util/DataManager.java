@@ -52,16 +52,16 @@ public final class DataManager {
     return mTransactionTable.getAll(year, month, idBudget);
   }
 
-  public void updateTransaction(@NonNull Transaction transaction) {
-    mTransactionTable.update(transaction);
+  public Observable<Integer> updateTransaction(@NonNull final Transaction transaction) {
+    return Observable.just(transaction).map(mTransactionTable::update);
   }
 
-  public long addTransaction(@NonNull Transaction transaction) {
-    return mTransactionTable.add(transaction);
+  public Observable<Long> addTransaction(@NonNull final Transaction transaction) {
+    return Observable.just(transaction).map(mTransactionTable::add);
   }
 
-  public int deleteTransaction(@NonNull Transaction transaction) {
-    return mTransactionTable.delete(transaction);
+  public Observable<Integer> deleteTransaction(@NonNull final Transaction transaction) {
+    return Observable.just(transaction).map(mTransactionTable::delete);
   }
 
   public Observable<ArrayList<PresentationBudget>> getBudgets(int month, int year) {
@@ -76,16 +76,17 @@ public final class DataManager {
     return mCategoryTable.getAll();
   }
 
-  public long addCategory(@NonNull Category category) {
-    return mCategoryTable.add(category);
+  public Observable<Long> addCategory(@NonNull final Category category) {
+    return Observable.just(category).map(mCategoryTable::add);
   }
 
-  public int updateCategory(@NonNull Category category) {
-    return mCategoryTable.update(category);
+  public Observable<Integer> updateCategory(@NonNull final Category category) {
+    return Observable.just(category).map(mCategoryTable::update);
   }
 
   public Observable<Integer> deleteCategory(@NonNull Category category) {
-    return Observable.just(mCategoryTable.delete(category))
+    return Observable.just(category)
+        .map(mCategoryTable::delete)
         .filter(rows -> rows > 0)
         .map(ignored -> mTransactionTable.delete(category));
   }
@@ -94,12 +95,12 @@ public final class DataManager {
     return mBudgetTable.getAll();
   }
 
-  public long addBudget(@NonNull Budget budget) {
-    return mBudgetTable.add(budget);
+  public Observable<Long> addBudget(@NonNull final Budget budget) {
+    return Observable.just(budget).map(mBudgetTable::add);
   }
 
-  public int updateBudget(@NonNull Budget budget) {
-    return mBudgetTable.update(budget);
+  public Observable<Integer> updateBudget(@NonNull final Budget budget) {
+    return Observable.just(budget).map(mBudgetTable::update);
   }
 
   public Observable<Void> deleteBudget(@NonNull Budget budget) {
