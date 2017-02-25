@@ -28,9 +28,9 @@ android {
 
 dependencies {
   // Support
-  compile 'com.android.support:design:25.1.0'
-  compile 'com.android.support:support-v13:25.1.0'
-  compile 'com.android.support:support-v13:25.1.0'
+  compile 'com.android.support:design:25.2.0'
+  compile 'com.android.support:support-v13:25.2.0'
+  compile 'com.android.support:support-v13:25.2.0'
   compile 'com.google.code.gson:gson:2.8.0'
   // RxAndroid
   compile 'io.reactivex:rxjava:1.2.4'
