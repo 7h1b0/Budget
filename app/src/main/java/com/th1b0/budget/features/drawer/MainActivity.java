@@ -1,5 +1,7 @@
 package com.th1b0.budget.features.drawer;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.databinding.DataBindingUtil;
@@ -184,13 +186,33 @@ public final class MainActivity extends AppCompatActivity
   }
 
   @Override public void onBackStackChanged() {
-    if (getFragmentManager().getBackStackEntryCount() > 0) {
-      mDrawerToggle.setDrawerIndicatorEnabled(false);
-      if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    } else {
-      if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-      mDrawerToggle.setDrawerIndicatorEnabled(true);
-    }
+    final boolean enableArrow = getFragmentManager().getBackStackEntryCount() > 0;
+
+    ObjectAnimator animator = ObjectAnimator.ofFloat(mDrawerToggle.getDrawerArrowDrawable(), "progress", enableArrow ? 1f : 0f);
+    animator.addListener(new Animator.AnimatorListener() {
+          @Override public void onAnimationStart(Animator animator) {
+            if (!enableArrow) {
+              if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+              mDrawerToggle.setDrawerIndicatorEnabled(true);
+            }
+          }
+
+          @Override public void onAnimationEnd(Animator animator) {
+            if (enableArrow) {
+              mDrawerToggle.setDrawerIndicatorEnabled(false);
+              if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+          }
+
+          @Override public void onAnimationCancel(Animator animator) {
+
+          }
+
+          @Override public void onAnimationRepeat(Animator animator) {
+
+          }
+        });
+    animator.setDuration(150).start();
   }
 
   @Override public void onBackPressed() {
