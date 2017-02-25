@@ -27,6 +27,7 @@ public abstract class PresenterImpl<T> {
 
   public void detach() {
     mSubscription.clear();
+    mView.clear();
   }
 }
 
