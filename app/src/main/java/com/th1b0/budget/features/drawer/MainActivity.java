@@ -125,6 +125,10 @@ public final class MainActivity extends AppCompatActivity
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     mView.drawer.closeDrawers();
 
+    if (getFragmentManager().getBackStackEntryCount() > 0) {
+      enableDrawerIndicator();
+    }
+
     switch (item.getItemId()) {
       case R.id.home:
         display(PagerFragment.newInstance(), null);
@@ -185,6 +189,16 @@ public final class MainActivity extends AppCompatActivity
     DataManager.getInstance(this).initializeDatabase(budgets, categories);
   }
 
+  private void disableDrawerIndicator() {
+    mDrawerToggle.setDrawerIndicatorEnabled(false);
+    if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+  }
+
+  private void enableDrawerIndicator() {
+    if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    mDrawerToggle.setDrawerIndicatorEnabled(true);
+  }
+
   @Override public void onBackStackChanged() {
     final boolean enableArrow = getFragmentManager().getBackStackEntryCount() > 0;
 
@@ -192,15 +206,13 @@ public final class MainActivity extends AppCompatActivity
     animator.addListener(new Animator.AnimatorListener() {
           @Override public void onAnimationStart(Animator animator) {
             if (!enableArrow) {
-              if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-              mDrawerToggle.setDrawerIndicatorEnabled(true);
+              enableDrawerIndicator();
             }
           }
 
           @Override public void onAnimationEnd(Animator animator) {
             if (enableArrow) {
-              mDrawerToggle.setDrawerIndicatorEnabled(false);
-              if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+              disableDrawerIndicator();
             }
           }
 
