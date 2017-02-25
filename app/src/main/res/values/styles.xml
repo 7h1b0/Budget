@@ -77,7 +77,7 @@
         <item name="tabMaxWidth">800dp</item>
         <item name="tabMode">fixed</item>
         <item name="tabGravity">fill</item>
-        <item name="tabIndicatorColor">@android:color/white</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabBackground">?attr/selectableItemBackground</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
