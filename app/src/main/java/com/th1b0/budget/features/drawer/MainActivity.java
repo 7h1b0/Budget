@@ -26,13 +26,13 @@ import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
+import com.th1b0.budget.util.Logger;
 import java.util.ArrayList;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 public final class MainActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener,
-    FragmentManager.OnBackStackChangedListener {
+    implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener, Toolbar {
 
   private static final String ACTION_ADD_BUDGET = "com.th1b0.budget.ADD_BUDGET";
   private static final String ACTION_ADD_TRANSACTION = "com.th1b0.budget.ADD_TRANSACTION";
@@ -116,7 +116,7 @@ public final class MainActivity extends AppCompatActivity
     getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
   }
 
-  public void setToolbarTitle(CharSequence title) {
+  @Override public void setToolbarTitle(CharSequence title) {
     if (getSupportActionBar() != null) {
       getSupportActionBar().setTitle(title);
     }
@@ -126,7 +126,7 @@ public final class MainActivity extends AppCompatActivity
     mView.drawer.closeDrawers();
 
     if (getFragmentManager().getBackStackEntryCount() > 0) {
-      enableDrawerIndicator();
+      clearBackStack();
     }
 
     switch (item.getItemId()) {
@@ -175,16 +175,15 @@ public final class MainActivity extends AppCompatActivity
 
     ArrayList<Category> categories = new ArrayList<>(5);
     categories.add(
-        new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food),
-            R.mipmap.ic_food));
-    categories.add(new Category(getString(R.string.diner),
-        ContextCompat.getColor(this, R.color.category_diner), R.mipmap.ic_diner));
-    categories.add(new Category(getString(R.string.hobby),
-        ContextCompat.getColor(this, R.color.category_hobby), R.mipmap.ic_hobby));
-    categories.add(new Category(getString(R.string.shopping),
-        ContextCompat.getColor(this, R.color.category_shopping), R.mipmap.ic_shopping));
-    categories.add(new Category(getString(R.string.transport),
-        ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
+        new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food), R.mipmap.ic_food));
+    categories.add(new Category(getString(R.string.diner), ContextCompat.getColor(this, R.color.category_diner),
+        R.mipmap.ic_diner));
+    categories.add(new Category(getString(R.string.hobby), ContextCompat.getColor(this, R.color.category_hobby),
+        R.mipmap.ic_hobby));
+    categories.add(new Category(getString(R.string.shopping), ContextCompat.getColor(this, R.color.category_shopping),
+        R.mipmap.ic_shopping));
+    categories.add(new Category(getString(R.string.transport), ContextCompat.getColor(this, R.color.category_transport),
+        R.mipmap.ic_transport));
 
     DataManager.getInstance(this).initializeDatabase(budgets, categories);
   }
@@ -202,28 +201,29 @@ public final class MainActivity extends AppCompatActivity
   @Override public void onBackStackChanged() {
     final boolean enableArrow = getFragmentManager().getBackStackEntryCount() > 0;
 
-    ObjectAnimator animator = ObjectAnimator.ofFloat(mDrawerToggle.getDrawerArrowDrawable(), "progress", enableArrow ? 1f : 0f);
+    ObjectAnimator animator =
+        ObjectAnimator.ofFloat(mDrawerToggle.getDrawerArrowDrawable(), "progress", enableArrow ? 1f : 0f);
     animator.addListener(new Animator.AnimatorListener() {
-          @Override public void onAnimationStart(Animator animator) {
-            if (!enableArrow) {
-              enableDrawerIndicator();
-            }
-          }
+      @Override public void onAnimationStart(Animator animator) {
+        if (getFragmentManager().getBackStackEntryCount() <= 0) {
+          enableDrawerIndicator();
+        }
+      }
 
-          @Override public void onAnimationEnd(Animator animator) {
-            if (enableArrow) {
-              disableDrawerIndicator();
-            }
-          }
+      @Override public void onAnimationEnd(Animator animator) {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+          disableDrawerIndicator();
+        }
+      }
 
-          @Override public void onAnimationCancel(Animator animator) {
+      @Override public void onAnimationCancel(Animator animator) {
 
-          }
+      }
 
-          @Override public void onAnimationRepeat(Animator animator) {
+      @Override public void onAnimationRepeat(Animator animator) {
 
-          }
-        });
+      }
+    });
     animator.setDuration(150).start();
   }
 
@@ -232,5 +232,12 @@ public final class MainActivity extends AppCompatActivity
       mView.drawer.closeDrawers();
     }
     super.onBackPressed();
+  }
+
+  private void clearBackStack() {
+    FragmentManager fm = getFragmentManager();
+    for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+      fm.popBackStack();
+    }
   }
 }
