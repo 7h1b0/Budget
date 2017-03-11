@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
+import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
+import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.model.TransactionItem;
 import com.th1b0.budget.util.ConfirmDeletionDialog;
@@ -37,15 +40,18 @@ public final class TransactionFragment
     return fragment;
   }
 
-  public static TransactionFragment newInstance(int year, int month, long idBudget) {
+  public static TransactionFragment newInstance(@Nullable String title, int year, int month, long idBudget) {
     TransactionFragment fragment = new TransactionFragment();
     Bundle args = new Bundle();
+    args.putString(Budget.TITLE, title);
     args.putInt(Transaction.YEAR, year);
     args.putInt(Transaction.MONTH, month);
     args.putLong(Transaction.ID_BUDGET, idBudget);
     fragment.setArguments(args);
     return fragment;
   }
+
+
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -138,14 +144,24 @@ public final class TransactionFragment
         v -> startActivity(TransactionFormActivity.newInstance(getActivity())));
   }
 
+  private void initializeToolbar(@Nullable String title) {
+    if (getParentFragment() == null) {
+      Toolbar toolbar = (Toolbar) getActivity();
+      toolbar.setToolbarTitle(title);
+    }
+  }
+
   private void loadTransactions() {
     if (isDetailBudget()) {
+      initializeToolbar(getArguments().getString(Budget.TITLE));
       mPresenter.loadTransaction(getArguments().getInt(Transaction.YEAR),
           getArguments().getInt(Transaction.MONTH), getArguments().getLong(Transaction.ID_BUDGET));
     } else if (isDetailMonth()) {
+      initializeToolbar(getString(R.string.transactions));
       mPresenter.loadTransaction(getArguments().getInt(Transaction.YEAR),
           getArguments().getInt(Transaction.MONTH));
     } else {
+      initializeToolbar(getString(R.string.transactions));
       mPresenter.loadTransaction();
     }
   }

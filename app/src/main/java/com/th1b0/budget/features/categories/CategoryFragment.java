@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
 import com.th1b0.budget.features.categoryform.CategoryFormActivity;
+import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.ConfirmDeletionDialog;
 import com.th1b0.budget.util.DataManager;
@@ -38,6 +39,7 @@ public final class CategoryFragment extends FragmentRecycler<CategoryPresenter, 
 
     initializeRecycler();
     initializeFAB();
+    initializeToolbar();
 
     mPresenter.attach(this);
     mPresenter.loadCategory();
@@ -97,5 +99,10 @@ public final class CategoryFragment extends FragmentRecycler<CategoryPresenter, 
   private void initializeFAB() {
     mView.fab.setOnClickListener(
         v -> startActivity(CategoryFormActivity.newInstance(getActivity())));
+  }
+
+  private void initializeToolbar() {
+    Toolbar toolbar = (Toolbar) getActivity();
+    toolbar.setToolbarTitle(getString(R.string.categories));
   }
 }

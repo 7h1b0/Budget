@@ -110,7 +110,7 @@ public final class BudgetMonthFragment extends Fragment
     // set title budget.getTitle()
     getActivity().getFragmentManager()
         .beginTransaction()
-        .replace(R.id.frame_container, TransactionFragment.newInstance(getArguments().getInt(YEAR),
+        .replace(R.id.frame_container, TransactionFragment.newInstance(budget.getTitle(), getArguments().getInt(YEAR),
             getArguments().getInt(MONTH), budget.getId()))
         .addToBackStack("TransactionFragment")
         .commit();

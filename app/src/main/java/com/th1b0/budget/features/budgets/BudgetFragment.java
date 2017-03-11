@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
 import com.th1b0.budget.features.budgetform.BudgetFormActivity;
+import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.ConfirmDeletionDialog;
 import com.th1b0.budget.util.DataManager;
@@ -41,6 +42,7 @@ public final class BudgetFragment
 
     initializeRecycler();
     initializeFAB();
+    initializeToolbar();
 
     mPresenter.attach(this);
     mPresenter.loadBudgets();
@@ -66,6 +68,11 @@ public final class BudgetFragment
   private void initializeFAB() {
     mView.fab.setOnClickListener(
         v -> startActivity(BudgetFormActivity.newInstance(getActivity())));
+  }
+
+  private void initializeToolbar() {
+    Toolbar toolbar = (Toolbar) getActivity();
+    toolbar.setToolbarTitle(getString(R.string.budgets));
   }
 
   @Override public void onBudgetsLoaded(@NonNull ArrayList<Budget> budgets) {

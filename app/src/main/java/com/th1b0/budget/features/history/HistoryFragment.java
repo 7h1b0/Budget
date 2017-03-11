@@ -13,12 +13,15 @@ import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.View;
 import com.th1b0.budget.R;
+import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.util.DataManager;
+import com.th1b0.budget.util.DateUtil;
 import com.th1b0.budget.util.FragmentRecycler;
 import com.th1b0.budget.util.SimpleItemAdapter;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by 7h1b0.
@@ -44,6 +47,7 @@ public final class HistoryFragment
 
     initializeRecycler();
     initializeFAB();
+    initializeToolbar();
 
     mPresenter.attach(this);
     mPresenter.loadHistory();
@@ -57,6 +61,11 @@ public final class HistoryFragment
 
   private void initializeFAB() {
     mView.fab.setVisibility(View.GONE);
+  }
+
+  private void initializeToolbar() {
+    Toolbar toolbar = (Toolbar) getActivity();
+    toolbar.setToolbarTitle(getString(R.string.history));
   }
 
   @Override public void onHistoryLoaded(@NonNull ArrayList<PresentationHistory> histories) {
@@ -74,10 +83,11 @@ public final class HistoryFragment
   }
 
   @Override public void onSimpleItemClick(@NonNull PresentationHistory history) {
+    String title = DateUtil.formatDate(history.getYear(), history.getMonth());
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      displayFragmentWithAnimation(PagerFragment.newInstance(history.getMonth(), history.getYear()));
+      displayFragmentWithAnimation(PagerFragment.newInstance(title, history.getMonth(), history.getYear()));
     } else {
-      displayFragment(PagerFragment.newInstance(history.getMonth(), history.getYear()));
+      displayFragment(PagerFragment.newInstance(title, history.getMonth(), history.getYear()));
     }
   }
 

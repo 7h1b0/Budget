@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentPagerBinding;
 import com.th1b0.budget.features.budgetmonth.BudgetMonthFragment;
+import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.model.PresentationBalance;
 import com.th1b0.budget.util.DataManager;
@@ -27,19 +28,25 @@ public final class PagerFragment extends Fragment
 
   public static final String YEAR = "year";
   public static final String MONTH = "month";
+  public static final String TITLE = "title";
 
   private PagerPresenter mPresenter;
   private FragmentPagerBinding mView;
 
   public static PagerFragment newInstance() {
-    return newInstance(DateUtil.getCurrentMonth(), DateUtil.getCurrentYear());
+    return newInstance(null, DateUtil.getCurrentMonth(), DateUtil.getCurrentYear());
   }
 
   public static PagerFragment newInstance(int month, int year) {
+    return newInstance(null, month, year);
+  }
+
+  public static PagerFragment newInstance(@Nullable String title, int month, int year) {
     PagerFragment fragment = new PagerFragment();
     Bundle args = new Bundle();
     args.putInt(YEAR, year);
     args.putInt(MONTH, month);
+    args.putString(TITLE, title);
     fragment.setArguments(args);
     return fragment;
   }
@@ -66,6 +73,8 @@ public final class PagerFragment extends Fragment
     int month = getArguments().getInt(MONTH);
     int year = getArguments().getInt(YEAR);
 
+    initializeToolbar(getArguments().getString(TITLE));
+
     mView.viewpager.setAdapter(getPagerAdapter(year, month));
     mView.tabs.setupWithViewPager(mView.viewpager);
 
@@ -76,6 +85,11 @@ public final class PagerFragment extends Fragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     mPresenter.detach();
+  }
+
+  private void initializeToolbar(@Nullable String title) {
+    Toolbar toolbar = (Toolbar) getActivity();
+    toolbar.setToolbarTitle(title);
   }
 
   @Override public void onBalanceLoaded(@NonNull PresentationBalance balance) {

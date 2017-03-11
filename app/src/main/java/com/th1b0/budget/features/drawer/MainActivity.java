@@ -108,7 +108,7 @@ public final class MainActivity extends AppCompatActivity
   }
 
   private void display(@NonNull Fragment fragment, CharSequence title) {
-    setToolbarTitle(title);
+    //setToolbarTitle(title);
     displayFragment(fragment);
   }
 
@@ -124,10 +124,7 @@ public final class MainActivity extends AppCompatActivity
 
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     mView.drawer.closeDrawers();
-
-    if (getFragmentManager().getBackStackEntryCount() > 0) {
-      clearBackStack();
-    }
+    clearBackStack();
 
     switch (item.getItemId()) {
       case R.id.home:
@@ -176,14 +173,14 @@ public final class MainActivity extends AppCompatActivity
     ArrayList<Category> categories = new ArrayList<>(5);
     categories.add(
         new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food), R.mipmap.ic_food));
-    categories.add(new Category(getString(R.string.diner), ContextCompat.getColor(this, R.color.category_diner),
-        R.mipmap.ic_diner));
-    categories.add(new Category(getString(R.string.hobby), ContextCompat.getColor(this, R.color.category_hobby),
-        R.mipmap.ic_hobby));
-    categories.add(new Category(getString(R.string.shopping), ContextCompat.getColor(this, R.color.category_shopping),
-        R.mipmap.ic_shopping));
-    categories.add(new Category(getString(R.string.transport), ContextCompat.getColor(this, R.color.category_transport),
-        R.mipmap.ic_transport));
+    categories.add(
+        new Category(getString(R.string.diner), ContextCompat.getColor(this, R.color.category_diner), R.mipmap.ic_diner));
+    categories.add(
+        new Category(getString(R.string.hobby), ContextCompat.getColor(this, R.color.category_hobby), R.mipmap.ic_hobby));
+    categories.add(
+        new Category(getString(R.string.shopping), ContextCompat.getColor(this, R.color.category_shopping), R.mipmap.ic_shopping));
+    categories.add(
+        new Category(getString(R.string.transport), ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
 
     DataManager.getInstance(this).initializeDatabase(budgets, categories);
   }
