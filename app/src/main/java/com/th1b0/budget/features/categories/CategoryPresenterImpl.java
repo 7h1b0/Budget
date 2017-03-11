@@ -13,8 +13,8 @@ import rx.schedulers.Schedulers;
 
 final class CategoryPresenterImpl extends PresenterImpl<CategoryView> implements CategoryPresenter {
 
-  CategoryPresenterImpl(@NonNull CategoryView view, @NonNull DataManager dataManager) {
-    super(view, dataManager);
+  CategoryPresenterImpl(@NonNull DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void loadCategory() {

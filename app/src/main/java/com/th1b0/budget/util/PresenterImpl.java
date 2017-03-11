@@ -11,18 +11,21 @@ import rx.subscriptions.CompositeSubscription;
 
 public abstract class PresenterImpl<T> {
 
-  private final WeakReference<T> mView;
+  private WeakReference<T> mView;
   protected final DataManager mDataManager;
   protected final CompositeSubscription mSubscription;
 
-  public PresenterImpl(@NonNull final T view, @NonNull final DataManager dataManager) {
-    mView = new WeakReference<>(view);
+  public PresenterImpl(@NonNull final DataManager dataManager) {
     mDataManager = dataManager;
     mSubscription = new CompositeSubscription();
   }
 
   @Nullable protected T getView() {
     return mView.get();
+  }
+
+  public void attach(@NonNull final T view) {
+    mView = new WeakReference<>(view);
   }
 
   public void detach() {

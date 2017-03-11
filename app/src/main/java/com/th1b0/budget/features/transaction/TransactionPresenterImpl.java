@@ -19,8 +19,8 @@ import rx.schedulers.Schedulers;
 final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
     implements TransactionPresenter {
 
-  TransactionPresenterImpl(@NonNull TransactionView view, @NonNull DataManager dataManager) {
-    super(view, dataManager);
+  TransactionPresenterImpl(@NonNull DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void loadTransaction() {

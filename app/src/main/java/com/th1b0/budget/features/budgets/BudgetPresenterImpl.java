@@ -14,8 +14,8 @@ import rx.schedulers.Schedulers;
 final class BudgetPresenterImpl extends PresenterImpl<BudgetView>
     implements BudgetPresenter {
 
-  BudgetPresenterImpl(@NonNull BudgetView view, @NonNull DataManager dataManager) {
-    super(view, dataManager);
+  BudgetPresenterImpl(@NonNull DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void loadBudgets() {

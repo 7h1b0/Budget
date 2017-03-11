@@ -16,9 +16,8 @@ import rx.schedulers.Schedulers;
 final class TransactionFormPresenterImpl extends PresenterImpl<TransactionFormView>
     implements TransactionFormPresenter {
 
-  TransactionFormPresenterImpl(@NonNull final TransactionFormView view,
-      @NonNull final DataManager dataManager) {
-    super(view, dataManager);
+  TransactionFormPresenterImpl(@NonNull final DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void addTransaction(@NonNull final Transaction transaction) {

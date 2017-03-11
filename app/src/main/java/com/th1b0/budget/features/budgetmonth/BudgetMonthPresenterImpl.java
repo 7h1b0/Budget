@@ -1,6 +1,6 @@
 package com.th1b0.budget.features.budgetmonth;
 
-import com.android.annotations.NonNull;
+import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.util.DataManager;
@@ -14,10 +14,11 @@ import rx.schedulers.Schedulers;
  * Created by 7h1b0
  */
 
-final class BudgetMonthPresenterImpl extends PresenterImpl<BudgetMonthView> implements BudgetMonthPresenter {
+final class BudgetMonthPresenterImpl extends PresenterImpl<BudgetMonthView> implements
+    BudgetMonthPresenter {
 
-  BudgetMonthPresenterImpl(@NonNull BudgetMonthView view, @NonNull DataManager dataManager) {
-    super(view, dataManager);
+  BudgetMonthPresenterImpl(@NonNull DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void loadBudgets(int month, int year) {

@@ -38,10 +38,6 @@
             android:name=".features.detailmonth.DetailMonthActivity"
             android:theme="@style/AppTheme"/>
 
-        <activity
-            android:name=".features.detailbudget.DetailBudgetActivity"
-            android:theme="@style/AppTheme"/>
-
     </application>
 
 </manifest>

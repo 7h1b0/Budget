@@ -1,9 +1,16 @@
 package com.th1b0.budget.features.history;
 
+import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.View;
 import com.th1b0.budget.R;
 import com.th1b0.budget.features.pager.PagerFragment;
@@ -28,7 +35,7 @@ public final class HistoryFragment
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new HistoryPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mPresenter = new HistoryPresenterImpl(DataManager.getInstance(getActivity()));
     mAdapter = new SimpleItemAdapter<>(this, true);
   }
 
@@ -38,9 +45,9 @@ public final class HistoryFragment
     initializeRecycler();
     initializeFAB();
 
+    mPresenter.attach(this);
     mPresenter.loadHistory();
   }
-
 
   private void initializeRecycler() {
     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -67,10 +74,29 @@ public final class HistoryFragment
   }
 
   @Override public void onSimpleItemClick(@NonNull PresentationHistory history) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      displayFragmentWithAnimation(PagerFragment.newInstance(history.getMonth(), history.getYear()));
+    } else {
+      displayFragment(PagerFragment.newInstance(history.getMonth(), history.getYear()));
+    }
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private void displayFragmentWithAnimation(@NonNull Fragment fragment) {
+    TransitionSet transitionSet = new TransitionSet();
+    transitionSet.addTransition(new Fade().addTarget(R.id.header).addTarget(R.id.tabs).setDuration(200));
+    transitionSet.addTransition(new Slide(Gravity.BOTTOM).addTarget(R.id.viewpager).setDuration(250));
+    transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
+
+    fragment.setExitTransition(new Fade(Fade.OUT).setDuration(200));
+    fragment.setEnterTransition(transitionSet);
+    displayFragment(fragment);
+  }
+
+  private void displayFragment(@NonNull Fragment fragment) {
     getFragmentManager().beginTransaction()
-        .replace(R.id.frame_container, PagerFragment.newInstance(history.getMonth(), history.getYear()))
+        .replace(R.id.frame_container, fragment)
         .addToBackStack("PagerFragment")
         .commit();
   }
 }
-

@@ -53,7 +53,8 @@ public final class TransactionFormActivity extends AppCompatActivity
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mView = DataBindingUtil.setContentView(this, R.layout.activity_transaction_form);
-    mPresenter = new TransactionFormPresenterImpl(this, DataManager.getInstance(this));
+    mPresenter = new TransactionFormPresenterImpl(DataManager.getInstance(this));
+    mPresenter.attach(this);
     mCategories = new ArrayList<>();
     mBudgets = new ArrayList<>();
 
@@ -246,7 +247,7 @@ public final class TransactionFormActivity extends AppCompatActivity
     mView.budget.setText(budget.getTitle());
   }
 
-  @Override public void onCategoriesLoaded(ArrayList<Category> categories) {
+  @Override public void onCategoriesLoaded(@NonNull ArrayList<Category> categories) {
     mCategories = categories;
 
     Category category;
@@ -270,7 +271,7 @@ public final class TransactionFormActivity extends AppCompatActivity
     updateBudget();
   }
 
-  @Override public void onBudgetsLoaded(ArrayList<Budget> budgets) {
+  @Override public void onBudgetsLoaded(@NonNull ArrayList<Budget> budgets) {
     mBudgets = budgets;
   }
 

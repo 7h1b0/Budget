@@ -8,7 +8,6 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
-import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.model.TransactionItem;
@@ -51,12 +50,13 @@ public final class TransactionFragment
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new TransactionPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mPresenter = new TransactionPresenterImpl( DataManager.getInstance(getActivity()));
     mAdapter = new TransactionAdapter(this);
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    mPresenter.attach(this);
 
     initializeRecycler();
     initializeFAB();

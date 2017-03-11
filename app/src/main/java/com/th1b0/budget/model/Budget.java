@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by 7h1b0.
  */
 
-public class Budget implements Parcelable, SimpleItem{
+public class Budget implements Parcelable, SimpleItem {
 
   public static final String BUDGETS = "budgets";
   public static final String BUDGET = "budget";

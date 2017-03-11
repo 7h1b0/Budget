@@ -38,7 +38,8 @@ public final class BudgetFormActivity extends AppCompatActivity implements Budge
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mView = DataBindingUtil.setContentView(this, R.layout.activity_budget_form);
-    mPresenter = new BudgetFormPresenterImpl(this, DataManager.getInstance(this));
+    mPresenter = new BudgetFormPresenterImpl(DataManager.getInstance(this));
+    mPresenter.attach(this);
 
     if (savedInstanceState != null) {
       mBudget = savedInstanceState.getParcelable(Budget.BUDGET);

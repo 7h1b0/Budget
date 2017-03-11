@@ -13,8 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.FragmentRecyclerWithoutFabBinding;
-import com.th1b0.budget.features.detailbudget.DetailBudgetActivity;
-import com.th1b0.budget.features.pager.PagerFragment;
+import com.th1b0.budget.features.transaction.TransactionFragment;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.util.DataManager;
 import java.util.ArrayList;
@@ -45,13 +44,14 @@ public final class BudgetMonthFragment extends Fragment
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new BudgetMonthPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mPresenter = new BudgetMonthPresenterImpl(DataManager.getInstance(getActivity()));
     mAdapter = new BudgetAdapter(this);
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    mView = DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_without_fab, container, false);
+    mView =
+        DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_without_fab, container, false);
     return mView.getRoot();
   }
 
@@ -68,6 +68,7 @@ public final class BudgetMonthFragment extends Fragment
     int year = getArguments().getInt(YEAR);
 
     mView.included.noItem.setVisibility(View.GONE);
+    mPresenter.attach(this);
     mPresenter.loadBudgets(month, year);
   }
 
@@ -106,7 +107,12 @@ public final class BudgetMonthFragment extends Fragment
   }
 
   @Override public void onClickBudget(@NonNull PresentationBudget budget) {
-    startActivity(DetailBudgetActivity.newInstance(getActivity(), getArguments().getInt(YEAR),
-        getArguments().getInt(MONTH), budget.getId(), budget.getTitle()));
+    // set title budget.getTitle()
+    getActivity().getFragmentManager()
+        .beginTransaction()
+        .replace(R.id.frame_container, TransactionFragment.newInstance(getArguments().getInt(YEAR),
+            getArguments().getInt(MONTH), budget.getId()))
+        .addToBackStack("TransactionFragment")
+        .commit();
   }
 }

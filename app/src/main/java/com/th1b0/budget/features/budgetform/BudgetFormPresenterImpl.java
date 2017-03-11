@@ -11,10 +11,11 @@ import rx.schedulers.Schedulers;
  * Created by 7h1b0.
  */
 
-final class BudgetFormPresenterImpl extends PresenterImpl<BudgetFormView> implements BudgetFormPresenter {
+final class BudgetFormPresenterImpl extends PresenterImpl<BudgetFormView> implements
+    BudgetFormPresenter {
 
-  BudgetFormPresenterImpl(@NonNull final BudgetFormView view, @NonNull final DataManager dataManager) {
-    super(view, dataManager);
+  BudgetFormPresenterImpl(@NonNull final DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void addBudget(@NonNull final Budget budget) {

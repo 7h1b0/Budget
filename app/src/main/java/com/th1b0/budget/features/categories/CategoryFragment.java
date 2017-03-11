@@ -29,7 +29,7 @@ public final class CategoryFragment extends FragmentRecycler<CategoryPresenter, 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new CategoryPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mPresenter = new CategoryPresenterImpl(DataManager.getInstance(getActivity()));
     mAdapter = new CategoryAdapter(this);
   }
 
@@ -39,6 +39,7 @@ public final class CategoryFragment extends FragmentRecycler<CategoryPresenter, 
     initializeRecycler();
     initializeFAB();
 
+    mPresenter.attach(this);
     mPresenter.loadCategory();
   }
 

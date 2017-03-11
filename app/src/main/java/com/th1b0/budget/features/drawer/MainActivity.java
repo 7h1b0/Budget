@@ -116,7 +116,7 @@ public final class MainActivity extends AppCompatActivity
     getFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
   }
 
-  private void setToolbarTitle(CharSequence title) {
+  public void setToolbarTitle(CharSequence title) {
     if (getSupportActionBar() != null) {
       getSupportActionBar().setTitle(title);
     }

@@ -47,7 +47,7 @@ public final class PagerFragment extends Fragment
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new PagerPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mPresenter = new PagerPresenterImpl(DataManager.getInstance(getActivity()));
   }
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +69,7 @@ public final class PagerFragment extends Fragment
     mView.viewpager.setAdapter(getPagerAdapter(year, month));
     mView.tabs.setupWithViewPager(mView.viewpager);
 
+    mPresenter.attach(this);
     mPresenter.loadBalance(month, year);
   }
 

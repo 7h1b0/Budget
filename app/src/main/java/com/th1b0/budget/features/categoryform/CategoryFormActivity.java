@@ -19,7 +19,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -57,7 +56,8 @@ public final class CategoryFormActivity extends AppCompatActivity
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mView = DataBindingUtil.setContentView(this, R.layout.activity_category_form);
-    mPresenter = new CategoryFormPresenterImpl(this, DataManager.getInstance(this));
+    mPresenter = new CategoryFormPresenterImpl(DataManager.getInstance(this));
+    mPresenter.attach(this);
     mBudgets = new ArrayList<>();
 
     if (savedInstanceState != null) {

@@ -32,7 +32,7 @@ public final class BudgetFragment
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    mPresenter = new BudgetPresenterImpl(this, DataManager.getInstance(getActivity()));
+    mPresenter = new BudgetPresenterImpl(DataManager.getInstance(getActivity()));
     mAdapter = new SimpleItemAdapter<>(this);
   }
 
@@ -42,6 +42,7 @@ public final class BudgetFragment
     initializeRecycler();
     initializeFAB();
 
+    mPresenter.attach(this);
     mPresenter.loadBudgets();
   }
 

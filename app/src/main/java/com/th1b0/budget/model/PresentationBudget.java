@@ -51,4 +51,26 @@ public class PresentationBudget {
   public void setOut(double out) {
     this.out = out;
   }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PresentationBudget that = (PresentationBudget) o;
+
+    if (Double.compare(that.value, value) != 0) return false;
+    if (Double.compare(that.out, out) != 0) return false;
+    return title != null ? title.equals(that.title) : that.title == null;
+  }
+
+  @Override public int hashCode() {
+    int result;
+    long temp;
+    result = title != null ? title.hashCode() : 0;
+    temp = Double.doubleToLongBits(value);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(out);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
 }

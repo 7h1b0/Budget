@@ -1,13 +1,10 @@
 package com.th1b0.budget.features.pager;
 
 import android.support.annotation.NonNull;
-import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.PresentationBalance;
-import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.PresenterImpl;
-import java.util.ArrayList;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -17,8 +14,8 @@ import rx.schedulers.Schedulers;
 
 final class PagerPresenterImpl extends PresenterImpl<PagerView> implements PagerPresenter {
 
-  PagerPresenterImpl(@NonNull PagerView view, @NonNull DataManager dataManager) {
-    super(view, dataManager);
+  PagerPresenterImpl(@NonNull DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void loadBalance(int month, int year) {

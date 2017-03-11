@@ -16,7 +16,7 @@ import com.th1b0.budget.databinding.FragmentRecyclerViewBinding;
  * Created by 7h1b0.
  */
 
-public abstract class FragmentRecycler<T extends Presenter, S> extends Fragment {
+public abstract class FragmentRecycler<T extends BasePresenter, S> extends Fragment {
 
   public static final int CONFIRM_DELETE = 2;
 

@@ -16,8 +16,8 @@ import rx.schedulers.Schedulers;
 final class CategoryFormPresenterImpl extends PresenterImpl<CategoryFormView>
     implements CategoryFormPresenter {
 
-  CategoryFormPresenterImpl(@NonNull final CategoryFormView view, @NonNull final DataManager dataManager) {
-    super(view, dataManager);
+  CategoryFormPresenterImpl(@NonNull final DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void addCategory(@NonNull final Category category) {

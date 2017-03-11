@@ -12,8 +12,8 @@ import rx.schedulers.Schedulers;
 
 final class HistoryPresenterImpl extends PresenterImpl<HistoryView> implements HistoryPresenter {
 
-  HistoryPresenterImpl(@NonNull HistoryView view, @NonNull DataManager dataManager) {
-    super(view, dataManager);
+  HistoryPresenterImpl(@NonNull DataManager dataManager) {
+    super(dataManager);
   }
 
   @Override public void loadHistory() {
