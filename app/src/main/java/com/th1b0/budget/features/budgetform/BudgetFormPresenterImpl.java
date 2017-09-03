@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.PresenterImpl;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 7h1b0.

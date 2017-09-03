@@ -6,12 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
-import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.SqlBrite;
+import com.squareup.sqlbrite2.BriteDatabase;
+import com.squareup.sqlbrite2.SqlBrite;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Transaction;
-import rx.schedulers.Schedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by 7h1b0.
@@ -29,7 +29,7 @@ abstract class Database extends SQLiteOpenHelper {
 
   Database(@NonNull Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    SqlBrite sqlBrite = SqlBrite.create();
+    SqlBrite sqlBrite = new SqlBrite.Builder().build();
     db = sqlBrite.wrapDatabaseHelper(this, Schedulers.io());
   }
 

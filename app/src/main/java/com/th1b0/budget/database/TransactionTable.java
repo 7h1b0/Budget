@@ -8,8 +8,8 @@ import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
+import io.reactivex.Observable;
 import java.util.ArrayList;
-import rx.Observable;
 
 /**
  * Created by 7h1b0.

@@ -2,15 +2,15 @@ package com.th1b0.budget.database;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.squareup.sqlbrite.BriteDatabase;
+import com.squareup.sqlbrite2.BriteDatabase;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DbUtil;
+import io.reactivex.Observable;
 import java.util.ArrayList;
-import rx.Observable;
 
 import static com.th1b0.budget.model.PresentationBudget.OUT;
 

@@ -26,10 +26,9 @@ import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.DataManager;
-import com.th1b0.budget.util.Logger;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 public final class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener, Toolbar {
@@ -40,7 +39,7 @@ public final class MainActivity extends AppCompatActivity
   public static final String TOOLBAR_TITLE = "toolbar_title";
 
   private ActivityMainBinding mView;
-  private Subscription mSubscription;
+  private Disposable mSubscription;
   private ActionBarDrawerToggle mDrawerToggle;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +87,7 @@ public final class MainActivity extends AppCompatActivity
   @Override protected void onStop() {
     super.onStop();
     if (mSubscription != null) {
-      mSubscription.unsubscribe();
+      mSubscription.dispose();
     }
   }
 

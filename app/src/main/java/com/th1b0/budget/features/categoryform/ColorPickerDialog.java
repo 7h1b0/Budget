@@ -12,12 +12,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.util.Log;
-import com.jakewharton.rxbinding.widget.RxSeekBar;
+import com.jakewharton.rxbinding2.widget.RxSeekBar;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.DialogColorPickerBinding;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by 7h1b0.
@@ -28,7 +28,7 @@ public final class ColorPickerDialog extends DialogFragment {
 
   private int mCurrentColor;
   private DialogColorPickerBinding mView;
-  private CompositeSubscription mSubscription;
+  private CompositeDisposable mSubscription;
   private OnColorSet mListener;
 
   public interface OnColorSet {
@@ -54,7 +54,7 @@ public final class ColorPickerDialog extends DialogFragment {
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mSubscription = new CompositeSubscription();
+    mSubscription = new CompositeDisposable();
   }
 
   @Override public Dialog onCreateDialog(Bundle savedInstanceState) {

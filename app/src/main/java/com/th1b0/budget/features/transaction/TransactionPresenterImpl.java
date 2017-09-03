@@ -7,10 +7,10 @@ import com.th1b0.budget.model.TransactionItem;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DateUtil;
 import com.th1b0.budget.util.PresenterImpl;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by 7h1b0.
@@ -43,7 +43,7 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
 
   @Override public void loadTransaction(int year, int month, long idBudget) {
     mSubscription.add(mDataManager.getTransactions(year, month, idBudget)
-        .map((Func1<ArrayList<Transaction>, ArrayList<TransactionItem>>) ArrayList::new)
+        .map((Function<ArrayList<Transaction>, ArrayList<TransactionItem>>) ArrayList::new)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(transactions -> {
@@ -61,7 +61,7 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
 
   @Override public void loadTransaction(int year, int month) {
     mSubscription.add(mDataManager.getTransactions(year, month)
-        .map((Func1<ArrayList<Transaction>, ArrayList<TransactionItem>>) ArrayList::new)
+        .map((Function<ArrayList<Transaction>, ArrayList<TransactionItem>>) ArrayList::new)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(transactions -> {
