@@ -81,7 +81,7 @@ final class TransactionPresenterImpl extends PresenterImpl<TransactionView>
     mSubscription.add(mDataManager.deleteTransaction(transaction)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(transactions -> {
+        .subscribe(() -> {
         }, error -> {
           TransactionView view = getView();
           if (view != null) {

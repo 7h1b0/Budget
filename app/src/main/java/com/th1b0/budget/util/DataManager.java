@@ -11,7 +11,10 @@ import com.th1b0.budget.model.Category;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.model.Transaction;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import java.util.ArrayList;
 
 /**
@@ -52,16 +55,16 @@ public final class DataManager {
     return mTransactionTable.getAll(year, month, idBudget);
   }
 
-  public Observable<Integer> updateTransaction(@NonNull final Transaction transaction) {
-    return Observable.just(transaction).map(mTransactionTable::update);
+  public Single<Integer> updateTransaction(@NonNull final Transaction transaction) {
+    return Single.fromCallable(() -> mTransactionTable.update(transaction));
   }
 
-  public Observable<Long> addTransaction(@NonNull final Transaction transaction) {
-    return Observable.just(transaction).map(mTransactionTable::add);
+  public Single<Long> addTransaction(@NonNull final Transaction transaction) {
+    return Single.fromCallable(() -> mTransactionTable.add(transaction));
   }
 
-  public Observable<Integer> deleteTransaction(@NonNull final Transaction transaction) {
-    return Observable.just(transaction).map(mTransactionTable::delete);
+  public Completable deleteTransaction(@NonNull final Transaction transaction) {
+    return Completable.fromAction(() -> mTransactionTable.delete(transaction));
   }
 
   public Observable<ArrayList<PresentationBudget>> getBudgets(int month, int year) {
@@ -76,17 +79,16 @@ public final class DataManager {
     return mCategoryTable.getAll();
   }
 
-  public Observable<Long> addCategory(@NonNull final Category category) {
-    return Observable.just(category).map(mCategoryTable::add);
+  public Single<Long> addCategory(@NonNull final Category category) {
+    return Single.fromCallable(() -> mCategoryTable.add(category));
   }
 
-  public Observable<Integer> updateCategory(@NonNull final Category category) {
-    return Observable.just(category).map(mCategoryTable::update);
+  public Single<Integer> updateCategory(@NonNull final Category category) {
+    return Single.fromCallable(() -> mCategoryTable.update(category));
   }
 
-  public Observable<Integer> deleteCategory(@NonNull Category category) {
-    return Observable.just(category)
-        .map(mCategoryTable::delete)
+  public Maybe<Integer> deleteCategory(@NonNull Category category) {
+    return Single.fromCallable(() -> mCategoryTable.delete(category))
         .filter(rows -> rows > 0)
         .map(ignored -> mTransactionTable.delete(category));
   }
@@ -95,22 +97,20 @@ public final class DataManager {
     return mBudgetTable.getAll();
   }
 
-  public Observable<Long> addBudget(@NonNull final Budget budget) {
-    return Observable.just(budget).map(mBudgetTable::add);
+  public Single<Long> addBudget(@NonNull final Budget budget) {
+    return Single.fromCallable(() -> mBudgetTable.add(budget));
   }
 
-  public Observable<Integer> updateBudget(@NonNull final Budget budget) {
-    return Observable.just(budget).map(mBudgetTable::update);
+  public Single<Integer> updateBudget(@NonNull final Budget budget) {
+    return Single.fromCallable(() -> mBudgetTable.update(budget));
   }
 
-  public Observable<Void> deleteBudget(@NonNull Budget budget) {
-    return Observable.just(budget)
-        .map(mBudgetTable::delete)
+  public Maybe<Long> deleteBudget(@NonNull Budget budget) {
+    return Single.fromCallable(() -> mBudgetTable.delete(budget))
         .filter(rows -> rows > 0)
         .map(ignored -> budget.getId())
-        .doOnNext(mCategoryTable::removeIdBudget)
-        .doOnNext(mTransactionTable::removeIdBudget)
-        .flatMap(ignored -> Observable.empty());
+        .doOnSuccess(mCategoryTable::removeIdBudget)
+        .doOnSuccess(mTransactionTable::removeIdBudget);
   }
 
   public void initializeDatabase(ArrayList<Budget> budgets, ArrayList<Category> categories) {
@@ -119,6 +119,9 @@ public final class DataManager {
 
   public Observable<Boolean> isDatabaseEmpty() {
     return Observable.combineLatest(mCategoryTable.isEmpty(), mTransactionTable.isEmpty(),
-        (isCategoryEmpty, isTransactionEmpty) -> isCategoryEmpty != null && isCategoryEmpty && isTransactionEmpty != null && isTransactionEmpty);
+        (isCategoryEmpty, isTransactionEmpty) -> isCategoryEmpty != null
+            && isCategoryEmpty
+            && isTransactionEmpty != null
+            && isTransactionEmpty);
   }
 }
