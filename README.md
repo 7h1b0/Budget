@@ -1,4 +1,5 @@
-#Budget
+# Budget
+
 An Android application for budget management
 
 <p align="center">
