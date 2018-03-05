@@ -12,10 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.th1b0.budget.R;
+import com.th1b0.budget.databinding.FragmentPagerBinding;
 import com.th1b0.budget.databinding.FragmentRecyclerWithoutFabBinding;
+import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.features.transaction.TransactionFragment;
+import com.th1b0.budget.model.PresentationBalance;
 import com.th1b0.budget.model.PresentationBudget;
 import com.th1b0.budget.util.DataManager;
+import com.th1b0.budget.util.DateUtil;
 import java.util.ArrayList;
 
 /**
@@ -27,16 +31,26 @@ public final class BudgetMonthFragment extends Fragment
 
   public static final String YEAR = "year";
   public static final String MONTH = "month";
+  public static final String TITLE = "title";
 
   private BudgetMonthPresenter mPresenter;
   private BudgetAdapter mAdapter;
-  private FragmentRecyclerWithoutFabBinding mView;
+  private FragmentPagerBinding mView;
 
-  public static BudgetMonthFragment newInstance(int year, int month) {
+  public static BudgetMonthFragment newInstance() {
+    return newInstance(null, DateUtil.getCurrentMonth(), DateUtil.getCurrentYear());
+  }
+
+  public static BudgetMonthFragment newInstance(int month, int year) {
+    return newInstance(null, month, year);
+  }
+
+  public static BudgetMonthFragment newInstance(String title, int month, int year) {
     BudgetMonthFragment fragment = new BudgetMonthFragment();
     Bundle args = new Bundle();
     args.putInt(YEAR, year);
     args.putInt(MONTH, month);
+    args.putString(TITLE, title);
     fragment.setArguments(args);
     return fragment;
   }
@@ -50,8 +64,7 @@ public final class BudgetMonthFragment extends Fragment
 
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    mView =
-        DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_without_fab, container, false);
+    mView = DataBindingUtil.inflate(inflater, R.layout.fragment_pager, container, false);
     return mView.getRoot();
   }
 
@@ -62,6 +75,7 @@ public final class BudgetMonthFragment extends Fragment
       throw new IllegalStateException("Missing arguments. Please use newInstance()");
     }
 
+    initializeToolbar(getArguments().getString(TITLE));
     initializeRecycler();
 
     int month = getArguments().getInt(MONTH);
@@ -70,11 +84,17 @@ public final class BudgetMonthFragment extends Fragment
     mView.included.noItem.setVisibility(View.GONE);
     mPresenter.attach(this);
     mPresenter.loadBudgets(month, year);
+    mPresenter.loadBalance(month, year);
   }
 
   @Override public void onDestroyView() {
     super.onDestroyView();
     mPresenter.detach();
+  }
+
+  private void initializeToolbar(@Nullable String title) {
+    Toolbar toolbar = (Toolbar) getActivity();
+    toolbar.setToolbarTitle(title);
   }
 
   @Override public void onBudgetLoaded(@NonNull ArrayList<PresentationBudget> budgets) {
@@ -85,6 +105,12 @@ public final class BudgetMonthFragment extends Fragment
     } else {
       mView.included.noItem.setVisibility(View.GONE);
     }
+  }
+
+  @Override public void onBalanceLoaded(@NonNull PresentationBalance balance) {
+    mView.balance.setText(getString(R.string.float_value, balance.getBalance()));
+    mView.incomes.setText(getString(R.string.float_value, balance.getIncomes()));
+    mView.expenses.setText(getString(R.string.float_value, balance.getExpenses()));
   }
 
   @Override public void onError(@Nullable String error) {
@@ -110,8 +136,9 @@ public final class BudgetMonthFragment extends Fragment
     // set title budget.getTitle()
     getActivity().getFragmentManager()
         .beginTransaction()
-        .replace(R.id.frame_container, TransactionFragment.newInstance(budget.getTitle(), getArguments().getInt(YEAR),
-            getArguments().getInt(MONTH), budget.getId()))
+        .replace(R.id.frame_container,
+            TransactionFragment.newInstance(budget.getTitle(), getArguments().getInt(YEAR),
+                getArguments().getInt(MONTH), budget.getId()))
         .addToBackStack("TransactionFragment")
         .commit();
   }

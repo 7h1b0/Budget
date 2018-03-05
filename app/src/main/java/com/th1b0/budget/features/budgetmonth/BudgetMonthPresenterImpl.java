@@ -2,7 +2,9 @@ package com.th1b0.budget.features.budgetmonth;
 
 import android.support.annotation.NonNull;
 import com.th1b0.budget.model.Budget;
+import com.th1b0.budget.model.PresentationBalance;
 import com.th1b0.budget.model.PresentationBudget;
+import com.th1b0.budget.model.Transaction;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.PresenterImpl;
 import io.reactivex.Observable;
@@ -44,6 +46,31 @@ final class BudgetMonthPresenterImpl extends PresenterImpl<BudgetMonthView> impl
                 view.onError(error.getMessage());
               }
             }));
+  }
+
+  @Override public void loadBalance(int month, int year) {
+    mSubscription.add(mDataManager.getTransactions(year, month).map(transactions -> {
+      double incomes = 0;
+      double expenses = 0;
+      for (Transaction transaction : transactions) {
+        if (transaction.getValue() >= 0) {
+          incomes += transaction.getValue();
+        } else {
+          expenses -= transaction.getValue();
+        }
+      }
+      return new PresentationBalance(incomes, expenses, incomes - expenses);
+    }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(balance -> {
+      BudgetMonthView view = getView();
+      if (view != null) {
+        view.onBalanceLoaded(balance);
+      }
+    }, error -> {
+      BudgetMonthView view = getView();
+      if (view != null) {
+        view.onError(error.getMessage());
+      }
+    }));
   }
 
   private void addEmptyBudgets(ArrayList<PresentationBudget> presentationBudgets,

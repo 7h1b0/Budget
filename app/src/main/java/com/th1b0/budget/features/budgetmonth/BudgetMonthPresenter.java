@@ -8,4 +8,6 @@ import com.th1b0.budget.util.BasePresenter;
 
 interface BudgetMonthPresenter extends BasePresenter<BudgetMonthView> {
   void loadBudgets(int year, int month);
+
+  void loadBalance(int month, int year);
 }

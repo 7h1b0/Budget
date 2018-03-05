@@ -13,8 +13,8 @@ import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.View;
 import com.th1b0.budget.R;
+import com.th1b0.budget.features.budgetmonth.BudgetMonthFragment;
 import com.th1b0.budget.features.drawer.Toolbar;
-import com.th1b0.budget.features.pager.PagerFragment;
 import com.th1b0.budget.model.PresentationHistory;
 import com.th1b0.budget.util.DataManager;
 import com.th1b0.budget.util.DateUtil;
@@ -84,17 +84,18 @@ public final class HistoryFragment
   @Override public void onSimpleItemClick(@NonNull PresentationHistory history) {
     String title = DateUtil.formatDate(history.getYear(), history.getMonth());
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      displayFragmentWithAnimation(PagerFragment.newInstance(title, history.getMonth(), history.getYear()));
+      displayFragmentWithAnimation(
+          BudgetMonthFragment.newInstance(title, history.getMonth(), history.getYear()));
     } else {
-      displayFragment(PagerFragment.newInstance(title, history.getMonth(), history.getYear()));
+      displayFragment(BudgetMonthFragment.newInstance(title, history.getMonth(), history.getYear()));
     }
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   private void displayFragmentWithAnimation(@NonNull Fragment fragment) {
     TransitionSet transitionSet = new TransitionSet();
-    transitionSet.addTransition(new Fade().addTarget(R.id.header).addTarget(R.id.tabs).setDuration(200));
-    transitionSet.addTransition(new Slide(Gravity.BOTTOM).addTarget(R.id.viewpager).setDuration(250));
+    //transitionSet.addTransition(new Fade().addTarget(R.id.header).addTarget(R.id.tabs).setDuration(200));
+    //transitionSet.addTransition(new Slide(Gravity.BOTTOM).addTarget(R.id.viewpager).setDuration(250));
     transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
 
     fragment.setExitTransition(new Fade(Fade.OUT).setDuration(200));
