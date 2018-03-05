@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import com.th1b0.budget.R;
 import java.util.ArrayList;
 
+import static android.support.v7.widget.RecyclerView.NO_POSITION;
+
 /**
  * Created by 7h1b0.
  */
@@ -30,8 +32,17 @@ final class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vie
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_icon, parent, false);
-    return new ViewHolder(v);
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_icon, parent, false);
+    ViewHolder vh = new ViewHolder(view);
+
+    view.setOnClickListener(v -> {
+      final int position = vh.getAdapterPosition();
+      if (position != NO_POSITION) {
+        mListener.onIconSelected(mIcons.get(position));
+      }
+    });
+
+    return vh;
   }
 
   @Override public void onBindViewHolder(ViewHolder viewHolder, int position) {
@@ -52,9 +63,7 @@ final class IconPickerAdapter extends RecyclerView.Adapter<IconPickerAdapter.Vie
 
     ViewHolder(View v) {
       super(v);
-
-      icon = (ImageView) v.findViewById(R.id.icon);
-      v.setOnClickListener(view -> mListener.onIconSelected(mIcons.get(getLayoutPosition())));
+      icon = v.findViewById(R.id.icon);
     }
   }
 }

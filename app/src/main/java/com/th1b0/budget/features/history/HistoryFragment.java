@@ -21,7 +21,6 @@ import com.th1b0.budget.util.DateUtil;
 import com.th1b0.budget.util.FragmentRecycler;
 import com.th1b0.budget.util.SimpleItemAdapter;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by 7h1b0.

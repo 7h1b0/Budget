@@ -3,13 +3,9 @@ package com.th1b0.budget.features.categoryform;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -19,8 +15,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import com.th1b0.budget.R;
 import com.th1b0.budget.databinding.ActivityCategoryFormBinding;
@@ -147,15 +141,7 @@ public final class CategoryFormActivity extends AppCompatActivity
   }
 
   private void updateColor() {
-    if (getSupportActionBar() != null) {
-      getSupportActionBar().setBackgroundDrawable(new ColorDrawable(mCategory.getColor()));
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      Window window = getWindow();
-      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      window.setStatusBarColor(darker(mCategory.getColor(), 0.8f));
-    }
+    mView.color.setColorFilter(mCategory.getColor());
   }
 
   private void updateIcon() {
@@ -169,16 +155,6 @@ public final class CategoryFormActivity extends AppCompatActivity
     if (position > -1) {
       mView.budget.setText(mBudgets.get(position).getTitle());
     }
-  }
-
-  private int darker(int color, @FloatRange(from = 0.0, to = 1.0) float factor) {
-    int a = Color.alpha(color);
-    int r = Color.red(color);
-    int g = Color.green(color);
-    int b = Color.blue(color);
-
-    return Color.argb(a, Math.max((int) (r * factor), 0), Math.max((int) (g * factor), 0),
-        Math.max((int) (b * factor), 0));
   }
 
   private boolean isFormValid() {

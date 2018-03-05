@@ -12,6 +12,8 @@ import com.th1b0.budget.R;
 import com.th1b0.budget.model.PresentationBudget;
 import java.util.ArrayList;
 
+import static android.support.v7.widget.RecyclerView.NO_POSITION;
+
 /**
  * Created by 7h1b0.
  */
@@ -21,6 +23,7 @@ final class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewBudget>
   interface OnClickBudget {
     void onClickBudget(@NonNull PresentationBudget budget);
   }
+
   private ArrayList<PresentationBudget> mItems;
   private OnClickBudget mListener;
 
@@ -33,7 +36,15 @@ final class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewBudget>
   @Override public BudgetAdapter.ViewBudget onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_budget, parent, false);
-    return new ViewBudget(view);
+    ViewBudget vh = new ViewBudget(view);
+
+    view.setOnClickListener(v -> {
+      final int position = vh.getAdapterPosition();
+      if (position != NO_POSITION) {
+        mListener.onClickBudget(mItems.get(position));
+      }
+    });
+    return vh;
   }
 
   @Override public void onBindViewHolder(BudgetAdapter.ViewBudget holder, int position) {
@@ -69,11 +80,9 @@ final class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewBudget>
 
     ViewBudget(View v) {
       super(v);
-      title = (TextView) v.findViewById(R.id.title);
-      value = (TextView) v.findViewById(R.id.value);
-      detail = (TextView) v.findViewById(R.id.detail);
-
-      v.setOnClickListener(view -> mListener.onClickBudget(mItems.get(getLayoutPosition())));
+      title = v.findViewById(R.id.title);
+      value = v.findViewById(R.id.value);
+      detail = v.findViewById(R.id.detail);
     }
   }
 

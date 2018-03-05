@@ -12,6 +12,8 @@ import com.th1b0.budget.R;
 import com.th1b0.budget.model.SimpleItem;
 import java.util.ArrayList;
 
+import static android.support.v7.widget.RecyclerView.NO_POSITION;
+
 /**
  * Created by 7h1b0.
  */
@@ -42,7 +44,16 @@ public final class SimpleItemAdapter<T extends SimpleItem>
   public SimpleItemAdapter.ViewContainer onCreateViewHolder(ViewGroup parent, int viewType) {
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container, parent, false);
-    return new ViewContainer(view);
+    ViewContainer vh = new ViewContainer(view);
+
+    view.setOnClickListener(v -> {
+      final int position = vh.getAdapterPosition();
+      if (position != NO_POSITION) {
+        mListener.onSimpleItemClick(mContainers.get(position));
+      }
+    });
+
+    return vh;
   }
 
   @Override public void onBindViewHolder(SimpleItemAdapter.ViewContainer holder, int position) {
@@ -76,10 +87,8 @@ public final class SimpleItemAdapter<T extends SimpleItem>
 
     ViewContainer(View v) {
       super(v);
-      value = (TextView) v.findViewById(R.id.value);
-      title = (TextView) v.findViewById(R.id.title);
-
-      v.setOnClickListener(view -> mListener.onSimpleItemClick(mContainers.get(getLayoutPosition())));
+      value = v.findViewById(R.id.value);
+      title = v.findViewById(R.id.title);
     }
   }
 

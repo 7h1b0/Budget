@@ -1,7 +1,6 @@
 package com.th1b0.budget.util;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
