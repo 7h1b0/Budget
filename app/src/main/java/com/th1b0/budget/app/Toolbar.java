@@ -1,4 +1,4 @@
-package com.th1b0.budget.features.drawer;
+package com.th1b0.budget.app;
 
 import android.support.annotation.Nullable;
 
@@ -9,5 +9,3 @@ import android.support.annotation.Nullable;
 public interface Toolbar {
   void setToolbarTitle(@Nullable CharSequence title);
 }
-
-

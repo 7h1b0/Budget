@@ -8,8 +8,9 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
+import com.th1b0.budget.app.MainActivity;
+import com.th1b0.budget.app.Toolbar;
 import com.th1b0.budget.features.categoryform.CategoryFormActivity;
-import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.model.Category;
 import com.th1b0.budget.util.ConfirmDeletionDialog;
 import com.th1b0.budget.util.DataManager;
@@ -81,7 +82,7 @@ public final class CategoryFragment extends FragmentRecycler<CategoryPresenter, 
       view.findViewById(R.id.delete).setVisibility(View.GONE);
     } else {
       view.findViewById(R.id.delete).setOnClickListener(v -> {
-        String title = getString(R.string.confirm_category_deletion_title);
+        String title = getString(R.string.confirm_deletion_title, category.getTitle());
         String msg = getString(R.string.confirm_category_deletion);
         ConfirmDeletionDialog.newInstance(title, msg, category, this, CONFIRM_DELETE)
             .show(getFragmentManager(), null);

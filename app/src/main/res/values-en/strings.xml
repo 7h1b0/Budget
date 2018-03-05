@@ -9,11 +9,9 @@
 
     <string name="error_occurred">An error occurred</string>
 
-    <string name="confirm_transaction_deletion_title">Delete this transaction ?</string>
-    <string name="confirm_category_deletion_title">Delete this category ?</string>
-    <string name="confirm_budget_deletion_title">Delete this budget ?</string>
+    <string name="confirm_deletion_title">Delete %1$s ?</string>
     <string name="confirm_transaction_deletion">This transaction will be deleted from your device</string>
-    <string name="confirm_category_deletion">This transaction will be deleted from your device</string>
+    <string name="confirm_category_deletion">This category will be deleted from your device</string>
     <string name="confirm_budget_deletion">This budget will be deleted from your device</string>
 
     <string name="no_budget">No budget</string>

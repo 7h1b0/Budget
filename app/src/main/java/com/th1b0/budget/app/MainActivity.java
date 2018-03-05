@@ -1,16 +1,12 @@
-package com.th1b0.budget.features.drawer;
+package com.th1b0.budget.app;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -31,7 +27,8 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 
 public final class MainActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener, Toolbar {
+    implements Toolbar, BottomNavigationView.OnNavigationItemSelectedListener,
+    FragmentManager.OnBackStackChangedListener {
 
   private static final String ACTION_ADD_BUDGET = "com.th1b0.budget.ADD_BUDGET";
   private static final String ACTION_ADD_TRANSACTION = "com.th1b0.budget.ADD_TRANSACTION";
@@ -40,7 +37,6 @@ public final class MainActivity extends AppCompatActivity
 
   private ActivityMainBinding mView;
   private Disposable mSubscription;
-  private ActionBarDrawerToggle mDrawerToggle;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.AppTheme);
@@ -48,10 +44,8 @@ public final class MainActivity extends AppCompatActivity
     mView = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
     initializeToolbar();
-    initializeNavigationView();
-    initializeDrawer();
+    initializeBottomNavigationView();
     handleFirstLaunch();
-
     getFragmentManager().addOnBackStackChangedListener(this);
 
     if (savedInstanceState == null) {
@@ -66,9 +60,7 @@ public final class MainActivity extends AppCompatActivity
 
         default:
       }
-      display(BudgetMonthFragment.newInstance(), null);
-    } else {
-      this.onBackStackChanged();
+      displayFragment(BudgetMonthFragment.newInstance());
     }
   }
 
@@ -95,20 +87,9 @@ public final class MainActivity extends AppCompatActivity
     setSupportActionBar(mView.included.toolbar);
   }
 
-  private void initializeNavigationView() {
-    mView.navigationView.setNavigationItemSelectedListener(this);
-  }
-
-  private void initializeDrawer() {
-    mDrawerToggle = new ActionBarDrawerToggle(this, mView.drawer, mView.included.toolbar, 0, 0);
-    mView.drawer.addDrawerListener(mDrawerToggle);
-    mDrawerToggle.syncState();
-    mDrawerToggle.setToolbarNavigationClickListener(v -> onBackPressed());
-  }
-
-  private void display(@NonNull Fragment fragment, CharSequence title) {
-    //setToolbarTitle(title);
-    displayFragment(fragment);
+  private void initializeBottomNavigationView() {
+    BottomNavigationView navigation = mView.navigation;
+    navigation.setOnNavigationItemSelectedListener(this);
   }
 
   private void displayFragment(@NonNull Fragment fragment) {
@@ -121,29 +102,40 @@ public final class MainActivity extends AppCompatActivity
     }
   }
 
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        FragmentManager fm = getFragmentManager();
+        fm.popBackStack();
+        return true;
+
+      default:
+        return false;
+    }
+  }
+
   @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-    mView.drawer.closeDrawers();
     clearBackStack();
 
     switch (item.getItemId()) {
       case R.id.home:
-        display(BudgetMonthFragment.newInstance(), null);
+        displayFragment(BudgetMonthFragment.newInstance());
         return true;
 
       case R.id.transactions:
-        display(TransactionFragment.newInstance(), item.getTitle());
+        displayFragment(TransactionFragment.newInstance());
         return true;
 
       case R.id.categories:
-        display(CategoryFragment.newInstance(), item.getTitle());
+        displayFragment(CategoryFragment.newInstance());
         return true;
 
       case R.id.budget:
-        display(BudgetFragment.newInstance(), item.getTitle());
+        displayFragment(BudgetFragment.newInstance());
         return true;
 
       case R.id.history:
-        display(HistoryFragment.newInstance(), item.getTitle());
+        displayFragment(HistoryFragment.newInstance());
         return true;
 
       default:
@@ -171,69 +163,31 @@ public final class MainActivity extends AppCompatActivity
 
     ArrayList<Category> categories = new ArrayList<>(5);
     categories.add(
-        new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food), R.mipmap.ic_food));
-    categories.add(
-        new Category(getString(R.string.diner), ContextCompat.getColor(this, R.color.category_diner), R.mipmap.ic_diner));
-    categories.add(
-        new Category(getString(R.string.hobby), ContextCompat.getColor(this, R.color.category_hobby), R.mipmap.ic_hobby));
-    categories.add(
-        new Category(getString(R.string.shopping), ContextCompat.getColor(this, R.color.category_shopping), R.mipmap.ic_shopping));
-    categories.add(
-        new Category(getString(R.string.transport), ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
+        new Category(getString(R.string.food), ContextCompat.getColor(this, R.color.category_food),
+            R.mipmap.ic_food));
+    categories.add(new Category(getString(R.string.diner),
+        ContextCompat.getColor(this, R.color.category_diner), R.mipmap.ic_diner));
+    categories.add(new Category(getString(R.string.hobby),
+        ContextCompat.getColor(this, R.color.category_hobby), R.mipmap.ic_hobby));
+    categories.add(new Category(getString(R.string.shopping),
+        ContextCompat.getColor(this, R.color.category_shopping), R.mipmap.ic_shopping));
+    categories.add(new Category(getString(R.string.transport),
+        ContextCompat.getColor(this, R.color.category_transport), R.mipmap.ic_transport));
 
     DataManager.getInstance(this).initializeDatabase(budgets, categories);
-  }
-
-  private void disableDrawerIndicator() {
-    mDrawerToggle.setDrawerIndicatorEnabled(false);
-    if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-  }
-
-  private void enableDrawerIndicator() {
-    if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-    mDrawerToggle.setDrawerIndicatorEnabled(true);
-  }
-
-  @Override public void onBackStackChanged() {
-    final boolean enableArrow = getFragmentManager().getBackStackEntryCount() > 0;
-
-    ObjectAnimator animator =
-        ObjectAnimator.ofFloat(mDrawerToggle.getDrawerArrowDrawable(), "progress", enableArrow ? 1f : 0f);
-    animator.addListener(new Animator.AnimatorListener() {
-      @Override public void onAnimationStart(Animator animator) {
-        if (getFragmentManager().getBackStackEntryCount() <= 0) {
-          enableDrawerIndicator();
-        }
-      }
-
-      @Override public void onAnimationEnd(Animator animator) {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-          disableDrawerIndicator();
-        }
-      }
-
-      @Override public void onAnimationCancel(Animator animator) {
-
-      }
-
-      @Override public void onAnimationRepeat(Animator animator) {
-
-      }
-    });
-    animator.setDuration(150).start();
-  }
-
-  @Override public void onBackPressed() {
-    if (mView.drawer.isDrawerOpen(GravityCompat.START)) {
-      mView.drawer.closeDrawers();
-    }
-    super.onBackPressed();
   }
 
   private void clearBackStack() {
     FragmentManager fm = getFragmentManager();
     for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
       fm.popBackStack();
+    }
+  }
+
+  @Override public void onBackStackChanged() {
+    final boolean enableArrow = getFragmentManager().getBackStackEntryCount() > 0;
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(enableArrow);
     }
   }
 }

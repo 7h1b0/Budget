@@ -1,35 +1,37 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         >
+
+        <include
+            layout="@layout/toolbar"
+            android:id="@+id/included"
+            />
 
         <FrameLayout
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-            <include
-                layout="@layout/toolbar"
-                android:id="@+id/included"
-                />
-
-        </FrameLayout>
-
-        <android.support.design.widget.NavigationView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/navigation_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/drawer_header"
-            app:menu="@menu/drawer"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/included"
+            android:layout_above="@+id/navigation"
             />
 
-    </android.support.v4.widget.DrawerLayout>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            android:background="?attr/backgroundItem"
+            app:menu="@menu/navigation"
+            />
+
+    </RelativeLayout>
+
 </layout>

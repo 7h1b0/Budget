@@ -9,8 +9,9 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
+import com.th1b0.budget.app.MainActivity;
+import com.th1b0.budget.app.Toolbar;
 import com.th1b0.budget.features.budgetform.BudgetFormActivity;
-import com.th1b0.budget.features.drawer.Toolbar;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.util.ConfirmDeletionDialog;
 import com.th1b0.budget.util.DataManager;
@@ -101,7 +102,7 @@ public final class BudgetFragment
     });
 
     view.findViewById(R.id.delete).setOnClickListener(v -> {
-      String title = getString(R.string.confirm_budget_deletion_title);
+      String title = getString(R.string.confirm_deletion_title, budget.getTitle());
       String msg = getString(R.string.confirm_budget_deletion);
       ConfirmDeletionDialog.newInstance(title, msg, budget, this, CONFIRM_DELETE)
           .show(getFragmentManager(), null);

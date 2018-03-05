@@ -9,7 +9,8 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import com.th1b0.budget.R;
-import com.th1b0.budget.features.drawer.Toolbar;
+import com.th1b0.budget.app.MainActivity;
+import com.th1b0.budget.app.Toolbar;
 import com.th1b0.budget.features.transactionform.TransactionFormActivity;
 import com.th1b0.budget.model.Budget;
 import com.th1b0.budget.model.Transaction;
@@ -111,7 +112,7 @@ public final class TransactionFragment
     });
 
     view.findViewById(R.id.delete).setOnClickListener(v -> {
-      String title = getString(R.string.confirm_transaction_deletion_title);
+      String title = getString(R.string.confirm_deletion_title, transaction.getTitle());
       String msg = getString(R.string.confirm_transaction_deletion);
       ConfirmDeletionDialog.newInstance(title, msg, transaction, this, CONFIRM_DELETE)
           .show(getFragmentManager(), null);
