@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
+import com.th1b0.budget.R;
 import com.th1b0.budget.util.DateUtil;
 
 /**
@@ -178,8 +179,8 @@ public class Transaction implements Parcelable, TransactionItem {
     return this.description;
   }
 
-  @Override @ViewType public int getType() {
-    return TYPE_TRANSACTION;
+  @Override public int getLayout() {
+    return R.layout.item_transaction;
   }
 
   @Override public int hashCode() {

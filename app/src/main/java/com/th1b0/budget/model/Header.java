@@ -2,6 +2,7 @@ package com.th1b0.budget.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.th1b0.budget.R;
 
 /**
  * Created by 7h1b0.
@@ -31,8 +32,8 @@ public class Header implements Parcelable, TransactionItem {
     return title;
   }
 
-  @Override @ViewType public int getType() {
-    return TYPE_HEADER;
+  @Override public int getLayout() {
+    return R.layout.item_header;
   }
 
   public static final Parcelable.Creator<Header> CREATOR = new Parcelable.Creator<Header>() {
